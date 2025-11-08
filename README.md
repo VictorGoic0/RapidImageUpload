@@ -24,7 +24,13 @@ RapidPhotoUpload handles up to 100 concurrent photo uploads while maintaining a 
 - WebSocket (STOMP) for real-time updates
 
 ### Frontend
-- **Web**: React 18.3.1 + TypeScript + Vite
+- **Web**: React 19.1.1 + TypeScript + Vite
+  - **UI Components**: Shadcn/ui (built on Radix UI + Tailwind CSS)
+  - **Styling**: Tailwind CSS 3.4+ with custom design system
+  - **Icons**: Lucide React
+  - **Routing**: React Router DOM
+  - **HTTP Client**: Axios
+  - **WebSocket**: STOMP.js with SockJS fallback
 - **Mobile**: React Native via Expo SDK 51+
 
 ## Prerequisites

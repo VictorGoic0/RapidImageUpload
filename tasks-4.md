@@ -3,45 +3,42 @@
 ## PR #10: React Project Setup & Configuration
 
 ### Project Initialization
-- [ ] 1. Navigate to root directory: `cd rapidphoto`
-- [ ] 2. Create React app: `npm create vite@latest web-client -- --template react-ts`
-- [ ] 3. Navigate to web-client: `cd web-client`
-- [ ] 4. Install dependencies: `npm install`
-- [ ] 5. Install Axios: `npm install axios`
-- [ ] 6. Install WebSocket libraries: `npm install @stomp/stompjs sockjs-client`
-- [ ] 7. Install React Router: `npm install react-router-dom`
-- [ ] 8. Install Tailwind CSS: `npm install -D tailwindcss postcss autoprefixer`
-- [ ] 9. Initialize Tailwind: `npx tailwindcss init -p`
-- [ ] 10. Install Radix UI components: `npm install @radix-ui/react-dialog @radix-ui/react-slot @radix-ui/react-switch`
-- [ ] 11. Install Tailwind utilities: `npm install tailwindcss-animate tailwind-merge class-variance-authority clsx`
-- [ ] 12. Install Lucide icons: `npm install lucide-react`
-- [ ] 13. Install Recharts: `npm install recharts`
-- [ ] 14. Install TypeScript types: `npm install -D @types/sockjs-client`
+- [x] 1. Navigate to root directory: `cd rapidphoto`
+- [x] 2. Create React app: `npm create vite@latest web-client -- --template react-ts`
+- [x] 3. Navigate to web-client: `cd web-client`
+- [x] 4. Install dependencies: `npm install`
+- [x] 5. Install Axios: `npm install axios`
+- [x] 6. Install WebSocket libraries: `npm install @stomp/stompjs sockjs-client`
+- [x] 7. Install React Router: `npm install react-router-dom`
+- [x] 8. Install Tailwind CSS: `npm install -D tailwindcss postcss autoprefixer`
+- [x] 9. Initialize Tailwind: `npx tailwindcss init -p`
+- [x] 10. Install Radix UI components: `npm install @radix-ui/react-dialog @radix-ui/react-slot @radix-ui/react-switch`
+- [x] 11. Install Tailwind utilities: `npm install tailwindcss-animate tailwind-merge class-variance-authority clsx`
+- [x] 12. Install Lucide icons: `npm install lucide-react`
+- [x] 13. Install Recharts: `npm install recharts` (Removed - not needed)
+- [x] 14. Install TypeScript types: `npm install -D @types/sockjs-client`
 
 ### Tailwind Configuration
-- [ ] 15. Update `tailwind.config.js` content paths to include all source files
-- [ ] 16. Add tailwindcss-animate plugin to Tailwind config
-- [ ] 17. Update `src/index.css` with Tailwind directives (@tailwind base, components, utilities)
-- [ ] 18. Add custom CSS variables for theme colors (optional)
-- [ ] 19. Test Tailwind: add bg-blue-500 class to test component
+- [x] 15. Update `tailwind.config.js` content paths to include all source files
+- [x] 16. Add tailwindcss-animate plugin to Tailwind config
+- [x] 17. Update `src/index.css` with Tailwind directives (@tailwind base, components, utilities)
+- [x] 18. Add custom CSS variables for theme colors (Shadcn/ui Slate theme)
+- [x] 19. Test Tailwind: add bg-blue-500 class to test component (Shadcn/ui initialized)
 
 ### Project Structure
-- [ ] 20. Create `src/components/` directory
-- [ ] 21. Create `src/components/ui/` directory for Shadcn components
-- [ ] 22. Create `src/hooks/` directory
-- [ ] 23. Create `src/services/` directory
-- [ ] 24. Create `src/types/` directory
-- [ ] 25. Create `src/pages/` directory
-- [ ] 26. Create `src/lib/` directory for utilities
+- [x] 20. Create `src/components/` directory
+- [x] 21. Create `src/components/ui/` directory for Shadcn components
+- [x] 22. Create `src/hooks/` directory
+- [x] 23. Create `src/services/` directory
+- [x] 24. Create `src/types/` directory
+- [x] 25. Create `src/pages/` directory
+- [x] 26. Create `src/lib/` directory for utilities (with utils.ts)
 
-### Environment Configuration
-- [ ] 27. Create `.env.development` file
-- [ ] 28. Add `VITE_API_BASE_URL=http://localhost:8080`
-- [ ] 29. Add `VITE_WS_URL=ws://localhost:8080/ws`
-- [ ] 30. Create `.env.production` file
-- [ ] 31. Add production API URL (Elastic Beanstalk URL)
-- [ ] 32. Add production WebSocket URL
-- [ ] 33. Update `.gitignore` to exclude .env.local files
+### Shadcn/ui Setup
+- [x] Initialize Shadcn/ui with Slate base color
+- [x] Configure path aliases (@/*)
+- [x] Set up components.json
+- [x] Configure Tailwind theme with CSS variables
 
 ---
 
