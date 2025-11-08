@@ -6,36 +6,41 @@
 - [ ] 1. Navigate to root directory: `cd rapidphoto`
 - [ ] 2. Create Expo app: `npx create-expo-app@latest mobile-client --template blank-typescript`
 - [ ] 3. Navigate to mobile-client: `cd mobile-client`
-- [ ] 4. Install Expo Router: `npx expo install expo-router react-native-safe-area-context react-native-screens`
-- [ ] 5. Install image picker: `npx expo install expo-image-picker`
-- [ ] 6. Install file system: `npx expo install expo-file-system`
-- [ ] 7. Install Axios: `npm install axios`
-- [ ] 8. Install WebSocket: `npm install @stomp/stompjs`
-- [ ] 9. Install polyfills: `npm install text-encoding`
-- [ ] 10. Update `package.json` to include expo-router entry point
+- [ ] 4. **IMPORTANT**: Verify React version is 18 (not 19) - check `package.json` and downgrade if needed: `npm install react@18 react-dom@18`
+- [ ] 5. **IMPORTANT**: Install React Native version compatible with React 18: React Native 0.69.0 through 0.77.x are compatible with React 18. Use latest 0.77.x: `npx expo install react-native@0.77.x` (DO NOT use 0.78.0+ as it requires React 19)
+- [ ] 6. Install Expo Router: `npx expo install expo-router react-native-safe-area-context react-native-screens`
+- [ ] 7. Install image picker: `npx expo install expo-image-picker`
+- [ ] 8. Install file system: `npx expo install expo-file-system`
+- [ ] 9. Install Axios: `npm install axios`
+- [ ] 10. Install WebSocket: `npm install @stomp/stompjs`
+- [ ] 11. Install polyfills: `npm install text-encoding`
+- [ ] 12. **IMPORTANT**: Install react-native-web for web testing: `npm install react-native-web`
+- [ ] 13. Update `package.json` to include expo-router entry point
 
 ### Expo Configuration
-- [ ] 11. Update `app.json` with app name: "RapidPhoto"
-- [ ] 12. Add scheme: "rapidphoto" for deep linking
-- [ ] 13. Configure iOS bundle identifier
-- [ ] 14. Configure Android package name
-- [ ] 15. Add permissions for camera and photo library
-- [ ] 16. Set up splash screen and icon (use defaults for now)
-- [ ] 17. Configure orientation (portrait preferred)
+- [ ] 14. Update `app.json` with app name: "RapidPhoto"
+- [ ] 15. Add scheme: "rapidphoto" for deep linking
+- [ ] 16. Configure iOS bundle identifier
+- [ ] 17. Configure Android package name
+- [ ] 18. Add permissions for camera and photo library
+- [ ] 19. Set up splash screen and icon (use defaults for now)
+- [ ] 20. Configure orientation (portrait preferred)
+- [ ] 21. **IMPORTANT**: Configure web platform support in `app.json` for testing (add web configuration)
 
 ### Project Structure
-- [ ] 18. Create `app/tabs/` directory for tab navigation
-- [ ] 19. Create `app/tabs/_layout.tsx` for tab configuration
-- [ ] 20. Create `app/tabs/upload.tsx` for upload screen
-- [ ] 21. Create `app/tabs/gallery.tsx` for gallery screen
-- [ ] 22. Create `components/` directory
-- [ ] 23. Create `hooks/` directory
-- [ ] 24. Create `services/` directory
-- [ ] 25. Create `types/` directory
-- [ ] 26. Create `constants/` directory
-- [ ] 27. Create `.env` file with API_URL and WS_URL
-- [ ] 28. Install dotenv: `npm install react-native-dotenv`
-- [ ] 29. Configure dotenv in babel.config.js
+- [ ] 22. Create `app/tabs/` directory for tab navigation
+- [ ] 23. Create `app/tabs/_layout.tsx` for tab configuration
+- [ ] 24. Create `app/tabs/upload.tsx` for upload screen
+- [ ] 25. Create `app/tabs/gallery.tsx` for gallery screen
+- [ ] 26. Create `components/` directory
+- [ ] 27. Create `hooks/` directory
+- [ ] 28. Create `services/` directory
+- [ ] 29. Create `types/` directory
+- [ ] 30. Create `constants/` directory
+- [ ] 31. **IMPORTANT**: Set up Expo environment variables (NOT react-native-dotenv)
+- [ ] 32. Create `.env` file with API_URL and WS_URL (Expo will handle this automatically)
+- [ ] 33. Configure environment variables in `app.json` or use `process.env` (Expo handles env vars natively)
+- [ ] 34. **DO NOT** install react-native-dotenv - Expo handles environment variables internally
 
 ---
 
@@ -52,7 +57,7 @@
 ### API Service
 - [ ] 7. Create `services/api.ts`
 - [ ] 8. Import axios
-- [ ] 9. Import API_URL from environment variables
+- [ ] 9. **IMPORTANT**: Import API_URL from Expo environment variables (use `process.env.EXPO_PUBLIC_API_URL` or similar - Expo's native env handling)
 - [ ] 10. Create axios instance with baseURL
 - [ ] 11. Configure timeout (30 seconds)
 - [ ] 12. Add response interceptor for errors
@@ -81,12 +86,13 @@
 - [ ] 31. Create `services/websocket.ts`
 - [ ] 32. Import Client from @stomp/stompjs
 - [ ] 33. Import text-encoding polyfill
-- [ ] 34. Configure Client without SockJS (use native WebSocket)
-- [ ] 35. Create createWebSocketClient function
-- [ ] 36. Set webSocketFactory to return new WebSocket(url)
-- [ ] 37. Configure reconnect delay
-- [ ] 38. Add debug logging
-- [ ] 39. Export createWebSocketClient
+- [ ] 34. **IMPORTANT**: Import WS_URL from Expo environment variables (use `process.env.EXPO_PUBLIC_WS_URL` or similar)
+- [ ] 35. Configure Client without SockJS (use native WebSocket)
+- [ ] 36. Create createWebSocketClient function
+- [ ] 37. Set webSocketFactory to return new WebSocket(url)
+- [ ] 38. Configure reconnect delay
+- [ ] 39. Add debug logging
+- [ ] 40. Export createWebSocketClient
 
 ---
 
