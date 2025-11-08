@@ -56,8 +56,12 @@
 - **Navigation**: Expo Router (file-based routing)
 - **Image Picker**: expo-image-picker ~17.0.8
 - **File System**: expo-file-system ~19.0.17
-- **WebSocket**: Same STOMP library as web (@stomp/stompjs)
+- **WebSocket**: Same STOMP library as web (@stomp/stompjs 7.2.1)
+- **HTTP Client**: Axios 1.13.2 (same as web)
+- **Environment Variables**: Expo native support (EXPO_PUBLIC_* prefix)
 - **Package Manager**: npm
+- **Styling**: React Native StyleSheet (no Tailwind)
+- **Icons**: Unicode emoji (📤, 🖼️) for tab navigation
 
 ## Development Environment
 

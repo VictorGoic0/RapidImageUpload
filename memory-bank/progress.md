@@ -210,11 +210,27 @@
 - [x] Expo project with TypeScript (PR #16 Complete)
 - [x] React 19.1.0 and React Native 0.81.4 configured
 - [x] Expo Router setup (tab navigation) (PR #16 Complete)
-- [ ] Photo picker integration (expo-image-picker)
-- [ ] WebSocket hook (port from web)
-- [ ] Upload screen with progress
-- [ ] Gallery screen
-- [ ] API integration
+- [x] Type definitions and API service (PR #17 Complete)
+  - Photo types matching web app
+  - Navigation types for tab navigation
+  - API service with axios (30-second timeout)
+  - Upload service using FileSystem.uploadAsync
+  - WebSocket service with native WebSocket
+- [x] Hooks and state management (PR #18 Complete)
+  - useWebSocket hook (same logic as web)
+  - useThrottledProgress hook (exact copy from web)
+  - usePhotoUpload hook (adapted for file URIs)
+  - usePhotoGallery hook (exact copy from web)
+- [x] UI components (PR #19 Complete)
+  - PhotoPicker component (gallery and camera)
+  - UploadProgress component (individual file progress)
+  - BatchProgress component (batch summary)
+  - PhotoGrid component (2-column grid layout)
+- [x] Screens (PR #20 Complete)
+  - Upload screen with full workflow integration
+  - Gallery screen with pagination
+  - Tab navigation layout
+  - Root layout and entry point
 
 ### Deployment (Day 4)
 - [ ] AWS RDS PostgreSQL instance creation
@@ -260,16 +276,16 @@
 - [x] Photo query endpoint (PR #8 Complete)
 - [x] Backend integration tests (PR #9 Complete)
 
-### Phase 4: Frontend (Web Complete, Mobile In Progress)
+### Phase 4: Frontend (Web Complete, Mobile Complete)
 - [x] Web application foundation (React + Vite + TypeScript) (PR #10-11 Complete)
 - [x] Upload components and hooks (PR #12-13 Complete)
 - [x] Upload page and routing (PR #14 Complete)
 - [x] Gallery page (PR #15 Complete)
 - [x] Mobile application setup (React Native 0.81.4 + Expo SDK 54 + React 19) (PR #16 Complete)
-- [ ] Mobile services & type definitions (PR #17)
-- [ ] Mobile hooks & state management (PR #18)
-- [ ] Mobile UI components (PR #19)
-- [ ] Mobile screens (PR #20)
+- [x] Mobile services & type definitions (PR #17 Complete)
+- [x] Mobile hooks & state management (PR #18 Complete)
+- [x] Mobile UI components (PR #19 Complete)
+- [x] Mobile screens (PR #20 Complete)
 
 ### Phase 5: Deployment (Not Started)
 - [ ] AWS infrastructure

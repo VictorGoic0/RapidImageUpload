@@ -4,10 +4,11 @@ import { Text } from 'react-native';
 export default function TabLayout() {
   return (
     <Tabs
+      initialRouteName="upload"
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#007AFF',
-        tabBarInactiveTintColor: '#8E8E93',
+        tabBarActiveTintColor: '#3b82f6',
+        tabBarInactiveTintColor: '#9ca3af',
       }}
     >
       <Tabs.Screen
