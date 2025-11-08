@@ -84,6 +84,25 @@
     - CompletePhotoRequest DTO with validation
     - Exception handlers for PhotoNotFoundException (404), S3VerificationException (400), IllegalStateException (400)
     - Request/response logging
+- **Photo Query Feature (PR #8 Complete)**:
+  - GetPhotosQuery DTO with validation (userId, page with default 0, size with default 20, max 100)
+  - PhotoDto DTO with all photo fields (photoId, fileName, status, fileSize, contentType, createdAt, uploadedAt, downloadUrl)
+  - PhotoDto.fromDomain() factory method for converting Photo entities to DTOs
+  - PhotoQueryResponse DTO with pagination metadata (photos list, currentPage, totalPages, totalElements, pageSize)
+  - GetPhotoByIdQuery DTO for single photo retrieval (photoId, userId)
+  - PhotoNotFoundException custom exception for query side
+  - PhotoQueryHandler service:
+    - handle() method for paginated photo queries with Pageable and sorting
+    - handleGetById() method for single photo retrieval
+    - Pagination with sorting by createdAt descending
+    - Download URL generation only for COMPLETED photos using S3Service
+    - Error handling for repository failures
+    - Performance logging with duration tracking
+  - PhotoQueryController REST endpoints:
+    - GET `/api/photos?userId={userId}&page={page}&size={size}` - Paginated photo list
+    - GET `/api/photos/{photoId}?userId={userId}` - Single photo by ID
+    - Exception handlers for PhotoNotFoundException (404), validation errors (400), general errors (500)
+    - Request/response logging
 
 ## What's Left to Build
 
@@ -97,7 +116,7 @@
 - [x] Upload progress controller (PR #5 Complete)
 - [x] Batch upload feature (PR #6 Complete)
 - [x] Photo completion feature (PR #7 Complete)
-- [ ] Photo query feature (VSA: photoquery/)
+- [x] Photo query feature (PR #8 Complete)
 
 ### Web Frontend (Day 3)
 - [ ] React + Vite + TypeScript project setup
@@ -160,7 +179,8 @@
 ### Phase 3: Features (In Progress)
 - [x] Batch upload endpoint (PR #6 Complete)
 - [x] Photo completion endpoint (PR #7 Complete)
-- [ ] Photo query endpoint (PR #8 - Next)
+- [x] Photo query endpoint (PR #8 Complete)
+- [ ] Backend integration tests (PR #9 - Next)
 
 ### Phase 4: Frontend (Not Started)
 - [ ] Web application

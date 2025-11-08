@@ -3,7 +3,7 @@
 ## Current Status
 **Phase**: Backend Features Implementation
 **Date**: 2025-01-27
-**Focus**: Photo Query Feature (PR #8) - Next
+**Focus**: Backend Integration Tests (PR #9) - Next
 
 ## Recent Changes
 - **PR #1 Complete**: Development environment fully set up
@@ -104,21 +104,41 @@
     - CompletePhotoRequest DTO with @NotBlank validation
     - Exception handlers with appropriate HTTP status codes
     - Request/response logging
+- **Photo Query Feature (PR #8 Complete)**:
+  - GetPhotosQuery DTO with validation (userId, page, size with defaults)
+  - PhotoDto DTO with fromDomain() factory method for entity conversion
+  - PhotoQueryResponse DTO with pagination metadata (photos, currentPage, totalPages, totalElements, pageSize)
+  - GetPhotoByIdQuery DTO for single photo retrieval
+  - PhotoNotFoundException custom exception for query side
+  - PhotoQueryHandler service:
+    - handle() method for paginated photo queries
+    - handleGetById() method for single photo retrieval
+    - Pagination with sorting by createdAt descending
+    - Download URL generation only for COMPLETED photos
+    - Error handling and logging throughout
+  - PhotoQueryController REST endpoints:
+    - GET `/api/photos?userId={userId}&page={page}&size={size}` - Paginated photo list
+    - GET `/api/photos/{photoId}?userId={userId}` - Single photo by ID
+    - Exception handlers for PhotoNotFoundException (404), validation errors (400)
+    - Request/response logging
 - Memory bank structure created
 - Project brief, product context, system patterns, and tech context documented
 - Cursor rules directory initialized
 
 ## Current Work Focus
-1. **Photo Query Feature** (Tasks-2.md, PR #8) - **NEXT**
-   - Photo query DTOs (GetPhotosQuery, PhotoQueryResponse)
-   - PhotoQueryHandler for retrieving photos
-   - PhotoQueryController REST endpoint
+1. **Backend Integration Tests** (Tasks-3.md, PR #9) - **NEXT**
+   - Test configuration (H2 in-memory database, test profile)
+   - Batch upload integration tests
+   - Photo completion integration tests
+   - Photo query integration tests
+   - WebSocket integration tests (optional)
 
 ## Next Steps (Immediate)
-1. Create photo query DTOs
-2. Implement PhotoQueryHandler with pagination support
-3. Create PhotoQueryController REST endpoint
-4. Proceed to frontend implementation
+1. Create test configuration (application-test.yml, TestConfig.java)
+2. Implement batch upload integration tests
+3. Implement photo completion integration tests
+4. Implement photo query integration tests
+5. Proceed to frontend implementation
 
 ## Active Decisions & Considerations
 
