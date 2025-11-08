@@ -63,64 +63,64 @@
 ## PR #6: Batch Upload Feature (Command Side - CQRS)
 
 ### Batch Upload DTOs
-- [ ] 1. Create `features/batchupload/PhotoMetadata.java` record
-- [ ] 2. Add field: @NotBlank String fileName
-- [ ] 3. Add field: @NotBlank String contentType
-- [ ] 4. Add field: @Positive Long size
-- [ ] 5. Add validation annotations
-- [ ] 6. Create `features/batchupload/InitiateBatchUploadCommand.java` record
-- [ ] 7. Add field: @NotNull UserId userId
-- [ ] 8. Add field: @NotEmpty @Size(max=100) List<PhotoMetadata> photos
-- [ ] 9. Add validation for max 100 photos
-- [ ] 10. Create `features/batchupload/PresignedUploadInfo.java` record
-- [ ] 11. Add field: String photoId (UUID as string)
-- [ ] 12. Add field: String fileName
-- [ ] 13. Add field: String presignedUrl
-- [ ] 14. Add field: String s3Key
-- [ ] 15. Add field: Instant expiresAt
-- [ ] 16. Create `features/batchupload/BatchUploadResponse.java` record
-- [ ] 17. Add field: List<PresignedUploadInfo> uploads
-- [ ] 18. Add field: Integer totalCount
-- [ ] 19. Add field: Instant requestedAt
+- [x] 1. Create `features/batchupload/PhotoMetadata.java` record
+- [x] 2. Add field: @NotBlank String fileName
+- [x] 3. Add field: @NotBlank String contentType
+- [x] 4. Add field: @Positive Long size
+- [x] 5. Add validation annotations
+- [x] 6. Create `features/batchupload/InitiateBatchUploadCommand.java` record
+- [x] 7. Add field: @NotNull UserId userId
+- [x] 8. Add field: @NotEmpty @Size(max=100) List<PhotoMetadata> photos
+- [x] 9. Add validation for max 100 photos
+- [x] 10. Create `features/batchupload/PresignedUploadInfo.java` record
+- [x] 11. Add field: String photoId (UUID as string)
+- [x] 12. Add field: String fileName
+- [x] 13. Add field: String presignedUrl
+- [x] 14. Add field: String s3Key
+- [x] 15. Add field: Instant expiresAt
+- [x] 16. Create `features/batchupload/BatchUploadResponse.java` record
+- [x] 17. Add field: List<PresignedUploadInfo> uploads
+- [x] 18. Add field: Integer totalCount
+- [x] 19. Add field: Instant requestedAt
 
 ### Batch Upload Command Handler
-- [ ] 20. Create `features/batchupload/BatchUploadCommandHandler.java` with @Service
-- [ ] 21. Inject PhotoRepository via constructor
-- [ ] 22. Inject S3Service via constructor
-- [ ] 23. Add SLF4J logger
-- [ ] 24. Create @Transactional method `handle(InitiateBatchUploadCommand command)`
-- [ ] 25. Log start of batch upload with photo count
-- [ ] 26. Create List<Photo> from command.photos() using Photo.createPending()
-- [ ] 27. Generate PhotoId for each photo
-- [ ] 28. Set userId, fileName, fileSize, contentType for each photo
-- [ ] 29. Save all photos to database: `photoRepository.saveAll(photos)`
-- [ ] 30. Log successful database save
-- [ ] 31. Generate S3 keys for each photo using S3Service.generateS3Key()
-- [ ] 32. Generate presigned upload URLs for each photo
-- [ ] 33. Create PresignedUploadInfo for each photo with URL, key, expiration
-- [ ] 34. Create and return BatchUploadResponse with all upload info
-- [ ] 35. Add error handling for database failures
-- [ ] 36. Add error handling for S3 service failures
-- [ ] 37. Ensure transaction rollback on any failure
-- [ ] 38. Add performance logging (measure time taken)
+- [x] 20. Create `features/batchupload/BatchUploadCommandHandler.java` with @Service
+- [x] 21. Inject PhotoRepository via constructor
+- [x] 22. Inject S3Service via constructor
+- [x] 23. Add SLF4J logger
+- [x] 24. Create @Transactional method `handle(InitiateBatchUploadCommand command)`
+- [x] 25. Log start of batch upload with photo count
+- [x] 26. Create List<Photo> from command.photos() using Photo.createPending()
+- [x] 27. Generate PhotoId for each photo
+- [x] 28. Set userId, fileName, fileSize, contentType for each photo
+- [x] 29. Save all photos to database: `photoRepository.saveAll(photos)`
+- [x] 30. Log successful database save
+- [x] 31. Generate S3 keys for each photo using S3Service.generateS3Key()
+- [x] 32. Generate presigned upload URLs for each photo
+- [x] 33. Create PresignedUploadInfo for each photo with URL, key, expiration
+- [x] 34. Create and return BatchUploadResponse with all upload info
+- [x] 35. Add error handling for database failures
+- [x] 36. Add error handling for S3 service failures
+- [x] 37. Ensure transaction rollback on any failure
+- [x] 38. Add performance logging (measure time taken)
 
 ### Batch Upload REST Controller
-- [ ] 39. Create `features/batchupload/BatchUploadController.java` with @RestController
-- [ ] 40. Add @RequestMapping("/api/photos")
-- [ ] 41. Add @CrossOrigin annotation for CORS (dev: localhost:5173)
-- [ ] 42. Inject BatchUploadCommandHandler via constructor
-- [ ] 43. Add SLF4J logger
-- [ ] 44. Create @PostMapping("/batch-init") endpoint
-- [ ] 45. Accept @Valid @RequestBody InitiateBatchUploadCommand
-- [ ] 46. Add @RequestParam for userId (mock auth: hardcoded UUID for MVP)
-- [ ] 47. Create command object with userId and photo metadata
-- [ ] 48. Call commandHandler.handle(command)
-- [ ] 49. Return ResponseEntity.status(CREATED).body(response)
-- [ ] 50. Add @ExceptionHandler for validation errors
-- [ ] 51. Add @ExceptionHandler for S3UploadException
-- [ ] 52. Add @ExceptionHandler for general exceptions
-- [ ] 53. Return proper error responses with status codes
-- [ ] 54. Add request/response logging
+- [x] 39. Create `features/batchupload/BatchUploadController.java` with @RestController
+- [x] 40. Add @RequestMapping("/api/photos")
+- [x] 41. Add @CrossOrigin annotation for CORS (dev: localhost:5173)
+- [x] 42. Inject BatchUploadCommandHandler via constructor
+- [x] 43. Add SLF4J logger
+- [x] 44. Create @PostMapping("/batch-init") endpoint
+- [x] 45. Accept @Valid @RequestBody InitiateBatchUploadCommand
+- [x] 46. Add @RequestParam for userId (mock auth: hardcoded UUID for MVP)
+- [x] 47. Create command object with userId and photo metadata
+- [x] 48. Call commandHandler.handle(command)
+- [x] 49. Return ResponseEntity.status(CREATED).body(response)
+- [x] 50. Add @ExceptionHandler for validation errors
+- [x] 51. Add @ExceptionHandler for S3UploadException
+- [x] 52. Add @ExceptionHandler for general exceptions
+- [x] 53. Return proper error responses with status codes
+- [x] 54. Add request/response logging
 
 ---
 
