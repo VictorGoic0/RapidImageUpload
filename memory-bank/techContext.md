@@ -24,7 +24,7 @@
 - **Database**: AWS RDS PostgreSQL 16 (production)
 
 ### Web Frontend
-- **Framework**: React 19.1.1 with TypeScript 5.x
+- **Framework**: React 19.1.0 with TypeScript 5.x
 - **Build Tool**: Vite 7.1.7
 - **Package Manager**: npm
 - **Package Type**: ES modules (`"type": "module"` in package.json)
@@ -50,12 +50,14 @@
 - **Navigation**: Underlined active state (not button-style)
 
 ### Mobile Frontend
-- **Framework**: React Native via Expo SDK 51+
-- **Language**: TypeScript
+- **Framework**: React Native 0.81.4 via Expo SDK 54
+- **React Version**: React 19.1.0 (same as web frontend)
+- **Language**: TypeScript 5.9.2
 - **Navigation**: Expo Router (file-based routing)
-- **Image Picker**: expo-image-picker ~15.0.0
-- **File System**: expo-file-system ~17.0.0
-- **WebSocket**: Same STOMP library as web
+- **Image Picker**: expo-image-picker ~17.0.8
+- **File System**: expo-file-system ~19.0.17
+- **WebSocket**: Same STOMP library as web (@stomp/stompjs)
+- **Package Manager**: npm
 
 ## Development Environment
 
@@ -235,9 +237,11 @@ RDS_PASSWORD=[SECURE_PASSWORD]
 - **UI Responsiveness**: 60fps maintained during uploads
 
 ## Version Compatibility
-- **Node.js**: 20.x LTS (required for React 18 and Expo SDK 51)
+- **Node.js**: 20.x LTS (required for React 19 and Expo SDK 54)
 - **Java**: 21 (required for Virtual Threads)
 - **PostgreSQL**: 16 (latest stable)
 - **Spring Boot**: 3.3+ (compatible with Java 21)
-- **Expo SDK**: 51+ (compatible with React Native 0.74.5)
+- **React**: 19.1.0 (web and mobile)
+- **React Native**: 0.81.4 (compatible with React 19)
+- **Expo SDK**: 54 (compatible with React 19 and React Native 0.81.4)
 

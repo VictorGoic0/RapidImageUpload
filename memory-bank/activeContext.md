@@ -1,11 +1,18 @@
 # Active Context: RapidPhotoUpload
 
 ## Current Status
-**Phase**: Frontend Implementation - Web Components
+**Phase**: Frontend Implementation - Mobile Setup
 **Date**: 2025-01-XX
-**Focus**: Photo Gallery Page Complete (PR #15) - Web frontend core features complete
+**Focus**: Mobile client dependency configuration - React 19 and React Native 0.81.4
 
 ## Recent Changes
+- **Mobile Client Dependency Update (2025-01-XX)**:
+  - Updated mobile-client package.json to use React 19.1.0 and React Native 0.81.4
+  - Updated expo to ~54.0.23 (compatible with React 19)
+  - Updated react-native-web to ^0.21.0
+  - Updated @types/react to ~19.1.10
+  - Updated tasks-6.md to reflect React 19 and React Native 0.81.4 requirements
+  - All existing packages maintained, only version updates applied
 - **PR #15 Complete: Photo Gallery Page (2025-01-XX)**:
   - Created `usePhotoGallery.ts` hook with pagination support
   - Fetches photos with getUserPhotos API (page, size: 20)
@@ -254,13 +261,15 @@
 - Cursor rules directory initialized
 
 ## Current Work Focus
-1. **Frontend Implementation** - **WEB COMPLETE**
+1. **Frontend Implementation** - **WEB COMPLETE, MOBILE IN PROGRESS**
    - ✅ Upload components and hooks (PR #13 Complete)
    - ✅ Upload Page & Integration (PR #14 Complete)
    - ✅ Photo Gallery Page (PR #15 Complete)
-   - **NEXT**: Mobile frontend (React Native + Expo) - Pending
-   - **NEXT**: Download functionality improvements (make download button actually download files)
-   - **NEXT**: Make photo cards clickable to open in new tab
+   - ✅ Mobile client project initialized with React 19 and React Native 0.81.4
+   - **NEXT**: Mobile services & type definitions (PR #17)
+   - **NEXT**: Mobile hooks & state management (PR #18)
+   - **NEXT**: Mobile UI components (PR #19)
+   - **NEXT**: Mobile screens (PR #20)
 
 ## Next Steps (Immediate)
 1. ✅ Implement upload components and hooks (PR #13 Complete)
@@ -284,8 +293,9 @@
 ### Technical Decisions
 - **PostgreSQL 16**: Latest stable version for metadata storage
 - **Spring Boot 3.3+**: Required for Java 21 and virtual threads support
-- **React 18.3.1**: Latest stable with concurrent features
-- **Expo SDK 51+**: Latest stable for React Native mobile app
+- **React 19.1.0**: Latest stable version (web and mobile)
+- **React Native 0.81.4**: Compatible with React 19
+- **Expo SDK 54**: Compatible with React 19 and React Native 0.81.4
 
 ### Pending Decisions
 - Migration tool: Flyway vs Liquibase (to be decided during implementation)
