@@ -1,0 +1,102 @@
+graph TB
+    subgraph "Client Layer"
+        WEB[Web App<br/>React + TypeScript<br/>Vite]
+        MOBILE[Mobile App<br/>React Native<br/>Expo]
+    end
+
+    subgraph "API Gateway"
+        ALB[Application Load Balancer<br/>AWS Elastic Beanstalk]
+    end
+
+    subgraph "Backend Layer - Spring Boot Java 21"
+        subgraph "Features - Vertical Slice Architecture"
+            BATCH[Batch Upload Feature<br/>Command Handler]
+            QUERY[Photo Query Feature<br/>Query Handler]
+            COMPLETE[Photo Completion Feature<br/>Command Handler]
+        end
+        
+        subgraph "Infrastructure Services"
+            S3SVC[S3 Service<br/>Presigned URL Generator]
+            WSSVC[WebSocket Service<br/>Progress Broadcaster]
+        end
+        
+        subgraph "Domain Layer - DDD"
+            PHOTO[Photo Entity<br/>Business Logic]
+            REPO[Photo Repository<br/>JPA]
+        end
+        
+        VTHREADS[Virtual Threads<br/>Concurrency Engine]
+    end
+
+    subgraph "WebSocket Layer"
+        STOMP[STOMP Protocol<br/>/ws endpoint]
+    end
+
+    subgraph "Data Layer"
+        RDS[(PostgreSQL RDS<br/>Photo Metadata)]
+    end
+
+    subgraph "Storage Layer"
+        S3DEV[S3 Bucket Dev<br/>rapidphoto-dev]
+        S3PROD[S3 Bucket Prod<br/>rapidphoto-prod]
+    end
+
+    subgraph "Monitoring"
+        CW[CloudWatch<br/>Logs & Metrics]
+    end
+
+    %% Client to Backend Connections
+    WEB -->|1. POST /batch-init| ALB
+    MOBILE -->|1. POST /batch-init| ALB
+    WEB -->|3. WebSocket Connect| STOMP
+    MOBILE -->|3. WebSocket Connect| STOMP
+    WEB -->|5. POST /complete| ALB
+    MOBILE -->|5. POST /complete| ALB
+    WEB -->|7. GET /photos| ALB
+    MOBILE -->|7. GET /photos| ALB
+
+    %% Backend Internal Flow
+    ALB --> BATCH
+    ALB --> COMPLETE
+    ALB --> QUERY
+    
+    BATCH -->|Create Domain Objects| PHOTO
+    COMPLETE -->|Update Domain Objects| PHOTO
+    QUERY -->|Fetch Domain Objects| PHOTO
+    
+    PHOTO -->|Persist| REPO
+    REPO -->|Query/Save| RDS
+    
+    BATCH -->|Generate URLs| S3SVC
+    COMPLETE -->|Verify Upload| S3SVC
+    QUERY -->|Generate Download URLs| S3SVC
+    
+    COMPLETE -->|Notify Progress| WSSVC
+    WSSVC -->|Broadcast| STOMP
+    
+    BATCH -.->|Async Execution| VTHREADS
+    COMPLETE -.->|Async Execution| VTHREADS
+    
+    %% Direct S3 Upload Flow
+    WEB -->|2. Upload Files Directly<br/>via Presigned URL| S3PROD
+    MOBILE -->|2. Upload Files Directly<br/>via Presigned URL| S3PROD
+    
+    %% WebSocket Progress Flow
+    STOMP -->|4. Progress Updates<br/>Throttled 2s| WEB
+    STOMP -->|4. Progress Updates<br/>Throttled 2s| MOBILE
+    
+    %% Monitoring
+    ALB -.->|Application Logs| CW
+    RDS -.->|Database Metrics| CW
+    S3PROD -.->|Access Logs| CW
+
+    %% Styling
+    classDef clientStyle fill:#e1f5ff,stroke:#01579b,stroke-width:2px
+    classDef backendStyle fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    classDef storageStyle fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef infraStyle fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px
+    
+    class WEB,MOBILE clientStyle
+    class BATCH,QUERY,COMPLETE,PHOTO,REPO,VTHREADS backendStyle
+    class S3DEV,S3PROD,RDS storageStyle
+    class ALB,STOMP,S3SVC,WSSVC,CW infraStyle

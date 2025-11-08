@@ -1,0 +1,52 @@
+sequenceDiagram
+    participant Client as Web/Mobile Client
+    participant Backend as Spring Boot Backend
+    participant DB as PostgreSQL RDS
+    participant S3 as AWS S3
+    participant WS as WebSocket Service
+
+    Note over Client,WS: 1. Initiate Batch Upload (Command)
+    Client->>+Backend: POST /api/photos/batch-init<br/>{userId, photos: [metadata...]}
+    Backend->>Backend: Create 100 Photo entities (PENDING)
+    Backend->>+DB: Save all photos
+    DB-->>-Backend: 100 records saved
+    Backend->>Backend: Generate 100 presigned URLs
+    Backend-->>-Client: {uploads: [{photoId, presignedUrl, s3Key}...]}
+
+    Note over Client,WS: 2. Direct S3 Upload (Client → S3)
+    loop For each photo (100 concurrent)
+        Client->>Client: Track XHR progress (0-100%)
+        Client->>+S3: PUT file to presigned URL
+        Note over Client: Local progress: 23%
+        
+        alt Every 2 seconds (throttled)
+            Client->>WS: WebSocket: {photoId, progress: 23%}
+            WS-->>Client: Broadcast: {photoId, progress: 23%}
+        end
+        
+        S3-->>-Client: Upload complete (HTTP 200)
+    end
+
+    Note over Client,WS: 3. Complete Upload Notification (Command)
+    loop For each completed upload
+        Client->>+Backend: POST /api/photos/{photoId}/complete<br/>{s3Key}
+        Backend->>+S3: Verify object exists (HEAD request)
+        S3-->>-Backend: Object exists: true
+        Backend->>Backend: photo.markAsCompleted(s3Key)
+        Backend->>+DB: Update photo status = COMPLETED
+        DB-->>-Backend: Updated
+        Backend->>WS: Notify completion
+        WS-->>Client: WebSocket: {photoId, status: COMPLETED, progress: 100%}
+        Backend-->>-Client: {status: COMPLETED, uploadedAt}
+    end
+
+    Note over Client,WS: 4. Query Photos (Query)
+    Client->>+Backend: GET /api/photos?userId={id}&page=0&size=20
+    Backend->>+DB: SELECT * FROM photos WHERE userId=?
+    DB-->>-Backend: Page<Photo>
+    Backend->>Backend: Generate download presigned URLs
+    Backend-->>-Client: {photos: [{photoId, downloadUrl}...], pagination}
+    
+    Client->>+S3: GET download presigned URL
+    S3-->>-Client: Image bytes
+    Client->>Client: Display photo in gallery

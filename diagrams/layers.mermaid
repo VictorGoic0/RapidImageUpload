@@ -1,0 +1,80 @@
+graph LR
+    subgraph "Client Layer"
+        UI[User Interface<br/>React / React Native]
+    end
+
+    subgraph "Application Layer - Vertical Slices"
+        subgraph "Batch Upload Slice"
+            BC[BatchUploadController]
+            BCH[BatchUploadCommandHandler]
+            BCMD[InitiateBatchUploadCommand]
+        end
+        
+        subgraph "Photo Query Slice"
+            QC[PhotoQueryController]
+            QH[PhotoQueryHandler]
+            QCMD[GetPhotosQuery]
+        end
+        
+        subgraph "Photo Completion Slice"
+            CC[PhotoCompletionController]
+            CCH[PhotoCompletionCommandHandler]
+            CCMD[CompletePhotoUploadCommand]
+        end
+    end
+
+    subgraph "Domain Layer - DDD"
+        ENTITY[Photo Entity<br/>Business Logic]
+        VO1[PhotoId<br/>Value Object]
+        VO2[UserId<br/>Value Object]
+        ENUM[UploadStatus<br/>Enum]
+        IREPO[PhotoRepository<br/>Interface]
+    end
+
+    subgraph "Infrastructure Layer"
+        REPOIMPL[PhotoRepositoryImpl<br/>JPA]
+        S3[S3Service]
+        WS[WebSocketService]
+        DB[(PostgreSQL)]
+        BUCKET[S3 Bucket]
+    end
+
+    UI -->|Commands| BC
+    UI -->|Commands| CC
+    UI -->|Queries| QC
+    UI -.->|WebSocket| WS
+
+    BC --> BCH
+    BCH --> BCMD
+    BCH -->|Uses| ENTITY
+    BCH -->|Uses| S3
+
+    QC --> QH
+    QH --> QCMD
+    QH -->|Uses| ENTITY
+    QH -->|Uses| S3
+
+    CC --> CCH
+    CCH --> CCMD
+    CCH -->|Uses| ENTITY
+    CCH -->|Uses| S3
+    CCH -->|Uses| WS
+
+    ENTITY -->|Composed of| VO1
+    ENTITY -->|Composed of| VO2
+    ENTITY -->|Has| ENUM
+    ENTITY -->|Persisted via| IREPO
+
+    IREPO -->|Implemented by| REPOIMPL
+    REPOIMPL -->|Queries| DB
+    S3 -->|Stores files| BUCKET
+
+    classDef commandStyle fill:#ffcdd2,stroke:#c62828,stroke-width:2px
+    classDef queryStyle fill:#c8e6c9,stroke:#2e7d32,stroke-width:2px
+    classDef domainStyle fill:#fff9c4,stroke:#f57f17,stroke-width:2px
+    classDef infraStyle fill:#e1bee7,stroke:#6a1b9a,stroke-width:2px
+
+    class BC,BCH,BCMD,CC,CCH,CCMD commandStyle
+    class QC,QH,QCMD queryStyle
+    class ENTITY,VO1,VO2,ENUM,IREPO domainStyle
+    class REPOIMPL,S3,WS,DB,BUCKET infraStyle
