@@ -41,15 +41,56 @@ RapidPhotoUpload handles up to 100 concurrent photo uploads while maintaining a 
 - AWS CLI v2
 - Maven 3.9+ (or use Maven Wrapper)
 
-## Quick Start
+## Running Locally
 
-### 1. Start PostgreSQL (Docker)
+### Running the Backend
+
+Start the Spring Boot backend in development mode:
+
+```bash
+cd backend
+./mvnw spring-boot:run
+```
+
+The backend will start on `http://localhost:8080` by default.
+
+**First time setup:**
+- Ensure PostgreSQL is running: `docker compose up -d`
+- Configure AWS credentials: `aws configure`
+- Ensure S3 buckets exist: `rapidphoto-dev` (development)
+
+### Running the Frontend
+
+Start the React web client in development mode:
+
+```bash
+cd web-client
+npm install  # First time only
+npm run dev
+```
+
+The web client will start on `http://localhost:5173` (Vite default).
+
+**First time setup:**
+- Ensure Node.js 20.x LTS is installed
+- Run `npm install` to install dependencies
+
+## Starting the Application
+
+### 1. Start PostgreSQL Database
+
+Start the PostgreSQL container:
 
 ```bash
 docker compose up -d
 ```
 
-### 2. Configure AWS
+Verify it's running:
+```bash
+docker compose ps
+```
+
+### 2. Configure AWS Credentials
 
 Ensure AWS credentials are configured:
 ```bash
@@ -60,28 +101,39 @@ S3 buckets should already be created:
 - `rapidphoto-dev` (development)
 - `rapidphoto-prod` (production)
 
-### 3. Backend Setup
+### 3. Start Backend
 
-```bash
-cd backend
-./mvnw spring-boot:run
-```
+See [Running the Backend](#running-the-backend) section above.
 
-### 4. Web Frontend
+### 4. Start Web Client
 
-```bash
-cd web-client
-npm install
-npm run dev
-```
+See [Running the Frontend](#running-the-frontend) section above.
 
-### 5. Mobile Frontend
+### 5. Start Mobile Client
 
+**Development mode**:
 ```bash
 cd mobile-client
-npm install
+npm install  # First time only
 npx expo start
 ```
+
+This will:
+- Start the Expo development server
+- Open Expo Go app on your device or emulator
+- Provide QR code for scanning
+
+## Quick Start
+
+For a quick development setup, follow these steps in order:
+
+1. **Start PostgreSQL**: `docker compose up -d`
+2. **Configure AWS**: `aws configure` (ensure S3 buckets exist)
+3. **Start Backend**: `cd backend && ./mvnw spring-boot:run`
+4. **Start Web Client**: `cd web-client && npm install && npm run dev`
+5. **Start Mobile Client**: `cd mobile-client && npm install && npx expo start`
+
+See the [Running Locally](#running-locally) and [Starting the Application](#starting-the-application) sections above for detailed commands and options.
 
 ## Project Structure
 

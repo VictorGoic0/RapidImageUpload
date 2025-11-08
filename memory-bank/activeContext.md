@@ -2,10 +2,25 @@
 
 ## Current Status
 **Phase**: Backend Complete - Ready for Frontend
-**Date**: 2025-01-27
+**Date**: 2025-11-08
 **Focus**: Frontend Implementation (Web & Mobile) - Next
 
 ## Recent Changes
+- **WebSocket Configuration Fix (2025-11-08)**:
+  - Fixed TaskScheduler circular dependency issue in WebSocketConfig
+  - Moved TaskScheduler bean from WebSocketConfig to AsyncConfig
+  - WebSocketConfig now uses constructor injection to receive TaskScheduler
+  - TaskScheduler explicitly set on SimpleBrokerRegistration for heartbeat functionality
+  - Application now starts successfully without "Heartbeat values configured but no TaskScheduler provided" error
+- **README Documentation Updates (2025-11-08)**:
+  - Added "Running Locally" section with backend and frontend commands
+  - Added "Starting the Application" section with step-by-step startup guide
+  - Updated Quick Start section to reference detailed sections
+  - Focused on development/running commands rather than production builds
+- **Frontend Configuration Fix (2025-11-08)**:
+  - Fixed Tailwind config ES module issue (require -> import)
+  - Changed `require("tailwindcss-animate")` to `import tailwindcssAnimate from "tailwindcss-animate"`
+  - Resolved "ReferenceError: require is not defined" error in tailwind.config.js
 - **PR #1 Complete**: Development environment fully set up
   - Java 21 installed and verified (OpenJDK 21.0.9)
   - Docker Desktop installed and running

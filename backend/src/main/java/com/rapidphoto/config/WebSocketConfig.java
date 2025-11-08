@@ -2,8 +2,10 @@ package com.rapidphoto.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
@@ -17,6 +19,16 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     private static final Logger log = LoggerFactory.getLogger(WebSocketConfig.class);
+    private final TaskScheduler taskScheduler;
+
+    /**
+     * Constructor injection of TaskScheduler.
+     * The TaskScheduler bean is provided by AsyncConfig.
+     */
+    @Autowired
+    public WebSocketConfig(TaskScheduler taskScheduler) {
+        this.taskScheduler = taskScheduler;
+    }
 
     /**
      * Configures the message broker for WebSocket communication.
@@ -28,8 +40,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void configureMessageBroker(MessageBrokerRegistry config) {
         // Enable simple broker for topic and queue destinations with heartbeat
         // Heartbeat: send every 10 seconds, expect response within 20 seconds
-        config.enableSimpleBroker("/topic", "/queue")
+        var brokerRegistration = config.enableSimpleBroker("/topic", "/queue")
                 .setHeartbeatValue(new long[]{10000, 10000}); // [sendInterval, receiveTimeout] in milliseconds
+        
+        // Set TaskScheduler for heartbeat functionality
+        brokerRegistration.setTaskScheduler(taskScheduler);
         
         // Set prefix for messages from client to server
         config.setApplicationDestinationPrefixes("/app");

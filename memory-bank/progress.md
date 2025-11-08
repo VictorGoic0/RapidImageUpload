@@ -34,12 +34,15 @@
   - Custom AsyncUncaughtExceptionHandler for error logging
   - Async configuration in application.yml with virtual threads enabled
   - Thread pool configuration for fallback executor
+  - TaskScheduler bean for WebSocket heartbeat (added to AsyncConfig to avoid circular dependency)
 - **WebSocket Configuration & Infrastructure (PR #5 Complete)**:
   - WebSocketConfig with STOMP protocol and message broker
   - Message broker: `/topic`, `/queue` destinations, `/app` and `/user` prefixes
   - STOMP endpoint at `/ws` with SockJS fallback
   - CORS configured for Vite dev servers (ports 5173-5177) and backend (8080)
   - Heartbeat configuration (10-second intervals)
+  - TaskScheduler bean in AsyncConfig for WebSocket heartbeat (moved from WebSocketConfig to avoid circular dependency)
+  - TaskScheduler explicitly configured on SimpleBrokerRegistration
   - PhotoProgress DTO with factory methods
   - WebSocketProgressService for progress broadcasting
   - UploadProgressController for handling client messages

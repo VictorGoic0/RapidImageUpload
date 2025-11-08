@@ -5,9 +5,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.AsyncConfigurer;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 import java.lang.reflect.Method;
 import java.util.concurrent.Executor;
@@ -42,6 +44,22 @@ public class AsyncConfig implements AsyncConfigurer {
             executor.initialize();
             return executor;
         }
+    }
+
+    /**
+     * Provides a TaskScheduler bean required for WebSocket heartbeat functionality.
+     * The simple broker uses this scheduler to send periodic heartbeat messages.
+     */
+    @Bean
+    public TaskScheduler taskScheduler() {
+        ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
+        scheduler.setPoolSize(1);
+        scheduler.setThreadNamePrefix("websocket-heartbeat-");
+        scheduler.setWaitForTasksToCompleteOnShutdown(true);
+        scheduler.setAwaitTerminationSeconds(60);
+        scheduler.initialize();
+        log.info("TaskScheduler initialized for WebSocket heartbeat");
+        return scheduler;
     }
 
     @Override

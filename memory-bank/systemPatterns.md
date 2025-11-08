@@ -127,6 +127,7 @@ xhr.upload.addEventListener('progress', (e) => {
 - Use `Executors.newVirtualThreadPerTaskExecutor()` for async operations
 - Enables millions of concurrent operations with minimal overhead
 - Configured in `AsyncConfig.java` with `@EnableAsync`
+- TaskScheduler bean also defined in AsyncConfig for WebSocket heartbeat (avoids circular dependency with WebSocketConfig)
 
 ### Async Processing
 - Commands use `@Async` annotation with virtual thread executor
