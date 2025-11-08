@@ -66,6 +66,34 @@ export function PhotoCard({ photo }: PhotoCardProps) {
     }
   };
 
+  const handleDownload = async (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent card click from firing
+
+    if (!photo.downloadUrl || photo.status !== UPLOAD_STATUS.COMPLETED) {
+      return;
+    }
+
+    try {
+      const response = await fetch(photo.downloadUrl);
+      if (!response.ok) throw new Error('Download failed');
+
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = photo.fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Failed to download file:', err);
+      alert('Failed to download file');
+    }
+  };
+
   const isDownloadDisabled = photo.status !== UPLOAD_STATUS.COMPLETED || !photo.downloadUrl;
   const isCardClickable = photo.status === UPLOAD_STATUS.COMPLETED && photo.downloadUrl;
   const truncatedFileName =
@@ -132,7 +160,7 @@ export function PhotoCard({ photo }: PhotoCardProps) {
             {photo.status}
           </span>
           <button
-            onClick={(e) => e.stopPropagation()}
+            onClick={handleDownload}
             disabled={isDownloadDisabled}
             className={`flex items-center gap-1 px-3 py-1.5 rounded text-xs font-medium transition-colors ${
               isDownloadDisabled
