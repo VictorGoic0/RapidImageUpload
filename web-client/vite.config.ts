@@ -10,4 +10,10 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  optimizeDeps: {
+    include: ['sockjs-client'],
+  },
+  define: {
+    global: 'globalThis',
+  },
 })

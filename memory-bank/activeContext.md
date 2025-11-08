@@ -3,9 +3,27 @@
 ## Current Status
 **Phase**: Frontend Implementation - Web Components
 **Date**: 2025-11-08
-**Focus**: Upload Components Complete - Next: Upload Page Integration (PR #14)
+**Focus**: Upload Page Complete - Next: Photo Gallery Page (PR #15)
 
 ## Recent Changes
+- **PR #14 Complete: Upload Page & Integration (2025-11-08)**:
+  - Created `UploadPage.tsx` component with full upload workflow integration
+  - Integrated all hooks: useWebSocket, usePhotoUpload, useThrottledProgress
+  - WebSocket connection status indicator (green/red dot)
+  - Merged local upload progress with WebSocket progress updates using useMemo
+  - Conditional rendering: UploadZone when not uploading, progress section when active
+  - BatchProgress and individual ProgressIndicator components displayed
+  - Reset button to clear state and start over
+  - Error handling and display
+  - Responsive Tailwind styling
+  - Updated `App.tsx` with React Router configuration
+  - Routes configured: "/" and "/upload" → UploadPage, "/gallery" → placeholder
+  - Created `Navigation.tsx` component with active route highlighting
+  - Navigation bar with logo, Upload and Gallery links
+  - Fixed `global is not defined` error for sockjs-client:
+    - Added polyfill in `index.html` (window.global = window)
+    - Configured Vite optimizeDeps for sockjs-client
+  - All PR #14 tasks completed (54/54)
 - **PR #13 Complete: Upload Components & File Handling (2025-11-08)**:
   - Created `usePhotoUpload.ts` hook with full upload state management
   - Manages uploading state, error handling, and uploadResults Map
@@ -199,18 +217,15 @@
 ## Current Work Focus
 1. **Frontend Implementation** - **IN PROGRESS**
    - ✅ Upload components and hooks (PR #13 Complete)
-   - **NEXT**: Upload Page & Integration (PR #14)
-   - Upload page component with WebSocket integration
-   - App router configuration with React Router
-   - Navigation component
+   - ✅ Upload Page & Integration (PR #14 Complete)
+   - **NEXT**: Photo Gallery Page (PR #15)
    - Mobile frontend (React Native + Expo) - Pending
-   - Gallery page (PR #15) - Pending
 
 ## Next Steps (Immediate)
 1. ✅ Implement upload components and hooks (PR #13 Complete)
-2. Create UploadPage component with WebSocket integration (PR #14)
-3. Configure App router with React Router (PR #14)
-4. Create Navigation component (PR #14)
+2. ✅ Create UploadPage component with WebSocket integration (PR #14 Complete)
+3. ✅ Configure App router with React Router (PR #14 Complete)
+4. ✅ Create Navigation component (PR #14 Complete)
 5. Implement Gallery page (PR #15)
 6. Set up React Native mobile frontend
 7. Deploy to AWS

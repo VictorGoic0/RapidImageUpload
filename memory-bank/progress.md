@@ -182,11 +182,22 @@
   - Overall batch progress calculation
   - Counts for completed/failed/uploading files
   - Large progress bar display
-- [ ] UploadPage component (PR #14)
-- [ ] App router configuration (PR #14)
-- [ ] Navigation component (PR #14)
+- [x] UploadPage component (PR #14 Complete)
+  - Full upload workflow integration
+  - WebSocket connection status indicator
+  - Merged local and WebSocket progress updates
+  - Conditional rendering and error handling
+- [x] App router configuration (PR #14 Complete)
+  - React Router setup with BrowserRouter
+  - Routes for "/", "/upload", and "/gallery"
+- [x] Navigation component (PR #14 Complete)
+  - Navigation bar with logo and links
+  - Active route highlighting
+  - Responsive design
+- [x] Upload flow integration (PR #14 Complete)
+  - All components integrated and working
+  - Fixed sockjs-client global polyfill issue
 - [ ] PhotoGallery component (PR #15)
-- [ ] Upload flow integration
 
 ### Mobile Frontend (Day 4)
 - [ ] Expo project with TypeScript
@@ -241,8 +252,11 @@
 - [x] Photo query endpoint (PR #8 Complete)
 - [x] Backend integration tests (PR #9 Complete)
 
-### Phase 4: Frontend (Next)
-- [ ] Web application (React + Vite + TypeScript)
+### Phase 4: Frontend (In Progress)
+- [x] Web application foundation (React + Vite + TypeScript) (PR #10-11 Complete)
+- [x] Upload components and hooks (PR #12-13 Complete)
+- [x] Upload page and routing (PR #14 Complete)
+- [ ] Gallery page (PR #15)
 - [ ] Mobile application (React Native + Expo)
 
 ### Phase 5: Deployment (Not Started)

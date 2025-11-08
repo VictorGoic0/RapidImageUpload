@@ -43,45 +43,45 @@ export function BatchProgress({ uploads }: BatchProgressProps) {
   const uploadingCount = uploadArray.filter((upload) => upload.status === UPLOAD_STATUS.UPLOADING).length;
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 shadow-sm">
+    <div className="bg-white dark:bg-gray-800 rounded-xl border-2 border-gray-200 dark:border-gray-700 p-8 shadow-lg">
       {/* Title */}
-      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
+      <h3 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-6">
         {uploadingCount > 0
           ? `Uploading ${uploadingCount} of ${totalUploads} photos`
           : `Uploaded ${totalUploads} photos`}
       </h3>
 
       {/* Large progress bar for batch */}
-      <div className="mb-4">
-        <div className="w-full h-4 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+      <div className="mb-6">
+        <div className="w-full h-6 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden shadow-inner">
           <div
-            className="h-full bg-blue-500 transition-all duration-300"
+            className="h-full bg-blue-500 transition-all duration-300 shadow-sm"
             style={{ width: `${Math.min(100, Math.max(0, overallProgress))}%` }}
           />
         </div>
-        <div className="flex justify-between items-center mt-2">
-          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+        <div className="flex justify-between items-center mt-4">
+          <span className="text-base font-semibold text-gray-700 dark:text-gray-300">
             Overall Progress
           </span>
-          <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+          <span className="text-xl font-bold text-gray-900 dark:text-gray-100">
             {Math.round(overallProgress)}%
           </span>
         </div>
       </div>
 
       {/* Count summary */}
-      <div className="flex items-center gap-4 text-sm">
-        <span className="text-gray-600 dark:text-gray-400">
-          <span className="font-medium text-green-600 dark:text-green-400">{completedCount}</span> completed
+      <div className="flex items-center gap-6 text-base">
+        <span className="text-gray-700 dark:text-gray-300">
+          <span className="font-bold text-green-600 dark:text-green-400 text-lg">{completedCount}</span> completed
         </span>
         {failedCount > 0 && (
-          <span className="text-gray-600 dark:text-gray-400">
-            <span className="font-medium text-red-600 dark:text-red-400">{failedCount}</span> failed
+          <span className="text-gray-700 dark:text-gray-300">
+            <span className="font-bold text-red-600 dark:text-red-400 text-lg">{failedCount}</span> failed
           </span>
         )}
         {uploadingCount > 0 && (
-          <span className="text-gray-600 dark:text-gray-400">
-            <span className="font-medium text-blue-600 dark:text-blue-400">{uploadingCount}</span> uploading
+          <span className="text-gray-700 dark:text-gray-300">
+            <span className="font-bold text-blue-600 dark:text-blue-400 text-lg">{uploadingCount}</span> uploading
           </span>
         )}
       </div>

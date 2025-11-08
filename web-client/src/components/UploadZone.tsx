@@ -89,25 +89,25 @@ export function UploadZone({ onFilesSelected }: UploadZoneProps) {
         onDrop={handleDrop}
         onClick={handleClick}
         className={`
-          relative border-2 border-dashed rounded-lg p-12 text-center cursor-pointer
-          transition-all duration-200
+          relative border-2 border-dashed rounded-xl p-20 text-center cursor-pointer
+          transition-all duration-200 min-h-[400px] flex flex-col items-center justify-center
           ${isDragging 
-            ? 'border-blue-500 bg-blue-50 dark:bg-blue-950' 
-            : 'border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600 bg-gray-50 dark:bg-gray-900'
+            ? 'border-blue-500 bg-blue-50 dark:bg-blue-950 shadow-lg' 
+            : 'border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600 bg-white dark:bg-gray-800 hover:shadow-md'
           }
         `}
       >
         <Upload 
-          className={`mx-auto mb-4 ${isDragging ? 'text-blue-500' : 'text-gray-400'}`} 
-          size={48} 
+          className={`mx-auto mb-6 ${isDragging ? 'text-blue-500' : 'text-gray-400'}`} 
+          size={80} 
         />
-        <p className={`text-lg font-medium mb-2 ${isDragging ? 'text-blue-700 dark:text-blue-300' : 'text-gray-700 dark:text-gray-300'}`}>
+        <p className={`text-2xl font-semibold mb-3 ${isDragging ? 'text-blue-700 dark:text-blue-300' : 'text-gray-800 dark:text-gray-200'}`}>
           Drag and drop photos here
         </p>
-        <p className="text-sm text-gray-500 dark:text-gray-400">
+        <p className="text-lg text-gray-600 dark:text-gray-400 mb-2">
           or click to select files
         </p>
-        <p className="text-xs text-gray-400 dark:text-gray-500 mt-2">
+        <p className="text-base text-gray-500 dark:text-gray-500 mt-4">
           Maximum 100 files, images only
         </p>
       </div>

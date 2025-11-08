@@ -97,67 +97,67 @@
 
 ---
 
-## PR #14: Upload Page & Integration
+## PR #14: Upload Page & Integration ✅ COMPLETE
 
 ### Upload Page Component
-- [ ] 1. Create `src/pages/UploadPage.tsx`
-- [ ] 2. Import all hooks: useWebSocket, usePhotoUpload, useThrottledProgress
-- [ ] 3. Import components: UploadZone, ProgressIndicator, BatchProgress
-- [ ] 4. Define mock userId constant (for MVP: hardcoded UUID)
-- [ ] 5. Initialize useWebSocket hook with userId
-- [ ] 6. Initialize useThrottledProgress with sendProgress from WebSocket
-- [ ] 7. Initialize usePhotoUpload with userId and throttled progress callback
-- [ ] 8. Create state: `selectedFiles: File[]`
-- [ ] 9. Create state: `showProgress: boolean`
-- [ ] 10. Create handleFilesSelected callback
-- [ ] 11. Set selectedFiles state
-- [ ] 12. Set showProgress to true
-- [ ] 13. Call uploadPhotos from usePhotoUpload hook
-- [ ] 14. Create handleReset callback to clear state and start over
-- [ ] 15. Render page container with padding and max-width
-- [ ] 16. Render page title: "Upload Photos"
-- [ ] 17. Show WebSocket connection status indicator (green dot if connected)
-- [ ] 18. Conditionally render UploadZone if not uploading
-- [ ] 19. Pass handleFilesSelected to UploadZone
-- [ ] 20. Conditionally render progress section if showProgress
-- [ ] 21. Render BatchProgress component with uploadResults
-- [ ] 22. Render list of ProgressIndicator components
-- [ ] 23. Map through selectedFiles and uploadResults
-- [ ] 24. Pass fileName, progress, status to each ProgressIndicator
-- [ ] 25. Merge local upload progress with WebSocket progress updates
-- [ ] 26. Show "Reset" button when all uploads complete
-- [ ] 27. Bind handleReset to button
-- [ ] 28. Add loading spinner if uploading
-- [ ] 29. Show error message if error exists
-- [ ] 30. Apply responsive Tailwind styling
-- [ ] 31. Export UploadPage component
+- [x] 1. Create `src/pages/UploadPage.tsx`
+- [x] 2. Import all hooks: useWebSocket, usePhotoUpload, useThrottledProgress
+- [x] 3. Import components: UploadZone, ProgressIndicator, BatchProgress
+- [x] 4. Define mock userId constant (for MVP: hardcoded UUID)
+- [x] 5. Initialize useWebSocket hook with userId
+- [x] 6. Initialize useThrottledProgress with sendProgress from WebSocket
+- [x] 7. Initialize usePhotoUpload with userId and throttled progress callback
+- [x] 8. Create state: `selectedFiles: File[]`
+- [x] 9. Create state: `showProgress: boolean`
+- [x] 10. Create handleFilesSelected callback
+- [x] 11. Set selectedFiles state
+- [x] 12. Set showProgress to true
+- [x] 13. Call uploadPhotos from usePhotoUpload hook
+- [x] 14. Create handleReset callback to clear state and start over
+- [x] 15. Render page container with padding and max-width
+- [x] 16. Render page title: "Upload Photos"
+- [x] 17. Show WebSocket connection status indicator (green dot if connected)
+- [x] 18. Conditionally render UploadZone if not uploading
+- [x] 19. Pass handleFilesSelected to UploadZone
+- [x] 20. Conditionally render progress section if showProgress
+- [x] 21. Render BatchProgress component with uploadResults
+- [x] 22. Render list of ProgressIndicator components
+- [x] 23. Map through selectedFiles and uploadResults
+- [x] 24. Pass fileName, progress, status to each ProgressIndicator
+- [x] 25. Merge local upload progress with WebSocket progress updates
+- [x] 26. Show "Reset" button when all uploads complete
+- [x] 27. Bind handleReset to button
+- [x] 28. Add loading spinner if uploading
+- [x] 29. Show error message if error exists
+- [x] 30. Apply responsive Tailwind styling
+- [x] 31. Export UploadPage component
 
 ### App Router Configuration
-- [ ] 32. Update `src/App.tsx`
-- [ ] 33. Import BrowserRouter, Routes, Route from react-router-dom
-- [ ] 34. Import UploadPage component
-- [ ] 35. Remove default Vite boilerplate
-- [ ] 36. Wrap app in BrowserRouter
-- [ ] 37. Define Routes component
-- [ ] 38. Add Route for "/" path to UploadPage
-- [ ] 39. Add Route for "/upload" path to UploadPage (same component)
-- [ ] 40. Add placeholder Route for "/gallery" (to be implemented)
-- [ ] 41. Export App component
+- [x] 32. Update `src/App.tsx`
+- [x] 33. Import BrowserRouter, Routes, Route from react-router-dom
+- [x] 34. Import UploadPage component
+- [x] 35. Remove default Vite boilerplate
+- [x] 36. Wrap app in BrowserRouter
+- [x] 37. Define Routes component
+- [x] 38. Add Route for "/" path to UploadPage
+- [x] 39. Add Route for "/upload" path to UploadPage (same component)
+- [x] 40. Add placeholder Route for "/gallery" (to be implemented)
+- [x] 41. Export App component
 
 ### Navigation Component
-- [ ] 42. Create `src/components/Navigation.tsx`
-- [ ] 43. Import Link from react-router-dom
-- [ ] 44. Import lucide-react icons: Upload, Image
-- [ ] 45. Render nav bar with flex layout
-- [ ] 46. Add app logo/title on left
-- [ ] 47. Add navigation links: Upload, Gallery
-- [ ] 48. Use Link component for routing
-- [ ] 49. Highlight active route based on current path
-- [ ] 50. Apply Tailwind styling for nav appearance
-- [ ] 51. Make responsive for mobile (hamburger menu optional)
-- [ ] 52. Export Navigation component
-- [ ] 53. Import Navigation in App.tsx
-- [ ] 54. Render Navigation above Routes
+- [x] 42. Create `src/components/Navigation.tsx`
+- [x] 43. Import Link from react-router-dom
+- [x] 44. Import lucide-react icons: Upload, Image
+- [x] 45. Render nav bar with flex layout
+- [x] 46. Add app logo/title on left
+- [x] 47. Add navigation links: Upload, Gallery
+- [x] 48. Use Link component for routing
+- [x] 49. Highlight active route based on current path
+- [x] 50. Apply Tailwind styling for nav appearance
+- [x] 51. Make responsive for mobile (hamburger menu optional)
+- [x] 52. Export Navigation component
+- [x] 53. Import Navigation in App.tsx
+- [x] 54. Render Navigation above Routes
 
 ---
 

@@ -20,15 +20,15 @@ interface ProgressIndicatorProps {
 function getStatusIcon(status: UploadStatus) {
   switch (status) {
     case UPLOAD_STATUS.COMPLETED:
-      return <CheckCircle className="w-5 h-5 text-green-500" />;
+      return <CheckCircle className="w-7 h-7 text-green-500" />;
     case UPLOAD_STATUS.FAILED:
-      return <XCircle className="w-5 h-5 text-red-500" />;
+      return <XCircle className="w-7 h-7 text-red-500" />;
     case UPLOAD_STATUS.UPLOADING:
-      return <Loader2 className="w-5 h-5 text-blue-500 animate-spin" />;
+      return <Loader2 className="w-7 h-7 text-blue-500 animate-spin" />;
     case UPLOAD_STATUS.PENDING:
-      return <Clock className="w-5 h-5 text-gray-400" />;
+      return <Clock className="w-7 h-7 text-gray-400" />;
     default:
-      return <Clock className="w-5 h-5 text-gray-400" />;
+      return <Clock className="w-7 h-7 text-gray-400" />;
   }
 }
 
@@ -54,11 +54,11 @@ function getProgressBarColor(status: UploadStatus): string {
  * Component for displaying individual file upload progress.
  */
 export function ProgressIndicator({ fileName, progress, status }: ProgressIndicatorProps) {
-  // Truncate file name if too long
-  const displayFileName = fileName.length > 40 ? `${fileName.substring(0, 40)}...` : fileName;
+  // Truncate file name if too long (desktop: allow longer names)
+  const displayFileName = fileName.length > 80 ? `${fileName.substring(0, 80)}...` : fileName;
 
   return (
-    <div className="flex items-center gap-3 p-3 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+    <div className="flex items-center gap-4 p-5 bg-white dark:bg-gray-800 rounded-xl border-2 border-gray-200 dark:border-gray-700 shadow-sm">
       {/* Status icon on left */}
       <div className="flex-shrink-0">
         {getStatusIcon(status)}
@@ -66,20 +66,20 @@ export function ProgressIndicator({ fileName, progress, status }: ProgressIndica
 
       {/* File name and progress bar */}
       <div className="flex-1 min-w-0">
-        <div className="flex items-center justify-between mb-1">
-          <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-base font-semibold text-gray-900 dark:text-gray-100 truncate">
             {displayFileName}
           </p>
-          <span className="text-xs text-gray-500 dark:text-gray-400 ml-2 whitespace-nowrap">
+          <span className="text-base font-bold text-gray-700 dark:text-gray-300 ml-4 whitespace-nowrap">
             {Math.round(progress)}%
           </span>
         </div>
         
         {/* Progress bar container */}
-        <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+        <div className="w-full h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden shadow-inner">
           {/* Filled progress bar */}
           <div
-            className={`h-full transition-all duration-300 ${getProgressBarColor(status)}`}
+            className={`h-full transition-all duration-300 ${getProgressBarColor(status)} shadow-sm`}
             style={{ width: `${Math.min(100, Math.max(0, progress))}%` }}
           />
         </div>
