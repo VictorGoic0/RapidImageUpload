@@ -3,44 +3,44 @@
 ## PR #16: React Native Project Setup
 
 ### Expo Project Initialization
-- [ ] 1. Navigate to root directory: `cd rapidphoto`
-- [ ] 2. Create Expo app: `npx create-expo-app@latest mobile-client --template blank-typescript`
-- [ ] 3. Navigate to mobile-client: `cd mobile-client`
-- [ ] 4. **IMPORTANT**: Verify React version is 18 (not 19) - check `package.json` and downgrade if needed: `npm install react@18 react-dom@18`
-- [ ] 5. **IMPORTANT**: Install React Native version compatible with React 18: React Native 0.69.0 through 0.77.x are compatible with React 18. Use latest 0.77.x: `npx expo install react-native@0.77.x` (DO NOT use 0.78.0+ as it requires React 19)
-- [ ] 6. Install Expo Router: `npx expo install expo-router react-native-safe-area-context react-native-screens`
-- [ ] 7. Install image picker: `npx expo install expo-image-picker`
-- [ ] 8. Install file system: `npx expo install expo-file-system`
-- [ ] 9. Install Axios: `npm install axios`
-- [ ] 10. Install WebSocket: `npm install @stomp/stompjs`
-- [ ] 11. Install polyfills: `npm install text-encoding`
-- [ ] 12. **IMPORTANT**: Install react-native-web for web testing: `npm install react-native-web`
-- [ ] 13. Update `package.json` to include expo-router entry point
+- [x] 1. Navigate to root directory: `cd rapidphoto`
+- [x] 2. Create Expo app: `npx create-expo-app@latest mobile-client --template blank-typescript`
+- [x] 3. Navigate to mobile-client: `cd mobile-client`
+- [x] 4. **IMPORTANT**: Verify React version is 19 - check `package.json` and ensure React 19.1.0: `npm install react@19.1.0 react-dom@19.1.0`
+- [x] 5. **IMPORTANT**: Install React Native version compatible with React 19: Use React Native 0.81.4: `npx expo install react-native@0.81.4`
+- [x] 6. Install Expo Router: `npx expo install expo-router react-native-safe-area-context react-native-screens`
+- [x] 7. Install image picker: `npx expo install expo-image-picker`
+- [x] 8. Install file system: `npx expo install expo-file-system`
+- [x] 9. Install Axios: `npm install axios`
+- [x] 10. Install WebSocket: `npm install @stomp/stompjs`
+- [x] 11. Install polyfills: `npm install text-encoding`
+- [x] 12. **IMPORTANT**: Install react-native-web for web testing: `npm install react-native-web`
+- [x] 13. Update `package.json` to include expo-router entry point
 
 ### Expo Configuration
-- [ ] 14. Update `app.json` with app name: "RapidPhoto"
-- [ ] 15. Add scheme: "rapidphoto" for deep linking
-- [ ] 16. Configure iOS bundle identifier
-- [ ] 17. Configure Android package name
-- [ ] 18. Add permissions for camera and photo library
-- [ ] 19. Set up splash screen and icon (use defaults for now)
-- [ ] 20. Configure orientation (portrait preferred)
-- [ ] 21. **IMPORTANT**: Configure web platform support in `app.json` for testing (add web configuration)
+- [x] 14. Update `app.json` with app name: "RapidPhoto"
+- [x] 15. Add scheme: "rapidphoto" for deep linking
+- [x] 16. Configure iOS bundle identifier
+- [x] 17. Configure Android package name
+- [x] 18. Add permissions for camera and photo library
+- [x] 19. Set up splash screen and icon (use defaults for now)
+- [x] 20. Configure orientation (portrait preferred)
+- [x] 21. **IMPORTANT**: Configure web platform support in `app.json` for testing (add web configuration)
 
 ### Project Structure
-- [ ] 22. Create `app/tabs/` directory for tab navigation
-- [ ] 23. Create `app/tabs/_layout.tsx` for tab configuration
-- [ ] 24. Create `app/tabs/upload.tsx` for upload screen
-- [ ] 25. Create `app/tabs/gallery.tsx` for gallery screen
-- [ ] 26. Create `components/` directory
-- [ ] 27. Create `hooks/` directory
-- [ ] 28. Create `services/` directory
-- [ ] 29. Create `types/` directory
-- [ ] 30. Create `constants/` directory
-- [ ] 31. **IMPORTANT**: Set up Expo environment variables (NOT react-native-dotenv)
-- [ ] 32. Create `.env` file with API_URL and WS_URL (Expo will handle this automatically)
-- [ ] 33. Configure environment variables in `app.json` or use `process.env` (Expo handles env vars natively)
-- [ ] 34. **DO NOT** install react-native-dotenv - Expo handles environment variables internally
+- [x] 22. Create `app/tabs/` directory for tab navigation
+- [x] 23. Create `app/tabs/_layout.tsx` for tab configuration
+- [x] 24. Create `app/tabs/upload.tsx` for upload screen
+- [x] 25. Create `app/tabs/gallery.tsx` for gallery screen
+- [x] 26. Create `components/` directory
+- [x] 27. Create `hooks/` directory
+- [x] 28. Create `services/` directory
+- [x] 29. Create `types/` directory
+- [x] 30. Create `constants/` directory
+- [x] 31. **IMPORTANT**: Set up Expo environment variables (NOT react-native-dotenv)
+- [x] 32. Create `.env` file with API_URL and WS_URL (Expo will handle this automatically)
+- [x] 33. Configure environment variables in `app.json` or use `process.env` (Expo handles env vars natively)
+- [x] 34. **DO NOT** install react-native-dotenv - Expo handles environment variables internally
 
 ---
 
