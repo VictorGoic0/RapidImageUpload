@@ -28,6 +28,11 @@
 - **Build Tool**: Vite 7.1.7
 - **Package Manager**: npm
 - **Package Type**: ES modules (`"type": "module"` in package.json)
+- **TypeScript Configuration**:
+  - `verbatimModuleSyntax: true` enabled in tsconfig.app.json
+  - **CRITICAL**: All type-only imports MUST use `import type` syntax
+  - Example: `import type { IMessage } from '@stomp/stompjs'` (not `import { IMessage }`)
+  - Mixing types and values: `import { Client } from '@stomp/stompjs'; import type { IMessage } from '@stomp/stompjs'`
 - **HTTP Client**: Axios 1.13.2
   - API client timeout: 90 seconds (configured for large file uploads)
   - Request/response interceptors for logging and error handling

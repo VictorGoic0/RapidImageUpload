@@ -96,59 +96,59 @@
 ## PR #12: WebSocket Hook & Connection Management
 
 ### WebSocket Service
-- [ ] 1. Create `src/services/websocket.ts`
-- [ ] 2. Import Client from @stomp/stompjs
-- [ ] 3. Import SockJS from sockjs-client
-- [ ] 4. Create function `createWebSocketClient(url: string)`
-- [ ] 5. Configure Client with webSocketFactory using SockJS
-- [ ] 6. Set broker URL from environment variable
-- [ ] 7. Configure debug logging (console.log in dev)
-- [ ] 8. Configure reconnect delay (5 seconds)
-- [ ] 9. Return configured Client instance
-- [ ] 10. Export createWebSocketClient
+- [x] 1. Create `src/services/websocket.ts`
+- [x] 2. Import Client from @stomp/stompjs
+- [x] 3. Import SockJS from sockjs-client
+- [x] 4. Create function `createWebSocketClient(url: string)`
+- [x] 5. Configure Client with webSocketFactory using SockJS
+- [x] 6. Set broker URL from environment variable
+- [x] 7. Configure debug logging (console.log in dev)
+- [x] 8. Configure reconnect delay (5 seconds)
+- [x] 9. Return configured Client instance
+- [x] 10. Export createWebSocketClient
 
 ### WebSocket Hook
-- [ ] 11. Create `src/hooks/useWebSocket.ts`
-- [ ] 12. Import React hooks: useState, useEffect, useRef, useCallback
-- [ ] 13. Import Client and PhotoProgress types
-- [ ] 14. Define hook function: `useWebSocket(userId: string)`
-- [ ] 15. Create state: `const [connected, setConnected] = useState(false)`
-- [ ] 16. Create state: `const [progress, setProgress] = useState<Map<string, PhotoProgress>>(new Map())`
-- [ ] 17. Create ref: `const clientRef = useRef<Client | null>(null)`
-- [ ] 18. Create useEffect to initialize WebSocket connection
-- [ ] 19. Create Client using createWebSocketClient()
-- [ ] 20. Configure onConnect callback to set connected state true
-- [ ] 21. Subscribe to `/user/queue/progress` in onConnect
-- [ ] 22. Parse received message body as PhotoProgress
-- [ ] 23. Update progress Map with new PhotoProgress (use photoId as key)
-- [ ] 24. Configure onStompError callback for error logging
-- [ ] 25. Configure onDisconnect callback to set connected false
-- [ ] 26. Call client.activate() to start connection
-- [ ] 27. Store client in clientRef.current
-- [ ] 28. Return cleanup function to call client.deactivate()
-- [ ] 29. Add userId to dependency array
-- [ ] 30. Create sendProgress callback function
-- [ ] 31. Check if client is connected
-- [ ] 32. Publish message to `/app/upload-progress` destination
-- [ ] 33. Serialize PhotoProgress to JSON in message body
-- [ ] 34. Add error handling for send failures
-- [ ] 35. Wrap in useCallback with clientRef dependency
-- [ ] 36. Return object: `{ connected, progress, sendProgress }`
-- [ ] 37. Export useWebSocket hook
+- [x] 11. Create `src/hooks/useWebSocket.ts`
+- [x] 12. Import React hooks: useState, useEffect, useRef, useCallback
+- [x] 13. Import Client and PhotoProgress types
+- [x] 14. Define hook function: `useWebSocket(userId: string)`
+- [x] 15. Create state: `const [connected, setConnected] = useState(false)`
+- [x] 16. Create state: `const [progress, setProgress] = useState<Map<string, PhotoProgress>>(new Map())`
+- [x] 17. Create ref: `const clientRef = useRef<Client | null>(null)`
+- [x] 18. Create useEffect to initialize WebSocket connection
+- [x] 19. Create Client using createWebSocketClient()
+- [x] 20. Configure onConnect callback to set connected state true
+- [x] 21. Subscribe to `/user/queue/progress` in onConnect
+- [x] 22. Parse received message body as PhotoProgress
+- [x] 23. Update progress Map with new PhotoProgress (use photoId as key)
+- [x] 24. Configure onStompError callback for error logging
+- [x] 25. Configure onDisconnect callback to set connected false
+- [x] 26. Call client.activate() to start connection
+- [x] 27. Store client in clientRef.current
+- [x] 28. Return cleanup function to call client.deactivate()
+- [x] 29. Add userId to dependency array
+- [x] 30. Create sendProgress callback function
+- [x] 31. Check if client is connected
+- [x] 32. Publish message to `/app/upload-progress` destination
+- [x] 33. Serialize PhotoProgress to JSON in message body
+- [x] 34. Add error handling for send failures
+- [x] 35. Wrap in useCallback with clientRef dependency
+- [x] 36. Return object: `{ connected, progress, sendProgress }`
+- [x] 37. Export useWebSocket hook
 
 ### Throttled Progress Hook
-- [ ] 38. Create `src/hooks/useThrottledProgress.ts`
-- [ ] 39. Import useRef, useCallback
-- [ ] 40. Define hook: `useThrottledProgress(sendProgress: Function, throttleMs = 2000)`
-- [ ] 41. Create ref: `lastUpdateRef` as Map<string, number>
-- [ ] 42. Create throttledSend callback function
-- [ ] 43. Accept photoId and progressPercent parameters
-- [ ] 44. Get current timestamp: `Date.now()`
-- [ ] 45. Get last update time from lastUpdateRef for this photoId
-- [ ] 46. Calculate time since last update
-- [ ] 47. Check if enough time passed OR progress is 100%
-- [ ] 48. If yes: call sendProgress and update lastUpdateRef
-- [ ] 49. If no: skip sending (throttled)
-- [ ] 50. Wrap in useCallback with sendProgress dependency
-- [ ] 51. Return throttledSend function
-- [ ] 52. Export useThrottledProgress hook
+- [x] 38. Create `src/hooks/useThrottledProgress.ts`
+- [x] 39. Import useRef, useCallback
+- [x] 40. Define hook: `useThrottledProgress(sendProgress: Function, throttleMs = 2000)`
+- [x] 41. Create ref: `lastUpdateRef` as Map<string, number>
+- [x] 42. Create throttledSend callback function
+- [x] 43. Accept photoId and progressPercent parameters
+- [x] 44. Get current timestamp: `Date.now()`
+- [x] 45. Get last update time from lastUpdateRef for this photoId
+- [x] 46. Calculate time since last update
+- [x] 47. Check if enough time passed OR progress is 100%
+- [x] 48. If yes: call sendProgress and update lastUpdateRef
+- [x] 49. If no: skip sending (throttled)
+- [x] 50. Wrap in useCallback with sendProgress dependency
+- [x] 51. Return throttledSend function
+- [x] 52. Export useThrottledProgress hook
