@@ -60,19 +60,25 @@ function getStatusBadgeColor(status: string): string {
 export function PhotoCard({ photo }: PhotoCardProps) {
   const [imageError, setImageError] = useState(false);
 
-  const handleDownload = () => {
+  const openImageInNewTab = () => {
     if (photo.downloadUrl && photo.status === UPLOAD_STATUS.COMPLETED) {
       window.open(photo.downloadUrl, '_blank');
     }
   };
 
   const isDownloadDisabled = photo.status !== UPLOAD_STATUS.COMPLETED || !photo.downloadUrl;
+  const isCardClickable = photo.status === UPLOAD_STATUS.COMPLETED && photo.downloadUrl;
   const truncatedFileName =
     photo.fileName.length > 30 ? `${photo.fileName.substring(0, 30)}...` : photo.fileName;
   const showImage = photo.downloadUrl && photo.status === UPLOAD_STATUS.COMPLETED && !imageError;
 
   return (
-    <div className="group relative bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-lg transition-all duration-200 overflow-hidden hover:scale-[1.02]">
+    <div
+      onClick={isCardClickable ? openImageInNewTab : undefined}
+      className={`group relative bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-lg transition-all duration-200 overflow-hidden hover:scale-[1.02] ${
+        isCardClickable ? 'cursor-pointer' : ''
+      }`}
+    >
       {/* Image container */}
       <div className="relative w-full aspect-square bg-gray-100 dark:bg-gray-900 overflow-hidden">
         {showImage ? (
@@ -126,7 +132,7 @@ export function PhotoCard({ photo }: PhotoCardProps) {
             {photo.status}
           </span>
           <button
-            onClick={handleDownload}
+            onClick={(e) => e.stopPropagation()}
             disabled={isDownloadDisabled}
             className={`flex items-center gap-1 px-3 py-1.5 rounded text-xs font-medium transition-colors ${
               isDownloadDisabled
