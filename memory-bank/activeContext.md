@@ -6,6 +6,16 @@
 **Focus**: Frontend Implementation (Web & Mobile) - Next
 
 ## Recent Changes
+- **API Service Timeout Update (2025-11-08)**:
+  - Increased API client timeout from 30 seconds to 90 seconds
+  - Updated in `web-client/src/services/api.ts` to accommodate longer upload operations
+  - Prevents premature timeout errors during large file uploads
+- **PR #11 Complete: Type Definitions & API Service Layer (2025-11-08)**:
+  - Created `src/types/photo.ts` with all TypeScript type definitions
+  - Created `src/services/api.ts` with axios client and API functions
+  - Created `src/services/upload.ts` with S3 upload function using XMLHttpRequest
+  - All types match backend DTOs with proper JSDoc documentation
+  - API service includes request/response interceptors for logging and error handling
 - **WebSocket Configuration Fix (2025-11-08)**:
   - Fixed TaskScheduler circular dependency issue in WebSocketConfig
   - Moved TaskScheduler bean from WebSocketConfig to AsyncConfig

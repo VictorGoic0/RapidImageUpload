@@ -1,5 +1,6 @@
-import axios, { AxiosError, AxiosInstance } from 'axios';
-import {
+import axios from 'axios';
+import type { AxiosError, AxiosInstance } from 'axios';
+import type {
   BatchUploadResponse,
   Photo,
   PhotoCompletionResponse,
@@ -8,11 +9,19 @@ import {
 } from '@/types/photo';
 
 /**
+ * Extended error type for API errors with status and data.
+ */
+interface ApiError extends Error {
+  status?: number;
+  data?: unknown;
+}
+
+/**
  * Creates and configures an axios instance for API requests.
  */
 const createApiClient = (): AxiosInstance => {
   const baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
-  const timeout = 30000; // 30 seconds
+  const timeout = 90000; // 90 seconds
 
   const apiClient = axios.create({
     baseURL,
@@ -54,9 +63,9 @@ const createApiClient = (): AxiosInstance => {
         console.error(`[API Error] ${status}: ${message}`, error.response.data);
 
         // Create a more descriptive error
-        const apiError = new Error(message);
-        (apiError as any).status = status;
-        (apiError as any).data = error.response.data;
+        const apiError: ApiError = new Error(message);
+        apiError.status = status;
+        apiError.data = error.response.data;
         return Promise.reject(apiError);
       } else if (error.request) {
         // Request was made but no response received
@@ -87,18 +96,14 @@ export async function initiateBatchUpload(
   userId: string,
   photos: PhotoMetadata[]
 ): Promise<BatchUploadResponse> {
-  try {
-    const response = await apiClient.post<BatchUploadResponse>(
-      '/api/photos/batch-init',
-      { photos },
-      {
-        params: { userId },
-      }
-    );
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+  const response = await apiClient.post<BatchUploadResponse>(
+    '/api/photos/batch-init',
+    { photos },
+    {
+      params: { userId },
+    }
+  );
+  return response.data;
 }
 
 /**
@@ -115,18 +120,14 @@ export async function completePhotoUpload(
   userId: string,
   s3Key: string
 ): Promise<PhotoCompletionResponse> {
-  try {
-    const response = await apiClient.post<PhotoCompletionResponse>(
-      `/api/photos/${photoId}/complete`,
-      { s3Key },
-      {
-        params: { userId },
-      }
-    );
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+  const response = await apiClient.post<PhotoCompletionResponse>(
+    `/api/photos/${photoId}/complete`,
+    { s3Key },
+    {
+      params: { userId },
+    }
+  );
+  return response.data;
 }
 
 /**
@@ -143,14 +144,10 @@ export async function getUserPhotos(
   page: number = 0,
   size: number = 20
 ): Promise<PhotoQueryResponse> {
-  try {
-    const response = await apiClient.get<PhotoQueryResponse>('/api/photos', {
-      params: { userId, page, size },
-    });
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+  const response = await apiClient.get<PhotoQueryResponse>('/api/photos', {
+    params: { userId, page, size },
+  });
+  return response.data;
 }
 
 /**
@@ -162,13 +159,9 @@ export async function getUserPhotos(
  * @throws Error if the request fails or photo is not found
  */
 export async function getPhotoById(photoId: string, userId: string): Promise<Photo> {
-  try {
-    const response = await apiClient.get<Photo>(`/api/photos/${photoId}`, {
-      params: { userId },
-    });
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+  const response = await apiClient.get<Photo>(`/api/photos/${photoId}`, {
+    params: { userId },
+  });
+  return response.data;
 }
 

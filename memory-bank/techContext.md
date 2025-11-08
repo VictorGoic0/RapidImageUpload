@@ -29,6 +29,8 @@
 - **Package Manager**: npm
 - **Package Type**: ES modules (`"type": "module"` in package.json)
 - **HTTP Client**: Axios 1.13.2
+  - API client timeout: 90 seconds (configured for large file uploads)
+  - Request/response interceptors for logging and error handling
 - **WebSocket**: @stomp/stompjs 7.2.1, sockjs-client 1.6.1
 - **UI Components**: Shadcn/ui (Radix UI), Tailwind CSS 3.4.18
 - **Icons**: Lucide React 0.553.0

@@ -152,9 +152,17 @@
 - [x] Backend integration tests (PR #9 Complete)
 
 ### Web Frontend (Day 3)
-- [ ] React + Vite + TypeScript project setup
-- [ ] Tailwind CSS + Radix UI configuration
-- [ ] API service layer (axios)
+- [x] React + Vite + TypeScript project setup (PR #10 Complete)
+- [x] Tailwind CSS + Radix UI configuration (PR #10 Complete)
+- [x] API service layer (axios) (PR #11 Complete)
+  - Axios instance with 90-second timeout
+  - Request/response interceptors for logging and error handling
+  - Functions: initiateBatchUpload, completePhotoUpload, getUserPhotos, getPhotoById
+- [x] Type definitions (PR #11 Complete)
+  - UploadStatus, PhotoMetadata, PresignedUploadInfo, BatchUploadResponse
+  - Photo, PhotoProgress, PhotoQueryResponse, PhotoCompletionResponse
+- [x] Upload service (PR #11 Complete)
+  - uploadToS3 function with XMLHttpRequest and progress tracking
 - [ ] WebSocket hook with throttling
 - [ ] Photo upload hook
 - [ ] UploadZone component (drag & drop)
