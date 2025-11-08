@@ -103,6 +103,35 @@
     - GET `/api/photos/{photoId}?userId={userId}` - Single photo by ID
     - Exception handlers for PhotoNotFoundException (404), validation errors (400), general errors (500)
     - Request/response logging
+- **Backend Integration Tests (PR #9 Complete)**:
+  - H2 in-memory database dependency added to pom.xml (test scope)
+  - application-test.yml configuration:
+    - H2 in-memory database with PostgreSQL compatibility mode
+    - JPA ddl-auto set to create-drop for clean test state
+    - Random server port (port: 0) for parallel test execution
+    - Test logging configuration
+  - TestConfig.java with @TestConfiguration:
+    - Mock S3Service bean using Mockito
+    - @Primary annotation to override real S3Service in tests
+  - BatchUploadIntegrationTest (4 comprehensive test cases):
+    - shouldInitiateBatchUpload() - Full batch upload flow with 2 photos, verifies response structure, database state
+    - shouldRejectEmptyPhotoList() - Validation test for empty photos array (400)
+    - shouldRejectMoreThan100Photos() - Validation test for max limit enforcement (400)
+    - shouldHandleS3ServiceFailure() - Error handling test with transaction rollback verification (500)
+  - PhotoCompletionIntegrationTest (4 comprehensive test cases):
+    - shouldCompletePhotoUpload() - Full completion flow, verifies status change, uploadedAt timestamp, s3Key persistence
+    - shouldReturn404ForNonExistentPhoto() - Photo not found error handling (404)
+    - shouldFailIfS3ObjectNotFound() - S3 verification failure with status persistence check (400)
+    - shouldRejectCompletingAlreadyCompletedPhoto() - Invalid state transition prevention (400)
+  - PhotoQueryIntegrationTest (5 comprehensive test cases):
+    - shouldReturnUserPhotos() - Paginated query with 5 photos, verifies sorting, pagination metadata, download URL generation
+    - shouldReturnEmptyListForUserWithNoPhotos() - Empty result handling
+    - shouldPaginatePhotos() - Multi-page pagination with 25 photos across 3 pages
+    - shouldGetPhotoById() - Single photo retrieval with download URL for COMPLETED photos
+    - shouldReturn404ForNonExistentPhotoId() - Photo not found error handling (404)
+  - All tests use @SpringBootTest with @AutoConfigureMockMvc for full integration testing
+  - Tests verify HTTP status codes, response content, database state, and transaction behavior
+  - Mocked S3Service eliminates AWS dependencies for fast, isolated testing
 
 ## What's Left to Build
 
@@ -117,6 +146,7 @@
 - [x] Batch upload feature (PR #6 Complete)
 - [x] Photo completion feature (PR #7 Complete)
 - [x] Photo query feature (PR #8 Complete)
+- [x] Backend integration tests (PR #9 Complete)
 
 ### Web Frontend (Day 3)
 - [ ] React + Vite + TypeScript project setup
@@ -148,8 +178,8 @@
 - [ ] Environment variable configuration
 
 ### Testing & Documentation (Day 5)
-- [ ] Integration tests for upload flow
-- [ ] WebSocket progress broadcasting tests
+- [x] Integration tests for upload flow (PR #9 Complete)
+- [ ] WebSocket progress broadcasting tests (optional, deferred)
 - [ ] Performance testing (100 concurrent uploads)
 - [ ] Technical writeup (1-2 pages)
 - [ ] Demo video (5-7 minutes)
@@ -176,24 +206,24 @@
 - [x] Async configuration complete (PR #4 Complete)
 - [x] WebSocket configuration and infrastructure (PR #5 Complete)
 
-### Phase 3: Features (In Progress)
+### Phase 3: Backend Features (✅ Complete)
 - [x] Batch upload endpoint (PR #6 Complete)
 - [x] Photo completion endpoint (PR #7 Complete)
 - [x] Photo query endpoint (PR #8 Complete)
-- [ ] Backend integration tests (PR #9 - Next)
+- [x] Backend integration tests (PR #9 Complete)
 
-### Phase 4: Frontend (Not Started)
-- [ ] Web application
-- [ ] Mobile application
+### Phase 4: Frontend (Next)
+- [ ] Web application (React + Vite + TypeScript)
+- [ ] Mobile application (React Native + Expo)
 
 ### Phase 5: Deployment (Not Started)
 - [ ] AWS infrastructure
 - [ ] Production deployment
 
-### Phase 6: Testing & Documentation (Not Started)
-- [ ] Integration tests
-- [ ] Performance tests
-- [ ] Documentation
+### Phase 6: Testing & Documentation (In Progress)
+- [x] Integration tests (PR #9 Complete)
+- [ ] Performance tests (100 concurrent uploads)
+- [ ] Documentation (technical writeup, demo video)
 
 ## Known Issues
 - None yet
@@ -208,9 +238,9 @@
 - [ ] 100 concurrent uploads within 90 seconds
 - [ ] Zero UI blocking during uploads
 - [ ] Real-time progress updates (2-second intervals)
-- [ ] DDD/CQRS/VSA architecture implemented
+- [x] DDD/CQRS/VSA architecture implemented (Backend complete)
 - [ ] Deployed to AWS
-- [ ] Integration tests passing
+- [x] Integration tests passing (PR #9 Complete - 13 test cases)
 - [ ] Demo video completed
 - [ ] Documentation complete
 
