@@ -34,6 +34,15 @@
   - Custom AsyncUncaughtExceptionHandler for error logging
   - Async configuration in application.yml with virtual threads enabled
   - Thread pool configuration for fallback executor
+- **WebSocket Configuration & Infrastructure (PR #5 Complete)**:
+  - WebSocketConfig with STOMP protocol and message broker
+  - Message broker: `/topic`, `/queue` destinations, `/app` and `/user` prefixes
+  - STOMP endpoint at `/ws` with SockJS fallback
+  - CORS configured for Vite dev servers (ports 5173-5177) and backend (8080)
+  - Heartbeat configuration (10-second intervals)
+  - PhotoProgress DTO with factory methods
+  - WebSocketProgressService for progress broadcasting
+  - UploadProgressController for handling client messages
 
 ## What's Left to Build
 
@@ -43,11 +52,11 @@
 - [x] PhotoRepository with custom queries (PR #2 Complete)
 - [x] S3Service with presigned URL generation (PR #3 Complete)
 - [x] Async configuration with virtual threads (PR #4 Complete)
+- [x] WebSocket configuration and progress service (PR #5 Complete)
+- [x] Upload progress controller (PR #5 Complete)
 - [ ] Batch upload feature (VSA: batchupload/)
 - [ ] Photo completion feature (VSA: photocompletion/)
 - [ ] Photo query feature (VSA: photoquery/)
-- [ ] WebSocket configuration and progress service
-- [ ] Upload progress controller
 
 ### Web Frontend (Day 3)
 - [ ] React + Vite + TypeScript project setup
@@ -105,12 +114,12 @@
 - [x] PhotoRepository with custom queries
 - [x] S3Service implemented (PR #3 Complete)
 - [x] Async configuration complete (PR #4 Complete)
+- [x] WebSocket configuration and infrastructure (PR #5 Complete)
 
-### Phase 3: Features (Not Started)
-- [ ] Batch upload endpoint
-- [ ] Photo completion endpoint
+### Phase 3: Features (In Progress)
+- [ ] Batch upload endpoint (PR #6 - Next)
+- [ ] Photo completion endpoint (PR #7)
 - [ ] Photo query endpoint
-- [ ] WebSocket progress service
 
 ### Phase 4: Frontend (Not Started)
 - [ ] Web application

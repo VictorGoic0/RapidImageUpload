@@ -3,7 +3,7 @@
 ## Current Status
 **Phase**: Backend Foundation
 **Date**: 2025-01-27
-**Focus**: WebSocket Configuration & Infrastructure (PR #5)
+**Focus**: Batch Upload Feature (PR #6) - Next
 
 ## Recent Changes
 - **PR #1 Complete**: Development environment fully set up
@@ -53,23 +53,32 @@
     - `spring.threads.virtual.enabled=true` for Spring Boot native support
     - Thread naming pattern: `async-`
     - Fallback pool configuration (core: 10, max: 50, queue: 1000)
+- **PR #5 Complete**: WebSocket Configuration & Infrastructure
+  - `WebSocketConfig.java` with STOMP endpoint and message broker configuration
+  - Message broker configured: `/topic`, `/queue` destinations, `/app` prefix, `/user` prefix
+  - STOMP endpoint registered at `/ws` with SockJS fallback
+  - CORS configured for multiple Vite dev server ports (5173-5177) and backend (8080)
+  - Heartbeat configuration: 10-second intervals for connection monitoring
+  - `PhotoProgress.java` DTO record with factory methods (uploading, completed, failed)
+  - `WebSocketProgressService.java` for user-specific and topic broadcasting
+  - `UploadProgressController.java` for handling client progress messages
+  - Mock userId extraction for MVP (hardcoded fallback)
+  - Error handling and logging throughout
 - Memory bank structure created
 - Project brief, product context, system patterns, and tech context documented
 - Cursor rules directory initialized
 
 ## Current Work Focus
-1. **WebSocket Configuration** (Tasks-2.md, PR #5) - **NEXT**
-   - WebSocketConfig with STOMP endpoint configuration
-   - WebSocket DTOs (PhotoProgress)
-   - WebSocketProgressService for progress broadcasting
-   - UploadProgressController for handling WebSocket messages
+1. **Batch Upload Feature** (Tasks-2.md, PR #6) - **NEXT**
+   - Batch upload DTOs (PhotoMetadata, InitiateBatchUploadCommand, PresignedUploadInfo, BatchUploadResponse)
+   - BatchUploadCommandHandler for processing batch uploads
+   - BatchUploadController REST endpoint
 
 ## Next Steps (Immediate)
-1. Create WebSocketConfig with STOMP endpoint and message broker
-2. Create PhotoProgress DTO with factory methods
-3. Implement WebSocketProgressService for user/topic broadcasting
-4. Create UploadProgressController for message handling
-5. Proceed to PR #6: Batch Upload Feature
+1. Create batch upload DTOs with validation
+2. Implement BatchUploadCommandHandler with transaction management
+3. Create BatchUploadController REST endpoint
+4. Proceed to PR #7: Photo Completion Feature
 
 ## Active Decisions & Considerations
 

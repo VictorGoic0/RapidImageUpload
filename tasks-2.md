@@ -3,60 +3,60 @@
 ## PR #5: WebSocket Configuration & Infrastructure
 
 ### WebSocket Configuration
-- [ ] 1. Create `config/WebSocketConfig.java` class with @Configuration
-- [ ] 2. Add @EnableWebSocketMessageBroker annotation
-- [ ] 3. Implement WebSocketMessageBrokerConfigurer interface
-- [ ] 4. Override `configureMessageBroker()` method
-- [ ] 5. Enable simple broker with destinations: "/topic", "/queue"
-- [ ] 6. Set application destination prefix: "/app"
-- [ ] 7. Set user destination prefix: "/user"
-- [ ] 8. Override `registerStompEndpoints()` method
-- [ ] 9. Register STOMP endpoint: "/ws"
-- [ ] 10. Configure allowed origins for development: "http://localhost:5173", "http://localhost:8080"
-- [ ] 11. Add withSockJS() for fallback support
-- [ ] 12. Configure CORS for WebSocket endpoints
-- [ ] 13. Add session timeout configuration (optional)
-- [ ] 14. Add heartbeat configuration for connection monitoring
+- [x] 1. Create `config/WebSocketConfig.java` class with @Configuration
+- [x] 2. Add @EnableWebSocketMessageBroker annotation
+- [x] 3. Implement WebSocketMessageBrokerConfigurer interface
+- [x] 4. Override `configureMessageBroker()` method
+- [x] 5. Enable simple broker with destinations: "/topic", "/queue"
+- [x] 6. Set application destination prefix: "/app"
+- [x] 7. Set user destination prefix: "/user"
+- [x] 8. Override `registerStompEndpoints()` method
+- [x] 9. Register STOMP endpoint: "/ws"
+- [x] 10. Configure allowed origins for development: "http://localhost:5173", "http://localhost:8080"
+- [x] 11. Add withSockJS() for fallback support
+- [x] 12. Configure CORS for WebSocket endpoints
+- [x] 13. Add session timeout configuration (optional)
+- [x] 14. Add heartbeat configuration for connection monitoring
 
 ### WebSocket DTOs
-- [ ] 15. Create `infrastructure/websocket/PhotoProgress.java` record
-- [ ] 16. Add field: String photoId
-- [ ] 17. Add field: String fileName
-- [ ] 18. Add field: UploadStatus status
-- [ ] 19. Add field: Integer progressPercentage (0-100)
-- [ ] 20. Add field: String message
-- [ ] 21. Add field: Instant timestamp
-- [ ] 22. Add static factory method `PhotoProgress.uploading()`
-- [ ] 23. Add static factory method `PhotoProgress.completed()`
-- [ ] 24. Add static factory method `PhotoProgress.failed()`
+- [x] 15. Create `infrastructure/websocket/PhotoProgress.java` record
+- [x] 16. Add field: String photoId
+- [x] 17. Add field: String fileName
+- [x] 18. Add field: UploadStatus status
+- [x] 19. Add field: Integer progressPercentage (0-100)
+- [x] 20. Add field: String message
+- [x] 21. Add field: Instant timestamp
+- [x] 22. Add static factory method `PhotoProgress.uploading()`
+- [x] 23. Add static factory method `PhotoProgress.completed()`
+- [x] 24. Add static factory method `PhotoProgress.failed()`
 
 ### WebSocket Service
-- [ ] 25. Create `infrastructure/websocket/WebSocketProgressService.java` with @Service
-- [ ] 26. Inject SimpMessagingTemplate via constructor
-- [ ] 27. Add SLF4J logger
-- [ ] 28. Create method `sendProgressToUser(UserId userId, PhotoProgress progress)`
-- [ ] 29. Implement convertAndSendToUser() to send to "/queue/progress"
-- [ ] 30. Add error handling for WebSocket send failures
-- [ ] 31. Add logging for all WebSocket messages sent
-- [ ] 32. Create method `broadcastProgress(PhotoProgress progress)` for topic broadcasting
-- [ ] 33. Implement convertAndSend() to broadcast to "/topic/progress"
-- [ ] 34. Add method `notifyUploadComplete(UserId userId, PhotoId photoId, String fileName)`
-- [ ] 35. Create PhotoProgress.completed() and send via WebSocket
-- [ ] 36. Add method `notifyUploadFailed(UserId userId, PhotoId photoId, String fileName, String error)`
-- [ ] 37. Create PhotoProgress.failed() and send via WebSocket
+- [x] 25. Create `infrastructure/websocket/WebSocketProgressService.java` with @Service
+- [x] 26. Inject SimpMessagingTemplate via constructor
+- [x] 27. Add SLF4J logger
+- [x] 28. Create method `sendProgressToUser(UserId userId, PhotoProgress progress)`
+- [x] 29. Implement convertAndSendToUser() to send to "/queue/progress"
+- [x] 30. Add error handling for WebSocket send failures
+- [x] 31. Add logging for all WebSocket messages sent
+- [x] 32. Create method `broadcastProgress(PhotoProgress progress)` for topic broadcasting
+- [x] 33. Implement convertAndSend() to broadcast to "/topic/progress"
+- [x] 34. Add method `notifyUploadComplete(UserId userId, PhotoId photoId, String fileName)`
+- [x] 35. Create PhotoProgress.completed() and send via WebSocket
+- [x] 36. Add method `notifyUploadFailed(UserId userId, PhotoId photoId, String fileName, String error)`
+- [x] 37. Create PhotoProgress.failed() and send via WebSocket
 
 ### WebSocket Controller
-- [ ] 38. Create `infrastructure/websocket/UploadProgressController.java` with @Controller
-- [ ] 39. Inject WebSocketProgressService
-- [ ] 40. Add @MessageMapping("/upload-progress") method
-- [ ] 41. Accept @Payload PhotoProgress parameter
-- [ ] 42. Accept Principal parameter for user identification
-- [ ] 43. Log received progress updates
-- [ ] 44. Extract UserId from Principal (use mock for MVP: hardcoded userId)
-- [ ] 45. Call WebSocketProgressService to broadcast progress
-- [ ] 46. Add validation for progress percentage (0-100)
-- [ ] 47. Add error handling for invalid messages
-- [ ] 48. Add @SendTo annotation for response routing (optional)
+- [x] 38. Create `infrastructure/websocket/UploadProgressController.java` with @Controller
+- [x] 39. Inject WebSocketProgressService
+- [x] 40. Add @MessageMapping("/upload-progress") method
+- [x] 41. Accept @Payload PhotoProgress parameter
+- [x] 42. Accept Principal parameter for user identification
+- [x] 43. Log received progress updates
+- [x] 44. Extract UserId from Principal (use mock for MVP: hardcoded userId)
+- [x] 45. Call WebSocketProgressService to broadcast progress
+- [x] 46. Add validation for progress percentage (0-100)
+- [x] 47. Add error handling for invalid messages
+- [x] 48. Add @SendTo annotation for response routing (optional)
 
 ---
 
