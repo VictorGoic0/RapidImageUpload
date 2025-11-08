@@ -1,12 +1,11 @@
 import { useState, useCallback, useMemo } from 'react';
-import { useWebSocket } from '@/hooks/useWebSocket';
 import { usePhotoUpload } from '@/hooks/usePhotoUpload';
 import { useThrottledProgress } from '@/hooks/useThrottledProgress';
 import { UploadZone } from '@/components/UploadZone';
 import { ProgressIndicator } from '@/components/ProgressIndicator';
 import { BatchProgress } from '@/components/BatchProgress';
 import { Loader2 } from 'lucide-react';
-import type { UploadStatus } from '@/types/photo';
+import type { UploadStatus, PhotoProgress } from '@/types/photo';
 import { UPLOAD_STATUS } from '@/types/photo';
 
 /**
@@ -16,14 +15,24 @@ import { UPLOAD_STATUS } from '@/types/photo';
 const MOCK_USER_ID = '550e8400-e29b-41d4-a716-446655440000';
 
 /**
+ * Props for UploadPage component.
+ */
+interface UploadPageProps {
+  websocketConnected: boolean;
+  websocketProgress: Map<string, PhotoProgress>;
+  websocketSendProgress: (progressData: PhotoProgress) => void;
+}
+
+/**
  * Upload page component that handles photo uploads with progress tracking.
  */
-export function UploadPage() {
-  // Initialize WebSocket hook
-  const { connected, progress: wsProgress, sendProgress } = useWebSocket(MOCK_USER_ID);
-
+export function UploadPage({
+  websocketConnected,
+  websocketProgress,
+  websocketSendProgress,
+}: UploadPageProps) {
   // Initialize throttled progress callback
-  const throttledProgress = useThrottledProgress(sendProgress);
+  const throttledProgress = useThrottledProgress(websocketSendProgress);
 
   // Create progress callback for usePhotoUpload
   const handleProgressUpdate = useCallback(
@@ -79,7 +88,7 @@ export function UploadPage() {
     });
 
     // Override with WebSocket updates if available (more up-to-date)
-    wsProgress.forEach((wsUpdate, photoId) => {
+    websocketProgress.forEach((wsUpdate, photoId) => {
       // Find the file name for this photoId from uploadResults
       uploadResults.forEach((result, fileName) => {
         if (result.photoId === photoId) {
@@ -93,7 +102,7 @@ export function UploadPage() {
     });
 
     return merged;
-  }, [uploadResults, wsProgress]);
+  }, [uploadResults, websocketProgress]);
 
   // Check if all uploads are complete
   const allComplete = selectedFiles.length > 0 && 
@@ -112,12 +121,12 @@ export function UploadPage() {
           <div className="flex items-center gap-3">
             <div
               className={`w-4 h-4 rounded-full ${
-                connected ? 'bg-green-500' : 'bg-red-500'
+                websocketConnected ? 'bg-green-500' : 'bg-red-500'
               }`}
-              title={connected ? 'Connected' : 'Disconnected'}
+              title={websocketConnected ? 'Connected' : 'Disconnected'}
             />
             <span className="text-base font-medium text-gray-700 dark:text-gray-300">
-              {connected ? 'Connected' : 'Disconnected'}
+              {websocketConnected ? 'Connected' : 'Disconnected'}
             </span>
           </div>
         </div>
