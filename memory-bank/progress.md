@@ -20,6 +20,20 @@
   - Domain models: UploadStatus enum, PhotoId, UserId, Photo entity
   - PhotoRepository with custom query methods
   - Project compiles successfully
+- **AWS S3 Integration (PR #3 Complete)**:
+  - S3Config with S3Client bean configuration
+  - S3Properties for configuration binding
+  - S3Service with presigned URL generation (upload/download)
+  - S3 key generation and file name sanitization
+  - S3 object verification
+  - S3UploadException custom exception
+  - All S3 operations with proper error handling and logging
+- **Virtual Threads & Async Configuration (PR #4 Complete)**:
+  - AsyncConfig with @EnableAsync and virtual thread executor
+  - Java 21+ virtual threads support with automatic fallback
+  - Custom AsyncUncaughtExceptionHandler for error logging
+  - Async configuration in application.yml with virtual threads enabled
+  - Thread pool configuration for fallback executor
 
 ## What's Left to Build
 
@@ -27,8 +41,8 @@
 - [x] Spring Boot project initialization (PR #2 Complete)
 - [x] Domain models (Photo, PhotoId, UserId, UploadStatus) (PR #2 Complete)
 - [x] PhotoRepository with custom queries (PR #2 Complete)
-- [ ] S3Service with presigned URL generation (PR #3 - Next)
-- [ ] Async configuration with virtual threads
+- [x] S3Service with presigned URL generation (PR #3 Complete)
+- [x] Async configuration with virtual threads (PR #4 Complete)
 - [ ] Batch upload feature (VSA: batchupload/)
 - [ ] Photo completion feature (VSA: photocompletion/)
 - [ ] Photo query feature (VSA: photoquery/)
@@ -89,8 +103,8 @@
 - [x] Application configuration (application.yml with dev/prod profiles)
 - [x] Domain models implemented (Photo, PhotoId, UserId, UploadStatus)
 - [x] PhotoRepository with custom queries
-- [ ] S3Service implemented (PR #3 - Next)
-- [ ] Async configuration complete (PR #4)
+- [x] S3Service implemented (PR #3 Complete)
+- [x] Async configuration complete (PR #4 Complete)
 
 ### Phase 3: Features (Not Started)
 - [ ] Batch upload endpoint

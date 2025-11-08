@@ -3,6 +3,9 @@ spring:
     name: rapidphoto
   profiles:
     active: dev
+  threads:
+    virtual:
+      enabled: true
   jpa:
     hibernate:
       ddl-auto: update
@@ -11,6 +14,13 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  task:
+    execution:
+      thread-name-prefix: async-
+      pool:
+        core-size: 10
+        max-size: 50
+        queue-capacity: 1000
 
 server:
   port: 8080

@@ -2,8 +2,8 @@
 
 ## Current Status
 **Phase**: Backend Foundation
-**Date**: 2025-11-08
-**Focus**: AWS S3 Integration & Configuration (PR #3)
+**Date**: 2025-01-27
+**Focus**: WebSocket Configuration & Infrastructure (PR #5)
 
 ## Recent Changes
 - **PR #1 Complete**: Development environment fully set up
@@ -31,30 +31,45 @@
     - `Photo` entity with all fields, business logic methods, and validation
   - `PhotoRepository` interface with custom query methods
   - Project compiles successfully with Java 21
+- **PR #3 Complete**: AWS S3 Integration & Configuration
+  - `S3Config.java` with @Configuration and @Bean for S3Client
+  - `S3Properties` record for configuration binding (@ConfigurationProperties)
+  - `S3Service` implementation with:
+    - `generatePresignedUploadUrl()` - 15-minute expiration, PUT method
+    - `generatePresignedDownloadUrl()` - 60-minute expiration, GET method
+    - `generateS3Key()` - Consistent key structure: `users/{userId}/photos/{uuid}-{sanitizedFileName}`
+    - `sanitizeFileName()` - Removes special characters, sanitizes file names
+    - `verifyObjectExists()` - HEAD request to verify S3 object existence
+  - `S3UploadException` custom exception with multiple constructors
+  - Proper error handling and logging throughout
+  - S3Presigner configured for presigned URL generation
+- **PR #4 Complete**: Virtual Threads & Async Configuration
+  - `AsyncConfig.java` with @Configuration and @EnableAsync
+  - Virtual thread executor for Java 21+ using `Executors.newVirtualThreadPerTaskExecutor()`
+  - Fallback to ThreadPoolTaskExecutor for older Java versions
+  - Custom AsyncUncaughtExceptionHandler for logging async exceptions
+  - Java version detection and automatic executor selection
+  - Async configuration in application.yml:
+    - `spring.threads.virtual.enabled=true` for Spring Boot native support
+    - Thread naming pattern: `async-`
+    - Fallback pool configuration (core: 10, max: 50, queue: 1000)
 - Memory bank structure created
 - Project brief, product context, system patterns, and tech context documented
 - Cursor rules directory initialized
 
 ## Current Work Focus
-1. **S3 Integration** (Tasks-1.md, PR #3) - **NEXT**
-   - S3Config class with @Configuration and @Bean for S3Client
-   - S3Properties record for configuration binding
-   - S3Service implementation with presigned URL generation
-   - PresignedUrlResponse DTO
-   - S3UploadException custom exception
-
-2. **Async Configuration** (Tasks-1.md, PR #4)
-   - AsyncConfig with virtual threads support
-   - Task executor configuration
-   - Async properties in application.yml
+1. **WebSocket Configuration** (Tasks-2.md, PR #5) - **NEXT**
+   - WebSocketConfig with STOMP endpoint configuration
+   - WebSocket DTOs (PhotoProgress)
+   - WebSocketProgressService for progress broadcasting
+   - UploadProgressController for handling WebSocket messages
 
 ## Next Steps (Immediate)
-1. Create S3Config class with S3Client bean
-2. Create S3Properties for configuration binding
-3. Implement S3Service with presigned URL generation (upload/download)
-4. Add S3 key generation and sanitization methods
-5. Create DTOs and exception classes
-6. Proceed to PR #4: Virtual Threads & Async Configuration
+1. Create WebSocketConfig with STOMP endpoint and message broker
+2. Create PhotoProgress DTO with factory methods
+3. Implement WebSocketProgressService for user/topic broadcasting
+4. Create UploadProgressController for message handling
+5. Proceed to PR #6: Batch Upload Feature
 
 ## Active Decisions & Considerations
 
