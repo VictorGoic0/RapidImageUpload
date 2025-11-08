@@ -24,10 +24,10 @@
 - [ ] 17. Configure orientation (portrait preferred)
 
 ### Project Structure
-- [ ] 18. Create `app/(tabs)/` directory for tab navigation
-- [ ] 19. Create `app/(tabs)/_layout.tsx` for tab configuration
-- [ ] 20. Create `app/(tabs)/upload.tsx` for upload screen
-- [ ] 21. Create `app/(tabs)/gallery.tsx` for gallery screen
+- [ ] 18. Create `app/tabs/` directory for tab navigation
+- [ ] 19. Create `app/tabs/_layout.tsx` for tab configuration
+- [ ] 20. Create `app/tabs/upload.tsx` for upload screen
+- [ ] 21. Create `app/tabs/gallery.tsx` for gallery screen
 - [ ] 22. Create `components/` directory
 - [ ] 23. Create `hooks/` directory
 - [ ] 24. Create `services/` directory
@@ -233,7 +233,7 @@
 ## PR #20: Mobile Screens
 
 ### Upload Screen
-- [ ] 1. Create `app/(tabs)/upload.tsx`
+- [ ] 1. Create `app/tabs/upload.tsx`
 - [ ] 2. Import React, useState
 - [ ] 3. Import SafeAreaView, ScrollView, View, Text from react-native
 - [ ] 4. Import PhotoPicker, UploadProgress, BatchProgress components
@@ -267,7 +267,7 @@
 - [ ] 32. Export default upload screen
 
 ### Gallery Screen
-- [ ] 33. Create `app/(tabs)/gallery.tsx`
+- [ ] 33. Create `app/tabs/gallery.tsx`
 - [ ] 34. Import React
 - [ ] 35. Import SafeAreaView, View, Text, Button, ActivityIndicator
 - [ ] 36. Import PhotoGrid component
@@ -297,7 +297,7 @@
 - [ ] 60. Export default gallery screen
 
 ### Tab Navigation Layout
-- [ ] 61. Create `app/(tabs)/_layout.tsx`
+- [ ] 61. Create `app/tabs/_layout.tsx`
 - [ ] 62. Import Tabs from expo-router
 - [ ] 63. Import icons from a library or use emoji
 - [ ] 64. Configure Tabs component
@@ -320,6 +320,6 @@
 
 ### App Entry Point
 - [ ] 79. Update `app/index.tsx`
-- [ ] 80. Redirect to (tabs) route
+- [ ] 80. Redirect to tabs route
 - [ ] 81. Use expo-router Redirect component
 - [ ] 82. Export default index
