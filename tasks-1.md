@@ -3,41 +3,41 @@
 ## PR #1: Development Environment Setup
 
 ### Prerequisites Installation
-- [ ] 1. Install Java 21 (Temurin/Corretto/Oracle JDK)
-- [ ] 2. Verify Java installation: `java -version` shows 21.x
-- [ ] 3. Install Docker Desktop for your OS
-- [ ] 4. Verify Docker installation: `docker --version` and `docker compose version`
-- [ ] 5. Install Node.js 20 LTS
-- [ ] 6. Verify Node installation: `node --version` shows v20.x
-- [ ] 7. Install AWS CLI v2
-- [ ] 8. Verify AWS CLI installation: `aws --version`
-- [ ] 9. Configure AWS credentials: `aws configure`
-- [ ] 10. Enter AWS Access Key ID, Secret Key, region (us-east-1), output format (json)
-- [ ] 11. Verify credentials: `cat ~/.aws/credentials`
+- [x] 1. Install Java 21 (Temurin/Corretto/Oracle JDK)
+- [x] 2. Verify Java installation: `java -version` shows 21.x
+- [x] 3. Install Docker Desktop for your OS
+- [x] 4. Verify Docker installation: `docker --version` and `docker compose version`
+- [x] 5. Install Node.js 20 LTS
+- [x] 6. Verify Node installation: `node --version` shows v20.x
+- [x] 7. Install AWS CLI v2
+- [x] 8. Verify AWS CLI installation: `aws --version`
+- [x] 9. Configure AWS credentials: `aws configure`
+- [x] 10. Enter AWS Access Key ID, Secret Key, region (us-east-2), output format (json)
+- [x] 11. Verify credentials: `cat ~/.aws/credentials`
 
 ### AWS S3 Bucket Setup
-- [ ] 12. Create development S3 bucket: `aws s3 mb s3://rapidphoto-dev --region us-east-1`
-- [ ] 13. Create production S3 bucket: `aws s3 mb s3://rapidphoto-prod --region us-east-1`
-- [ ] 14. Create `cors-config.json` file with CORS configuration for S3
-- [ ] 15. Apply CORS to dev bucket: `aws s3api put-bucket-cors --bucket rapidphoto-dev --cors-configuration file://cors-config.json`
-- [ ] 16. Apply CORS to prod bucket: `aws s3api put-bucket-cors --bucket rapidphoto-prod --cors-configuration file://cors-config.json`
-- [ ] 17. Verify buckets created: `aws s3 ls`
-- [ ] 18. Test S3 access by uploading a test file to dev bucket
+- [x] 12. Create development S3 bucket: `aws s3 mb s3://rapidphoto-dev --region us-east-2`
+- [x] 13. Create production S3 bucket: `aws s3 mb s3://rapidphoto-prod --region us-east-2`
+- [x] 14. Create `cors-config.json` file with CORS configuration for S3
+- [x] 15. Apply CORS to dev bucket: `aws s3api put-bucket-cors --bucket rapidphoto-dev --cors-configuration file://cors-config.json`
+- [x] 16. Apply CORS to prod bucket: `aws s3api put-bucket-cors --bucket rapidphoto-prod --cors-configuration file://cors-config.json`
+- [x] 17. Verify buckets created: `aws s3 ls`
+- [x] 18. Test S3 access by uploading a test file to dev bucket
 
 ### Project Structure Creation
-- [ ] 19. Create root project directory: `mkdir rapidphoto && cd rapidphoto`
-- [ ] 20. Initialize Git repository: `git init`
-- [ ] 21. Create `.gitignore` file at root level
-- [ ] 22. Add common ignore patterns to `.gitignore` (node_modules, target, .env, etc.)
-- [ ] 23. Create `README.md` with project overview
-- [ ] 24. Create `docker-compose.yml` at root level
-- [ ] 25. Configure PostgreSQL service in docker-compose.yml (image: postgres:16, port 5432)
-- [ ] 26. Add environment variables to PostgreSQL service (POSTGRES_DB, USER, PASSWORD)
-- [ ] 27. Add volume mapping for PostgreSQL data persistence
-- [ ] 28. Add healthcheck to PostgreSQL service
-- [ ] 29. Start PostgreSQL: `docker compose up -d`
-- [ ] 30. Verify PostgreSQL running: `docker compose ps`
-- [ ] 31. Test PostgreSQL connection: `docker exec -it rapidphoto-postgres psql -U postgres -d rapidphoto`
+- [x] 19. Create root project directory: `mkdir rapidphoto && cd rapidphoto`
+- [x] 20. Initialize Git repository: `git init`
+- [x] 21. Create `.gitignore` file at root level
+- [x] 22. Add common ignore patterns to `.gitignore` (node_modules, target, .env, etc.)
+- [x] 23. Create `README.md` with project overview
+- [x] 24. Create `docker-compose.yml` at root level
+- [x] 25. Configure PostgreSQL service in docker-compose.yml (image: postgres:16, port 5432)
+- [x] 26. Add environment variables to PostgreSQL service (POSTGRES_DB, USER, PASSWORD)
+- [x] 27. Add volume mapping for PostgreSQL data persistence
+- [x] 28. Add healthcheck to PostgreSQL service
+- [x] 29. Start PostgreSQL: `docker compose up -d`
+- [x] 30. Verify PostgreSQL running: `docker compose ps`
+- [x] 31. Test PostgreSQL connection: `docker exec -it rapidphoto-postgres psql -U postgres -d rapidphoto`
 
 ---
 
@@ -63,7 +63,7 @@
 - [ ] 15. Configure dev datasource URL: `jdbc:postgresql://localhost:5432/rapidphoto`
 - [ ] 16. Set dev datasource username: `postgres`
 - [ ] 17. Set dev datasource password: `postgres`
-- [ ] 18. Add AWS S3 configuration for dev: bucket name `rapidphoto-dev`, region `us-east-1`
+- [ ] 18. Add AWS S3 configuration for dev: bucket name `rapidphoto-dev`, region `us-east-2`
 - [ ] 19. Set server port: 8080
 - [ ] 20. Create production profile section in application.yml
 - [ ] 21. Configure prod datasource with environment variable placeholders

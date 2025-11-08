@@ -514,7 +514,7 @@ aws configure
 # Enter when prompted:
 AWS Access Key ID: [your-access-key]
 AWS Secret Access Key: [your-secret-key]
-Default region name: us-east-1
+Default region name: us-east-2
 Default output format: json
 
 # Verify credentials file created
@@ -526,10 +526,10 @@ cat ~/.aws/credentials
 #### Step 1: Create S3 Buckets
 ```bash
 # Development bucket
-aws s3 mb s3://rapidphoto-dev --region us-east-1
+aws s3 mb s3://rapidphoto-dev --region us-east-2
 
 # Production bucket
-aws s3 mb s3://rapidphoto-prod --region us-east-1
+aws s3 mb s3://rapidphoto-prod --region us-east-2
 
 # Configure CORS for development bucket
 aws s3api put-bucket-cors --bucket rapidphoto-dev --cors-configuration file://cors-config.json
@@ -646,7 +646,7 @@ spring:
 aws:
   s3:
     bucket: rapidphoto-dev
-    region: us-east-1
+    region: us-east-2
 
 server:
   port: 8080
@@ -666,7 +666,7 @@ spring:
 aws:
   s3:
     bucket: rapidphoto-prod
-    region: us-east-1
+    region: us-east-2
 
 server:
   port: 8080
@@ -987,7 +987,7 @@ aws rds create-db-instance \
 ./mvnw clean package -DskipTests
 
 # 3. Initialize Elastic Beanstalk
-eb init -p "Corretto 21" rapidphoto --region us-east-1
+eb init -p "Corretto 21" rapidphoto --region us-east-2
 
 # 4. Create environment with RDS connection
 eb create rapidphoto-prod-env \
@@ -997,7 +997,7 @@ eb create rapidphoto-prod-env \
 # 5. Set environment variables
 eb setenv \
   SPRING_PROFILES_ACTIVE=prod \
-  AWS_REGION=us-east-1 \
+  AWS_REGION=us-east-2 \
   S3_BUCKET=rapidphoto-prod
 
 # 6. Deploy
@@ -1028,7 +1028,7 @@ aws cloudfront create-distribution \
   --origin-domain-name rapidphoto-web-prod.s3.amazonaws.com
 
 # 6. Access application
-# http://rapidphoto-web-prod.s3-website-us-east-1.amazonaws.com
+# http://rapidphoto-web-prod.s3-website-us-east-2.amazonaws.com
 ```
 
 **Mobile App:**
@@ -1484,7 +1484,7 @@ EOF
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                     AWS Cloud (us-east-1)                    │
+│                     AWS Cloud (us-east-2)                    │
 ├─────────────────────────────────────────────────────────────┤
 │                                                               │
 │  ┌────────────────────────────────────────────────────────┐ │
@@ -1574,7 +1574,7 @@ pip install awsebcli
 
 # 2. Initialize EB application
 cd backend
-eb init -p "Corretto 21" rapidphoto --region us-east-1
+eb init -p "Corretto 21" rapidphoto --region us-east-2
 
 # 3. Create RDS instance (one-time)
 aws rds create-db-instance \
@@ -1595,7 +1595,7 @@ eb create rapidphoto-prod-env \
   --instance-type t3.micro \
   --envvars \
     SPRING_PROFILES_ACTIVE=prod,\
-    AWS_REGION=us-east-1,\
+    AWS_REGION=us-east-2,\
     S3_BUCKET=rapidphoto-prod,\
     RDS_HOSTNAME=[RDS_ENDPOINT],\
     RDS_PORT=5432,\

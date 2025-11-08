@@ -107,7 +107,7 @@ spring:
 aws:
   s3:
     bucket: rapidphoto-dev
-    region: us-east-1
+    region: us-east-2
 
 server:
   port: 8080
@@ -123,7 +123,7 @@ server:
   - Connection via environment variables
 
 ### AWS Configuration
-- **Region**: us-east-1 (default)
+- **Region**: us-east-2 (Ohio)
 - **Credentials**: Via `~/.aws/credentials` or environment variables
 - **S3 CORS**: Configured for localhost:5173 (web) and localhost:8080 (backend)
 
@@ -192,7 +192,7 @@ server:
 ### Environment Variables (Production)
 ```
 SPRING_PROFILES_ACTIVE=prod
-AWS_REGION=us-east-1
+AWS_REGION=us-east-2
 S3_BUCKET=rapidphoto-prod
 RDS_HOSTNAME=[RDS_ENDPOINT]
 RDS_PORT=5432

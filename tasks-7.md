@@ -57,7 +57,7 @@
 - [ ] 2. Verify installation: `eb --version`
 - [ ] 3. Navigate to backend directory: `cd backend`
 - [ ] 4. Initialize EB application: `eb init`
-- [ ] 5. Select region: us-east-1
+- [ ] 5. Select region: us-east-2
 - [ ] 6. Create new application: rapidphoto
 - [ ] 7. Select platform: Java with Corretto 21
 - [ ] 8. Choose not to use CodeCommit
@@ -81,7 +81,7 @@
 
 ### Environment Configuration
 - [ ] 22. Set environment variables: `eb setenv SPRING_PROFILES_ACTIVE=prod`
-- [ ] 23. Set AWS_REGION: `eb setenv AWS_REGION=us-east-1`
+- [ ] 23. Set AWS_REGION: `eb setenv AWS_REGION=us-east-2`
 - [ ] 24. Set S3_BUCKET: `eb setenv S3_BUCKET=rapidphoto-prod`
 - [ ] 25. Set RDS_HOSTNAME: `eb setenv RDS_HOSTNAME=[rds-endpoint]`
 - [ ] 26. Set RDS_PORT: `eb setenv RDS_PORT=5432`
@@ -142,7 +142,7 @@
 
 ### Website Access Test
 - [ ] 21. Get S3 website URL from bucket properties
-- [ ] 22. Access URL in browser: `http://rapidphoto-web-prod.s3-website-us-east-1.amazonaws.com`
+- [ ] 22. Access URL in browser: `http://rapidphoto-web-prod.s3-website-us-east-2.amazonaws.com`
 - [ ] 23. Verify application loads correctly
 - [ ] 24. Test WebSocket connection to backend
 - [ ] 25. Test photo upload flow end-to-end
