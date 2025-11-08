@@ -127,55 +127,55 @@
 ## PR #7: Photo Completion Feature (Command Side - CQRS)
 
 ### Photo Completion DTOs
-- [ ] 1. Create `features/photocompletion/CompletePhotoUploadCommand.java` record
-- [ ] 2. Add field: @NotNull PhotoId photoId
-- [ ] 3. Add field: @NotNull UserId userId
-- [ ] 4. Add field: @NotBlank String s3Key
-- [ ] 5. Add validation annotations
-- [ ] 6. Create `features/photocompletion/PhotoCompletionResponse.java` record
-- [ ] 7. Add field: String photoId
-- [ ] 8. Add field: UploadStatus status
-- [ ] 9. Add field: Instant uploadedAt
-- [ ] 10. Add field: String message
+- [x] 1. Create `features/photocompletion/CompletePhotoUploadCommand.java` record
+- [x] 2. Add field: @NotNull PhotoId photoId
+- [x] 3. Add field: @NotNull UserId userId
+- [x] 4. Add field: @NotBlank String s3Key
+- [x] 5. Add validation annotations
+- [x] 6. Create `features/photocompletion/PhotoCompletionResponse.java` record
+- [x] 7. Add field: String photoId
+- [x] 8. Add field: UploadStatus status
+- [x] 9. Add field: Instant uploadedAt
+- [x] 10. Add field: String message
 
 ### Photo Completion Command Handler
-- [ ] 11. Create `features/photocompletion/PhotoCompletionCommandHandler.java` with @Service
-- [ ] 12. Inject PhotoRepository via constructor
-- [ ] 13. Inject S3Service via constructor
-- [ ] 14. Inject WebSocketProgressService via constructor
-- [ ] 15. Add SLF4J logger
-- [ ] 16. Create @Transactional method `handle(CompletePhotoUploadCommand command)`
-- [ ] 17. Find photo by ID and userId: `photoRepository.findByIdAndUserId()`
-- [ ] 18. Throw exception if photo not found: "Photo not found"
-- [ ] 19. Verify S3 object exists using S3Service.verifyObjectExists()
-- [ ] 20. Throw exception if S3 object doesn't exist: "S3 upload verification failed"
-- [ ] 21. Call photo.markAsCompleted(s3Key) domain method
-- [ ] 22. Save updated photo to database
-- [ ] 23. Log successful completion
-- [ ] 24. Send WebSocket notification: webSocketService.notifyUploadComplete()
-- [ ] 25. Create and return PhotoCompletionResponse
-- [ ] 26. Add error handling for photo not found
-- [ ] 27. Add error handling for S3 verification failure
-- [ ] 28. Add error handling for invalid state transitions
-- [ ] 29. Ensure transaction rollback on failures
+- [x] 11. Create `features/photocompletion/PhotoCompletionCommandHandler.java` with @Service
+- [x] 12. Inject PhotoRepository via constructor
+- [x] 13. Inject S3Service via constructor
+- [x] 14. Inject WebSocketProgressService via constructor
+- [x] 15. Add SLF4J logger
+- [x] 16. Create @Transactional method `handle(CompletePhotoUploadCommand command)`
+- [x] 17. Find photo by ID and userId: `photoRepository.findByIdAndUserId()`
+- [x] 18. Throw exception if photo not found: "Photo not found"
+- [x] 19. Verify S3 object exists using S3Service.verifyObjectExists()
+- [x] 20. Throw exception if S3 object doesn't exist: "S3 upload verification failed"
+- [x] 21. Call photo.markAsCompleted(s3Key) domain method
+- [x] 22. Save updated photo to database
+- [x] 23. Log successful completion
+- [x] 24. Send WebSocket notification: webSocketService.notifyUploadComplete()
+- [x] 25. Create and return PhotoCompletionResponse
+- [x] 26. Add error handling for photo not found
+- [x] 27. Add error handling for S3 verification failure
+- [x] 28. Add error handling for invalid state transitions
+- [x] 29. Ensure transaction rollback on failures
 
 ### Photo Completion REST Controller
-- [ ] 30. Create `features/photocompletion/PhotoCompletionController.java` with @RestController
-- [ ] 31. Add @RequestMapping("/api/photos")
-- [ ] 32. Add @CrossOrigin annotation
-- [ ] 33. Inject PhotoCompletionCommandHandler via constructor
-- [ ] 34. Add SLF4J logger
-- [ ] 35. Create @PostMapping("/{photoId}/complete") endpoint
-- [ ] 36. Accept @PathVariable String photoId (convert to PhotoId)
-- [ ] 37. Accept @RequestParam String userId (mock auth)
-- [ ] 38. Accept @Valid @RequestBody CompletePhotoRequest (with s3Key)
-- [ ] 39. Create CompletePhotoRequest record with @NotBlank String s3Key field
-- [ ] 40. Convert String photoId to PhotoId object
-- [ ] 41. Convert String userId to UserId object
-- [ ] 42. Create CompletePhotoUploadCommand
-- [ ] 43. Call commandHandler.handle(command)
-- [ ] 44. Return ResponseEntity.ok(response)
-- [ ] 45. Add @ExceptionHandler for PhotoNotFoundException
-- [ ] 46. Add @ExceptionHandler for S3VerificationException
-- [ ] 47. Add @ExceptionHandler for IllegalStateException (invalid transitions)
-- [ ] 48. Return appropriate HTTP status codes (404, 400, 500)
+- [x] 30. Create `features/photocompletion/PhotoCompletionController.java` with @RestController
+- [x] 31. Add @RequestMapping("/api/photos")
+- [x] 32. Add @CrossOrigin annotation
+- [x] 33. Inject PhotoCompletionCommandHandler via constructor
+- [x] 34. Add SLF4J logger
+- [x] 35. Create @PostMapping("/{photoId}/complete") endpoint
+- [x] 36. Accept @PathVariable String photoId (convert to PhotoId)
+- [x] 37. Accept @RequestParam String userId (mock auth)
+- [x] 38. Accept @Valid @RequestBody CompletePhotoRequest (with s3Key)
+- [x] 39. Create CompletePhotoRequest record with @NotBlank String s3Key field
+- [x] 40. Convert String photoId to PhotoId object
+- [x] 41. Convert String userId to UserId object
+- [x] 42. Create CompletePhotoUploadCommand
+- [x] 43. Call commandHandler.handle(command)
+- [x] 44. Return ResponseEntity.ok(response)
+- [x] 45. Add @ExceptionHandler for PhotoNotFoundException
+- [x] 46. Add @ExceptionHandler for S3VerificationException
+- [x] 47. Add @ExceptionHandler for IllegalStateException (invalid transitions)
+- [x] 48. Return appropriate HTTP status codes (404, 400, 500)

@@ -43,6 +43,47 @@
   - PhotoProgress DTO with factory methods
   - WebSocketProgressService for progress broadcasting
   - UploadProgressController for handling client messages
+- **CORS Configuration (PR #6 Complete)**:
+  - Centralized CorsConfig.java with 5 allowed origins (localhost:5173-5177)
+  - Global CORS configuration for all `/api/**` endpoints
+  - WebSocketConfig uses CorsConfig.ALLOWED_ORIGINS constant
+  - Eliminates hardcoded CORS origins across the application
+- **Batch Upload Feature (PR #6 Complete)**:
+  - PhotoMetadata DTO with validation (fileName, contentType, size)
+  - InitiateBatchUploadCommand with validation (max 100 photos)
+  - PresignedUploadInfo DTO (photoId, fileName, presignedUrl, s3Key, expiresAt)
+  - BatchUploadResponse DTO (uploads list, totalCount, requestedAt)
+  - BatchUploadCommandHandler with @Transactional:
+    - Creates Photo entities using Photo.createPending()
+    - Saves all photos to database in single transaction
+    - Generates S3 keys and presigned URLs for each photo
+    - Returns batch response with all upload information
+    - Error handling for database and S3 failures
+    - Performance logging
+  - BatchUploadController REST endpoint:
+    - POST `/api/photos/batch-init`
+    - Accepts userId as @RequestParam and photos in request body
+    - Validation with @Valid annotation
+    - Exception handlers for validation, S3UploadException, and general errors
+    - Request/response logging
+- **Photo Completion Feature (PR #7 Complete)**:
+  - CompletePhotoUploadCommand DTO with validation (photoId, userId, s3Key)
+  - PhotoCompletionResponse DTO (photoId, status, uploadedAt, message)
+  - PhotoNotFoundException and S3VerificationException custom exceptions
+  - PhotoCompletionCommandHandler with @Transactional:
+    - Finds photo by ID and userId using repository
+    - Verifies S3 object exists before completion
+    - Calls photo.markAsCompleted(s3Key) domain method
+    - Saves updated photo to database
+    - Sends WebSocket notification via WebSocketProgressService
+    - Error handling for photo not found, S3 verification, and invalid state transitions
+    - Transaction rollback on failures
+  - PhotoCompletionController REST endpoint:
+    - POST `/api/photos/{photoId}/complete`
+    - Accepts photoId as @PathVariable, userId as @RequestParam, s3Key in request body
+    - CompletePhotoRequest DTO with validation
+    - Exception handlers for PhotoNotFoundException (404), S3VerificationException (400), IllegalStateException (400)
+    - Request/response logging
 
 ## What's Left to Build
 
@@ -54,8 +95,8 @@
 - [x] Async configuration with virtual threads (PR #4 Complete)
 - [x] WebSocket configuration and progress service (PR #5 Complete)
 - [x] Upload progress controller (PR #5 Complete)
-- [ ] Batch upload feature (VSA: batchupload/)
-- [ ] Photo completion feature (VSA: photocompletion/)
+- [x] Batch upload feature (PR #6 Complete)
+- [x] Photo completion feature (PR #7 Complete)
 - [ ] Photo query feature (VSA: photoquery/)
 
 ### Web Frontend (Day 3)
@@ -117,9 +158,9 @@
 - [x] WebSocket configuration and infrastructure (PR #5 Complete)
 
 ### Phase 3: Features (In Progress)
-- [ ] Batch upload endpoint (PR #6 - Next)
-- [ ] Photo completion endpoint (PR #7)
-- [ ] Photo query endpoint
+- [x] Batch upload endpoint (PR #6 Complete)
+- [x] Photo completion endpoint (PR #7 Complete)
+- [ ] Photo query endpoint (PR #8 - Next)
 
 ### Phase 4: Frontend (Not Started)
 - [ ] Web application

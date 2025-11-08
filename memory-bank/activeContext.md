@@ -1,9 +1,9 @@
 # Active Context: RapidPhotoUpload
 
 ## Current Status
-**Phase**: Backend Foundation
+**Phase**: Backend Features Implementation
 **Date**: 2025-01-27
-**Focus**: Batch Upload Feature (PR #6) - Next
+**Focus**: Photo Query Feature (PR #8) - Next
 
 ## Recent Changes
 - **PR #1 Complete**: Development environment fully set up
@@ -64,21 +64,61 @@
   - `UploadProgressController.java` for handling client progress messages
   - Mock userId extraction for MVP (hardcoded fallback)
   - Error handling and logging throughout
+- **CORS Configuration (PR #6 Complete)**:
+  - Centralized CorsConfig.java created with 5 allowed origins constant
+  - Global CORS configuration for all REST endpoints via WebMvcConfigurer
+  - WebSocketConfig updated to use CorsConfig.ALLOWED_ORIGINS
+  - BatchUploadController uses global CORS (removed @CrossOrigin)
+  - Documentation added to systemPatterns.md and techContext.md
+- **Batch Upload Feature (PR #6 Complete)**:
+  - PhotoMetadata DTO with @NotBlank and @Positive validation
+  - InitiateBatchUploadCommand with @NotEmpty, @Size(max=100) validation
+  - PresignedUploadInfo and BatchUploadResponse DTOs
+  - BatchUploadCommandHandler:
+    - @Transactional method for atomic batch operations
+    - Creates Photo entities using Photo.createPending()
+    - Saves all photos in single transaction
+    - Generates S3 keys and presigned URLs
+    - Error handling for database and S3 failures
+    - Performance logging with duration tracking
+  - BatchUploadController:
+    - POST `/api/photos/batch-init` endpoint
+    - Accepts userId as @RequestParam, photos in request body
+    - Exception handlers for validation, S3UploadException, general errors
+    - Request/response logging
+- **Photo Completion Feature (PR #7 Complete)**:
+  - CompletePhotoUploadCommand with @NotNull and @NotBlank validation
+  - PhotoCompletionResponse with photoId, status, uploadedAt, message
+  - PhotoNotFoundException and S3VerificationException custom exceptions
+  - PhotoCompletionCommandHandler:
+    - @Transactional method for atomic completion operations
+    - Finds photo by ID and userId using repository
+    - Verifies S3 object exists before marking as completed
+    - Calls photo.markAsCompleted(s3Key) domain method
+    - Sends WebSocket notification on completion
+    - Error handling for photo not found (404), S3 verification (400), invalid state (400)
+    - Transaction rollback on failures
+  - PhotoCompletionController:
+    - POST `/api/photos/{photoId}/complete` endpoint
+    - Accepts photoId as @PathVariable, userId as @RequestParam, s3Key in request body
+    - CompletePhotoRequest DTO with @NotBlank validation
+    - Exception handlers with appropriate HTTP status codes
+    - Request/response logging
 - Memory bank structure created
 - Project brief, product context, system patterns, and tech context documented
 - Cursor rules directory initialized
 
 ## Current Work Focus
-1. **Batch Upload Feature** (Tasks-2.md, PR #6) - **NEXT**
-   - Batch upload DTOs (PhotoMetadata, InitiateBatchUploadCommand, PresignedUploadInfo, BatchUploadResponse)
-   - BatchUploadCommandHandler for processing batch uploads
-   - BatchUploadController REST endpoint
+1. **Photo Query Feature** (Tasks-2.md, PR #8) - **NEXT**
+   - Photo query DTOs (GetPhotosQuery, PhotoQueryResponse)
+   - PhotoQueryHandler for retrieving photos
+   - PhotoQueryController REST endpoint
 
 ## Next Steps (Immediate)
-1. Create batch upload DTOs with validation
-2. Implement BatchUploadCommandHandler with transaction management
-3. Create BatchUploadController REST endpoint
-4. Proceed to PR #7: Photo Completion Feature
+1. Create photo query DTOs
+2. Implement PhotoQueryHandler with pagination support
+3. Create PhotoQueryController REST endpoint
+4. Proceed to frontend implementation
 
 ## Active Decisions & Considerations
 
