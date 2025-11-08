@@ -14,8 +14,8 @@ export function Navigation() {
   };
 
   return (
-    <nav className="bg-white dark:bg-gray-800 border-b-2 border-gray-200 dark:border-gray-700 shadow-sm">
-      <div className="container mx-auto px-12">
+    <nav className="w-full bg-white dark:bg-gray-800 border-b-2 border-gray-200 dark:border-gray-700 shadow-sm">
+      <div className="w-full px-12">
         <div className="flex items-center justify-between h-20">
           {/* App logo/title */}
           <Link
@@ -31,11 +31,11 @@ export function Navigation() {
             <Link
               to="/upload"
               className={`
-                flex items-center gap-2 px-6 py-3 rounded-lg font-semibold text-base transition-colors
+                flex items-center gap-2 px-6 py-3 font-semibold text-base transition-colors relative
                 ${
                   isActive('/upload') || isActive('/')
-                    ? 'bg-blue-600 text-white shadow-md'
-                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                    ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400'
+                    : 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400'
                 }
               `}
             >
@@ -45,11 +45,11 @@ export function Navigation() {
             <Link
               to="/gallery"
               className={`
-                flex items-center gap-2 px-6 py-3 rounded-lg font-semibold text-base transition-colors
+                flex items-center gap-2 px-6 py-3 font-semibold text-base transition-colors relative
                 ${
                   isActive('/gallery')
-                    ? 'bg-blue-600 text-white shadow-md'
-                    : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
+                    ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400'
+                    : 'text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400'
                 }
               `}
             >

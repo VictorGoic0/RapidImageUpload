@@ -9,14 +9,14 @@ import './App.css';
 function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen">
+      <div className="w-full min-h-screen">
         <Navigation />
         <Routes>
           <Route path="/" element={<UploadPage />} />
           <Route path="/upload" element={<UploadPage />} />
           <Route path="/gallery" element={
-            <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-              <div className="container mx-auto px-12 py-12 max-w-7xl">
+            <div className="w-full min-h-screen bg-gray-50 dark:bg-gray-900">
+              <div className="w-full px-12 py-12">
                 <h1 className="text-5xl font-bold text-gray-900 dark:text-gray-100">Gallery (Coming Soon)</h1>
               </div>
             </div>

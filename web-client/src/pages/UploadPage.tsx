@@ -102,8 +102,8 @@ export function UploadPage() {
     );
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="container mx-auto px-12 py-12 max-w-7xl">
+    <div className="min-h-screen w-full bg-gray-50 dark:bg-gray-900">
+      <div className="w-full px-12 py-12">
         {/* Page title */}
         <div className="flex items-center justify-between mb-12">
           <h1 className="text-5xl font-bold text-gray-900 dark:text-gray-100">Upload Photos</h1>
