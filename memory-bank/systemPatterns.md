@@ -133,6 +133,36 @@ xhr.upload.addEventListener('progress', (e) => {
 - Non-blocking database operations via Spring Data JPA
 - WebSocket operations are non-blocking by default
 
+## CORS Configuration Pattern
+
+### Centralized CORS Management
+**CRITICAL**: All CORS configuration is centralized in `CorsConfig.java` to ensure consistency across the application.
+
+**Location**: `com.rapidphoto.config.CorsConfig`
+
+**Allowed Origins** (5 front-end domains):
+- `http://localhost:5173` (Primary Vite dev server)
+- `http://localhost:5174` (Secondary Vite dev server)
+- `http://localhost:5175` (Tertiary Vite dev server)
+- `http://localhost:5176` (Quaternary Vite dev server)
+- `http://localhost:5177` (Quinary Vite dev server)
+
+**Usage Pattern**:
+1. **REST Controllers**: CORS is configured globally via `CorsConfig.addCorsMappings()`. 
+   - Do NOT use `@CrossOrigin` on individual controllers unless you need different settings.
+   - All `/api/**` endpoints automatically use the centralized configuration.
+
+2. **WebSocket**: `WebSocketConfig.java` imports `CorsConfig.ALLOWED_ORIGINS` constant.
+   - Always use the constant, never hardcode origins in WebSocketConfig.
+
+**When Adding New Front-End Domains**:
+1. Update `CorsConfig.ALLOWED_ORIGINS` constant
+2. Verify `WebSocketConfig.java` uses the constant (already done)
+3. No need to update individual controllers (global config applies)
+4. Update this documentation
+
+**Key Rule**: Never hardcode CORS origins in controllers or WebSocket config. Always use `CorsConfig.ALLOWED_ORIGINS`.
+
 ## Error Handling Patterns
 
 ### Domain Validation

@@ -125,7 +125,13 @@ server:
 ### AWS Configuration
 - **Region**: us-east-2 (Ohio)
 - **Credentials**: Via `~/.aws/credentials` or environment variables
-- **S3 CORS**: Configured for localhost:5173 (web) and localhost:8080 (backend)
+- **S3 CORS**: Configured for 5 front-end domains (see CorsConfig.java for complete list)
+
+### CORS Configuration
+- **Backend CORS**: Centralized in `CorsConfig.java` with 5 allowed origins (localhost:5173-5177)
+- **WebSocket CORS**: Uses same origins from `CorsConfig.ALLOWED_ORIGINS` constant
+- **REST API CORS**: Configured globally for all `/api/**` endpoints
+- **Important**: Always use `CorsConfig.ALLOWED_ORIGINS` constant, never hardcode origins
 
 ## Key Dependencies
 

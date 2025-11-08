@@ -43,23 +43,20 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     /**
      * Registers STOMP endpoints for WebSocket connections.
      * - Endpoint: "/ws"
-     * - Allowed origins: Multiple Vite dev server ports (5173-5177) and backend (8080)
+     * - Allowed origins: Uses centralized CORS configuration from CorsConfig.ALLOWED_ORIGINS
      * - SockJS fallback enabled for browsers that don't support WebSocket
      */
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
+        // Use centralized CORS origins from CorsConfig
+        String[] allowedOrigins = CorsConfig.ALLOWED_ORIGINS.toArray(new String[0]);
+        
         registry.addEndpoint("/ws")
-                .setAllowedOriginPatterns(
-                    "http://localhost:5173",
-                    "http://localhost:5174",
-                    "http://localhost:5175",
-                    "http://localhost:5176",
-                    "http://localhost:5177",
-                    "http://localhost:8080"
-                )
+                .setAllowedOriginPatterns(allowedOrigins)
                 .withSockJS();
         
-        log.info("STOMP endpoint registered at /ws with SockJS fallback support (CORS: ports 5173-5177, 8080)");
+        log.info("STOMP endpoint registered at /ws with SockJS fallback support (CORS: {} origins)", 
+                 CorsConfig.ALLOWED_ORIGINS.size());
     }
 }
 

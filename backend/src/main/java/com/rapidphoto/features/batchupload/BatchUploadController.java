@@ -14,10 +14,10 @@ import java.util.Map;
 
 /**
  * REST controller for batch photo upload operations.
+ * CORS is configured globally via CorsConfig, so @CrossOrigin is not needed here.
  */
 @RestController
 @RequestMapping("/api/photos")
-@CrossOrigin(origins = "http://localhost:5173")
 public class BatchUploadController {
 
     private static final Logger log = LoggerFactory.getLogger(BatchUploadController.class);
