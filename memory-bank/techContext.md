@@ -11,6 +11,9 @@
 - **ORM**: Spring Data JPA with Hibernate
 - **Migration**: Flyway or Liquibase
 - **WebSocket**: Spring WebSocket with STOMP protocol
+  - TaskScheduler bean in AsyncConfig (required for heartbeat functionality)
+  - WebSocketConfig uses constructor injection to receive TaskScheduler
+  - Heartbeat configured: 10-second send/receive intervals
 
 ### Cloud Services
 - **Storage**: AWS S3
@@ -21,13 +24,15 @@
 - **Database**: AWS RDS PostgreSQL 16 (production)
 
 ### Web Frontend
-- **Framework**: React 18.3.1 with TypeScript 5.x
+- **Framework**: React 19.1.1 with TypeScript 5.x
 - **Build Tool**: Vite 7.1.7
-- **Package Manager**: npm or pnpm
+- **Package Manager**: npm
+- **Package Type**: ES modules (`"type": "module"` in package.json)
 - **HTTP Client**: Axios 1.13.2
-- **WebSocket**: @stomp/stompjs 7.0.0, sockjs-client 1.6.1
-- **UI Components**: Radix UI, Tailwind CSS 3.4.17
-- **Charts**: Recharts 3.3.0 (for progress visualization)
+- **WebSocket**: @stomp/stompjs 7.2.1, sockjs-client 1.6.1
+- **UI Components**: Shadcn/ui (Radix UI), Tailwind CSS 3.4.18
+- **Icons**: Lucide React 0.553.0
+- **Styling**: Tailwind CSS with tailwindcss-animate plugin (ES module import syntax)
 
 ### Mobile Frontend
 - **Framework**: React Native via Expo SDK 51+

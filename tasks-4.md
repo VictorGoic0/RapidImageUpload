@@ -45,51 +45,51 @@
 ## PR #11: Type Definitions & API Service Layer
 
 ### TypeScript Type Definitions
-- [ ] 1. Create `src/types/photo.ts`
-- [ ] 2. Define UploadStatus enum: 'PENDING' | 'UPLOADING' | 'COMPLETED' | 'FAILED'
-- [ ] 3. Define PhotoMetadata interface with fileName, contentType, size
-- [ ] 4. Define PresignedUploadInfo interface matching backend response
-- [ ] 5. Define BatchUploadResponse interface
-- [ ] 6. Define Photo interface matching PhotoDto from backend
-- [ ] 7. Define PhotoProgress interface for WebSocket messages
-- [ ] 8. Define PhotoQueryResponse interface with pagination
-- [ ] 9. Add JSDoc comments to all interfaces
-- [ ] 10. Export all types from photo.ts
+- [x] 1. Create `src/types/photo.ts`
+- [x] 2. Define UploadStatus enum: 'PENDING' | 'UPLOADING' | 'COMPLETED' | 'FAILED'
+- [x] 3. Define PhotoMetadata interface with fileName, contentType, size
+- [x] 4. Define PresignedUploadInfo interface matching backend response
+- [x] 5. Define BatchUploadResponse interface
+- [x] 6. Define Photo interface matching PhotoDto from backend
+- [x] 7. Define PhotoProgress interface for WebSocket messages
+- [x] 8. Define PhotoQueryResponse interface with pagination
+- [x] 9. Add JSDoc comments to all interfaces
+- [x] 10. Export all types from photo.ts
 
 ### API Service Layer
-- [ ] 11. Create `src/services/api.ts`
-- [ ] 12. Import axios
-- [ ] 13. Create axios instance with baseURL from environment variable
-- [ ] 14. Configure default timeout (30 seconds)
-- [ ] 15. Add request interceptor for logging (optional)
-- [ ] 16. Add response interceptor for error handling
-- [ ] 17. Create function `initiateBatchUpload(userId: string, photos: PhotoMetadata[])`
-- [ ] 18. Implement POST /api/photos/batch-init
-- [ ] 19. Return Promise<BatchUploadResponse>
-- [ ] 20. Add error handling and type safety
-- [ ] 21. Create function `completePhotoUpload(photoId: string, userId: string, s3Key: string)`
-- [ ] 22. Implement POST /api/photos/{photoId}/complete
-- [ ] 23. Return Promise<{status: string}>
-- [ ] 24. Create function `getUserPhotos(userId: string, page: number, size: number)`
-- [ ] 25. Implement GET /api/photos with query params
-- [ ] 26. Return Promise<PhotoQueryResponse>
-- [ ] 27. Create function `getPhotoById(photoId: string, userId: string)`
-- [ ] 28. Implement GET /api/photos/{photoId}
-- [ ] 29. Return Promise<Photo>
-- [ ] 30. Export all API functions
+- [x] 11. Create `src/services/api.ts`
+- [x] 12. Import axios
+- [x] 13. Create axios instance with baseURL from environment variable
+- [x] 14. Configure default timeout (30 seconds)
+- [x] 15. Add request interceptor for logging (optional)
+- [x] 16. Add response interceptor for error handling
+- [x] 17. Create function `initiateBatchUpload(userId: string, photos: PhotoMetadata[])`
+- [x] 18. Implement POST /api/photos/batch-init
+- [x] 19. Return Promise<BatchUploadResponse>
+- [x] 20. Add error handling and type safety
+- [x] 21. Create function `completePhotoUpload(photoId: string, userId: string, s3Key: string)`
+- [x] 22. Implement POST /api/photos/{photoId}/complete
+- [x] 23. Return Promise<{status: string}>
+- [x] 24. Create function `getUserPhotos(userId: string, page: number, size: number)`
+- [x] 25. Implement GET /api/photos with query params
+- [x] 26. Return Promise<PhotoQueryResponse>
+- [x] 27. Create function `getPhotoById(photoId: string, userId: string)`
+- [x] 28. Implement GET /api/photos/{photoId}
+- [x] 29. Return Promise<Photo>
+- [x] 30. Export all API functions
 
 ### Upload Service
-- [ ] 31. Create `src/services/upload.ts`
-- [ ] 32. Create function `uploadToS3(file: File, presignedUrl: string, onProgress: (percent: number) => void)`
-- [ ] 33. Use XMLHttpRequest for upload to track progress
-- [ ] 34. Listen to xhr.upload 'progress' event
-- [ ] 35. Calculate percentage: (loaded / total) * 100
-- [ ] 36. Call onProgress callback with percentage
-- [ ] 37. Return Promise that resolves on completion
-- [ ] 38. Handle upload errors and rejections
-- [ ] 39. Add content-type header matching file type
-- [ ] 40. Use PUT method for presigned URL upload
-- [ ] 41. Export uploadToS3 function
+- [x] 31. Create `src/services/upload.ts`
+- [x] 32. Create function `uploadToS3(file: File, presignedUrl: string, onProgress: (percent: number) => void)`
+- [x] 33. Use XMLHttpRequest for upload to track progress
+- [x] 34. Listen to xhr.upload 'progress' event
+- [x] 35. Calculate percentage: (loaded / total) * 100
+- [x] 36. Call onProgress callback with percentage
+- [x] 37. Return Promise that resolves on completion
+- [x] 38. Handle upload errors and rejections
+- [x] 39. Add content-type header matching file type
+- [x] 40. Use PUT method for presigned URL upload
+- [x] 41. Export uploadToS3 function
 
 ---
 

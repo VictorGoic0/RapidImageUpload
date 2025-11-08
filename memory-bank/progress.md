@@ -229,7 +229,7 @@
 - [ ] Documentation (technical writeup, demo video)
 
 ## Known Issues
-- None yet
+- None currently - WebSocket TaskScheduler and Tailwind config issues resolved
 
 ## Performance Targets
 - **100 concurrent uploads**: Target 60-90 seconds
