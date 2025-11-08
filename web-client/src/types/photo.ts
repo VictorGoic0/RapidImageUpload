@@ -4,6 +4,17 @@
 export type UploadStatus = 'PENDING' | 'UPLOADING' | 'COMPLETED' | 'FAILED';
 
 /**
+ * Upload status constants matching backend UploadStatus enum values.
+ * Use these constants instead of hard-coded strings for type safety and maintainability.
+ */
+export const UPLOAD_STATUS = {
+  PENDING: 'PENDING' as const,
+  UPLOADING: 'UPLOADING' as const,
+  COMPLETED: 'COMPLETED' as const,
+  FAILED: 'FAILED' as const,
+} as const;
+
+/**
  * Metadata for a photo to be uploaded in a batch.
  * Matches PhotoMetadata from backend.
  */

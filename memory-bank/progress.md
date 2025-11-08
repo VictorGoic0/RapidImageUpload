@@ -161,13 +161,31 @@
 - [x] Type definitions (PR #11 Complete)
   - UploadStatus, PhotoMetadata, PresignedUploadInfo, BatchUploadResponse
   - Photo, PhotoProgress, PhotoQueryResponse, PhotoCompletionResponse
+  - UPLOAD_STATUS constants added for type safety
 - [x] Upload service (PR #11 Complete)
   - uploadToS3 function with XMLHttpRequest and progress tracking
-- [ ] WebSocket hook with throttling
-- [ ] Photo upload hook
-- [ ] UploadZone component (drag & drop)
-- [ ] ProgressIndicator component
-- [ ] PhotoGallery component
+- [x] WebSocket hook with throttling (PR #12 Complete)
+- [x] Photo upload hook (PR #13 Complete)
+  - usePhotoUpload hook with full state management
+  - Integrates with batch upload and completion APIs
+  - S3 upload with progress tracking
+  - Error handling and cleanup on unmount
+- [x] UploadZone component (drag & drop) (PR #13 Complete)
+  - Drag-and-drop with visual feedback
+  - Click-to-select fallback
+  - Image file validation and max 100 files limit
+- [x] ProgressIndicator component (PR #13 Complete)
+  - Individual file progress with status icons
+  - Status-based colors and animations
+  - File name truncation
+- [x] BatchProgress component (PR #13 Complete)
+  - Overall batch progress calculation
+  - Counts for completed/failed/uploading files
+  - Large progress bar display
+- [ ] UploadPage component (PR #14)
+- [ ] App router configuration (PR #14)
+- [ ] Navigation component (PR #14)
+- [ ] PhotoGallery component (PR #15)
 - [ ] Upload flow integration
 
 ### Mobile Frontend (Day 4)
