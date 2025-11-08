@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation';
 import { UploadPage } from '@/pages/UploadPage';
+import { GalleryPage } from '@/pages/GalleryPage';
 import './App.css';
 
 /**
@@ -14,13 +15,7 @@ function App() {
         <Routes>
           <Route path="/" element={<UploadPage />} />
           <Route path="/upload" element={<UploadPage />} />
-          <Route path="/gallery" element={
-            <div className="w-full min-h-screen bg-gray-50 dark:bg-gray-900">
-              <div className="w-full px-12 py-12">
-                <h1 className="text-5xl font-bold text-gray-900 dark:text-gray-100">Gallery (Coming Soon)</h1>
-              </div>
-            </div>
-          } />
+          <Route path="/gallery" element={<GalleryPage />} />
         </Routes>
       </div>
     </BrowserRouter>

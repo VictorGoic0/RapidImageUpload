@@ -187,13 +187,14 @@
   - WebSocket connection status indicator
   - Merged local and WebSocket progress updates
   - Conditional rendering and error handling
+  - Desktop-first full-screen layout (no width constraints)
 - [x] App router configuration (PR #14 Complete)
   - React Router setup with BrowserRouter
   - Routes for "/", "/upload", and "/gallery"
 - [x] Navigation component (PR #14 Complete)
   - Navigation bar with logo and links
-  - Active route highlighting
-  - Responsive design
+  - Active route highlighting with underlined style (not button-like)
+  - Desktop-first design (full-width, no mobile constraints)
 - [x] Upload flow integration (PR #14 Complete)
   - All components integrated and working
   - Fixed sockjs-client global polyfill issue

@@ -161,94 +161,94 @@
 
 ---
 
-## PR #15: Photo Gallery Page
+## PR #15: Photo Gallery Page ✅ COMPLETE
 
 ### Gallery Hook
-- [ ] 1. Create `src/hooks/usePhotoGallery.ts`
-- [ ] 2. Import useState, useEffect, useCallback
-- [ ] 3. Import getUserPhotos API function
-- [ ] 4. Import types: Photo, PhotoQueryResponse
-- [ ] 5. Define hook: `usePhotoGallery(userId: string)`
-- [ ] 6. Create state: `photos: Photo[]`
-- [ ] 7. Create state: `loading: boolean`
-- [ ] 8. Create state: `error: string | null`
-- [ ] 9. Create state: `currentPage: number`
-- [ ] 10. Create state: `totalPages: number`
-- [ ] 11. Create fetchPhotos callback function
-- [ ] 12. Set loading true
-- [ ] 13. Call getUserPhotos API with page and size (20)
-- [ ] 14. Update photos state with response.photos
-- [ ] 15. Update pagination state (currentPage, totalPages)
-- [ ] 16. Set loading false
-- [ ] 17. Handle errors and update error state
-- [ ] 18. Wrap in useCallback with dependencies
-- [ ] 19. Create useEffect to fetch photos on mount
-- [ ] 20. Call fetchPhotos()
-- [ ] 21. Add userId to dependency array
-- [ ] 22. Create loadMore callback for pagination
-- [ ] 23. Increment currentPage
-- [ ] 24. Call fetchPhotos with new page
-- [ ] 25. Append new photos to existing array
-- [ ] 26. Return object: `{ photos, loading, error, currentPage, totalPages, loadMore, refetch: fetchPhotos }`
-- [ ] 27. Export usePhotoGallery hook
+- [x] 1. Create `src/hooks/usePhotoGallery.ts`
+- [x] 2. Import useState, useEffect, useCallback
+- [x] 3. Import getUserPhotos API function
+- [x] 4. Import types: Photo, PhotoQueryResponse
+- [x] 5. Define hook: `usePhotoGallery(userId: string)`
+- [x] 6. Create state: `photos: Photo[]`
+- [x] 7. Create state: `loading: boolean`
+- [x] 8. Create state: `error: string | null`
+- [x] 9. Create state: `currentPage: number`
+- [x] 10. Create state: `totalPages: number`
+- [x] 11. Create fetchPhotos callback function
+- [x] 12. Set loading true
+- [x] 13. Call getUserPhotos API with page and size (20)
+- [x] 14. Update photos state with response.photos
+- [x] 15. Update pagination state (currentPage, totalPages)
+- [x] 16. Set loading false
+- [x] 17. Handle errors and update error state
+- [x] 18. Wrap in useCallback with dependencies
+- [x] 19. Create useEffect to fetch photos on mount
+- [x] 20. Call fetchPhotos()
+- [x] 21. Add userId to dependency array
+- [x] 22. Create loadMore callback for pagination
+- [x] 23. Increment currentPage
+- [x] 24. Call fetchPhotos with new page
+- [x] 25. Append new photos to existing array
+- [x] 26. Return object: `{ photos, loading, error, currentPage, totalPages, loadMore, refetch: fetchPhotos }`
+- [x] 27. Export usePhotoGallery hook
 
 ### Photo Card Component
-- [ ] 28. Create `src/components/PhotoCard.tsx`
-- [ ] 29. Define props interface: photo (Photo type)
-- [ ] 30. Import lucide-react icons: Download, Calendar
-- [ ] 31. Create handleDownload callback
-- [ ] 32. Open photo.downloadUrl in new tab
-- [ ] 33. Format file size (bytes to KB/MB)
-- [ ] 34. Format upload date (use Intl.DateTimeFormat or date-fns)
-- [ ] 35. Render card container with border and shadow
-- [ ] 36. Render image with photo.downloadUrl as src
-- [ ] 37. Apply object-cover and aspect-ratio styling
-- [ ] 38. Show loading skeleton while image loads
-- [ ] 39. Render photo metadata section below image
-- [ ] 40. Show file name (truncate if long)
-- [ ] 41. Show file size
-- [ ] 42. Show upload date with calendar icon
-- [ ] 43. Show upload status badge (colored based on status)
-- [ ] 44. Render download button with icon
-- [ ] 45. Bind handleDownload to button click
-- [ ] 46. Disable download if status is not COMPLETED
-- [ ] 47. Apply Tailwind styling for card appearance
-- [ ] 48. Add hover effects (scale, shadow)
-- [ ] 49. Make card responsive
-- [ ] 50. Export PhotoCard component
+- [x] 28. Create `src/components/PhotoCard.tsx`
+- [x] 29. Define props interface: photo (Photo type)
+- [x] 30. Import lucide-react icons: Download, Calendar
+- [x] 31. Create handleDownload callback
+- [x] 32. Open photo.downloadUrl in new tab
+- [x] 33. Format file size (bytes to KB/MB)
+- [x] 34. Format upload date (use Intl.DateTimeFormat or date-fns)
+- [x] 35. Render card container with border and shadow
+- [x] 36. Render image with photo.downloadUrl as src
+- [x] 37. Apply object-cover and aspect-ratio styling
+- [x] 38. Show loading skeleton while image loads
+- [x] 39. Render photo metadata section below image
+- [x] 40. Show file name (truncate if long)
+- [x] 41. Show file size
+- [x] 42. Show upload date with calendar icon
+- [x] 43. Show upload status badge (colored based on status)
+- [x] 44. Render download button with icon
+- [x] 45. Bind handleDownload to button click
+- [x] 46. Disable download if status is not COMPLETED
+- [x] 47. Apply Tailwind styling for card appearance
+- [x] 48. Add hover effects (scale, shadow)
+- [x] 49. Make card responsive
+- [x] 50. Export PhotoCard component
 
 ### Gallery Page Component
-- [ ] 51. Create `src/pages/GalleryPage.tsx`
-- [ ] 52. Import usePhotoGallery hook
-- [ ] 53. Import PhotoCard component
-- [ ] 54. Import lucide-react icons: RefreshCw, ImageOff
-- [ ] 55. Define mock userId (same as UploadPage)
-- [ ] 56. Initialize usePhotoGallery hook
-- [ ] 57. Destructure photos, loading, error, loadMore, refetch
-- [ ] 58. Create handleRefresh callback
-- [ ] 59. Call refetch to reload photos
-- [ ] 60. Render page container with padding
-- [ ] 61. Render page title: "My Photos"
-- [ ] 62. Add refresh button that calls handleRefresh
-- [ ] 63. Show loading spinner if loading and no photos
-- [ ] 64. Show error message if error exists
-- [ ] 65. Show empty state if no photos (ImageOff icon + message)
-- [ ] 66. Render photo grid with CSS Grid or Flexbox
-- [ ] 67. Set responsive columns (1 on mobile, 2 on tablet, 3-4 on desktop)
-- [ ] 68. Map through photos array
-- [ ] 69. Render PhotoCard for each photo
-- [ ] 70. Pass photo prop to PhotoCard
-- [ ] 71. Add "Load More" button at bottom if more pages exist
-- [ ] 72. Check if currentPage < totalPages
-- [ ] 73. Bind loadMore to button click
-- [ ] 74. Disable button while loading
-- [ ] 75. Show loading spinner on button when loading more
-- [ ] 76. Apply Tailwind styling for grid and layout
-- [ ] 77. Make fully responsive
-- [ ] 78. Export GalleryPage component
+- [x] 51. Create `src/pages/GalleryPage.tsx`
+- [x] 52. Import usePhotoGallery hook
+- [x] 53. Import PhotoCard component
+- [x] 54. Import lucide-react icons: RefreshCw, ImageOff
+- [x] 55. Define mock userId (same as UploadPage)
+- [x] 56. Initialize usePhotoGallery hook
+- [x] 57. Destructure photos, loading, error, loadMore, refetch
+- [x] 58. Create handleRefresh callback
+- [x] 59. Call refetch to reload photos
+- [x] 60. Render page container with padding
+- [x] 61. Render page title: "My Photos"
+- [x] 62. Add refresh button that calls handleRefresh
+- [x] 63. Show loading spinner if loading and no photos
+- [x] 64. Show error message if error exists
+- [x] 65. Show empty state if no photos (ImageOff icon + message)
+- [x] 66. Render photo grid with CSS Grid or Flexbox
+- [x] 67. Set responsive columns (1 on mobile, 2 on tablet, 3-4 on desktop)
+- [x] 68. Map through photos array
+- [x] 69. Render PhotoCard for each photo
+- [x] 70. Pass photo prop to PhotoCard
+- [x] 71. Add "Load More" button at bottom if more pages exist
+- [x] 72. Check if currentPage < totalPages
+- [x] 73. Bind loadMore to button click
+- [x] 74. Disable button while loading
+- [x] 75. Show loading spinner on button when loading more
+- [x] 76. Apply Tailwind styling for grid and layout
+- [x] 77. Make fully responsive
+- [x] 78. Export GalleryPage component
 
 ### Update App Router
-- [ ] 79. Import GalleryPage in `src/App.tsx`
-- [ ] 80. Update Route for "/gallery" path
-- [ ] 81. Set element to GalleryPage component
-- [ ] 82. Test navigation between Upload and Gallery pages
+- [x] 79. Import GalleryPage in `src/App.tsx`
+- [x] 80. Update Route for "/gallery" path
+- [x] 81. Set element to GalleryPage component
+- [x] 82. Test navigation between Upload and Gallery pages

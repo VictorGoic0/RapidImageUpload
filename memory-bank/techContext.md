@@ -28,6 +28,11 @@
 - **Build Tool**: Vite 7.1.7
 - **Package Manager**: npm
 - **Package Type**: ES modules (`"type": "module"` in package.json)
+- **Design Approach**: Desktop-first (no mobile responsiveness constraints)
+  - Full-screen layouts with `w-full` classes
+  - No max-width constraints on main containers
+  - Background colors span edge-to-edge
+  - Large fonts, generous spacing, wide layouts optimized for desktop
 - **TypeScript Configuration**:
   - `verbatimModuleSyntax: true` enabled in tsconfig.app.json
   - **CRITICAL**: All type-only imports MUST use `import type` syntax
@@ -37,9 +42,12 @@
   - API client timeout: 90 seconds (configured for large file uploads)
   - Request/response interceptors for logging and error handling
 - **WebSocket**: @stomp/stompjs 7.2.1, sockjs-client 1.6.1
+  - Global polyfill in `index.html` for `global is not defined` error
+  - Vite `optimizeDeps` configured for sockjs-client
 - **UI Components**: Shadcn/ui (Radix UI), Tailwind CSS 3.4.18
 - **Icons**: Lucide React 0.553.0
 - **Styling**: Tailwind CSS with tailwindcss-animate plugin (ES module import syntax)
+- **Navigation**: Underlined active state (not button-style)
 
 ### Mobile Frontend
 - **Framework**: React Native via Expo SDK 51+

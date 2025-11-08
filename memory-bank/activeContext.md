@@ -6,6 +6,20 @@
 **Focus**: Upload Page Complete - Next: Photo Gallery Page (PR #15)
 
 ## Recent Changes
+- **UI/UX Redesign: Desktop-First Layout (2025-11-08)**:
+  - Redesigned web client to be desktop-first (no mobile responsiveness constraints)
+  - Removed all max-width constraints (`max-w-4xl`, `max-w-7xl`) for full-screen layout
+  - Updated global CSS (`index.css`) to ensure full-width backgrounds:
+    - `html`, `body`, and `#root` set to `width: 100%` and `min-height: 100vh`
+    - Removed flex centering constraints that limited layout
+  - Navigation spans full width with `w-full` class
+  - UploadPage uses full width with padding (`px-12`) instead of container constraints
+  - All components updated for desktop-first: larger fonts, more spacing, wider layouts
+  - Navigation active state changed from button-style (blue background) to underlined style:
+    - Active items: blue text with `border-b-2` underline
+    - Inactive items: gray text that turns blue on hover
+    - Cleaner, less button-like appearance
+  - Background colors now span edge-to-edge across entire screen
 - **PR #14 Complete: Upload Page & Integration (2025-11-08)**:
   - Created `UploadPage.tsx` component with full upload workflow integration
   - Integrated all hooks: useWebSocket, usePhotoUpload, useThrottledProgress
@@ -15,10 +29,10 @@
   - BatchProgress and individual ProgressIndicator components displayed
   - Reset button to clear state and start over
   - Error handling and display
-  - Responsive Tailwind styling
+  - Desktop-first Tailwind styling (large fonts, wide layouts, generous spacing)
   - Updated `App.tsx` with React Router configuration
   - Routes configured: "/" and "/upload" → UploadPage, "/gallery" → placeholder
-  - Created `Navigation.tsx` component with active route highlighting
+  - Created `Navigation.tsx` component with underlined active route highlighting
   - Navigation bar with logo, Upload and Gallery links
   - Fixed `global is not defined` error for sockjs-client:
     - Added polyfill in `index.html` (window.global = window)
