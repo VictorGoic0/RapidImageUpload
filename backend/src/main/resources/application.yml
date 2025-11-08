@@ -1,0 +1,51 @@
+spring:
+  application:
+    name: rapidphoto
+  profiles:
+    active: dev
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+server:
+  port: 8080
+
+---
+# Development Profile
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:postgresql://localhost:5432/rapidphoto
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+aws:
+  s3:
+    bucket: rapidphoto-dev
+    region: us-east-2
+
+---
+# Production Profile
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: ${RDS_URL:jdbc:postgresql://${RDS_HOSTNAME:localhost}:${RDS_PORT:5432}/${RDS_DB_NAME:rapidphoto}}
+    username: ${RDS_USERNAME:postgres}
+    password: ${RDS_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+
+aws:
+  s3:
+    bucket: ${S3_BUCKET:rapidphoto-prod}
+    region: ${AWS_REGION:us-east-2}
+
