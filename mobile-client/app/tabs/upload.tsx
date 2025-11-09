@@ -125,6 +125,19 @@ export default function UploadScreen() {
           </View>
         </View>
 
+        {/* Welcome Card - show when no uploads in progress */}
+        {!showProgress && (
+          <View style={styles.welcomeCard}>
+            <View style={styles.welcomeIconContainer}>
+              <Text style={styles.welcomeIcon}>📷</Text>
+            </View>
+            <Text style={styles.welcomeTitle}>Upload Your Photos</Text>
+            <Text style={styles.welcomeSubtitle}>
+              Select from gallery or take a new photo
+            </Text>
+          </View>
+        )}
+
         {/* Upload Zone - show when not uploading or when uploads are complete */}
         {(!uploading || allComplete) && (
           <View style={styles.uploadSection}>
@@ -227,6 +240,48 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
     color: '#374151',
+  },
+  welcomeCard: {
+    backgroundColor: '#ffffff',
+    borderRadius: 16,
+    padding: 32,
+    alignItems: 'center',
+    marginBottom: 24,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
+  },
+  welcomeIconContainer: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    backgroundColor: '#eff6ff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 20,
+  },
+  welcomeIcon: {
+    fontSize: 60,
+  },
+  welcomeTitle: {
+    fontSize: 28,
+    fontWeight: '700',
+    color: '#111827',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  welcomeSubtitle: {
+    fontSize: 16,
+    color: '#6b7280',
+    textAlign: 'center',
+    lineHeight: 22,
   },
   uploadSection: {
     marginBottom: 24,

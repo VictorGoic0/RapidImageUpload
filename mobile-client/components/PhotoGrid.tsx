@@ -11,6 +11,10 @@ interface PhotoGridProps {
   photos: Photo[];
   /** Callback function called when a photo is pressed */
   onPhotoPress: (photo: Photo) => void;
+  /** Whether there are more pages to load */
+  hasMorePages?: boolean;
+  /** Footer component to render at the bottom of the list */
+  footerComponent?: React.ReactElement | null;
 }
 
 /**
@@ -98,7 +102,7 @@ function renderPhotoItem({ item: photo, onPress }: { item: Photo; onPress: (phot
 /**
  * Component for displaying photos in a grid layout.
  */
-export function PhotoGrid({ photos, onPhotoPress }: PhotoGridProps) {
+export function PhotoGrid({ photos, onPhotoPress, footerComponent }: PhotoGridProps) {
   return (
     <FlatList
       data={photos}
@@ -108,6 +112,7 @@ export function PhotoGrid({ photos, onPhotoPress }: PhotoGridProps) {
       columnWrapperStyle={styles.row}
       contentContainerStyle={styles.container}
       showsVerticalScrollIndicator={false}
+      ListFooterComponent={footerComponent}
     />
   );
 }

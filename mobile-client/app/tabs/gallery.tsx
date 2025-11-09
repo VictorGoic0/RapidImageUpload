@@ -89,36 +89,40 @@ export default function GalleryScreen() {
 
         {/* Photo grid */}
         {photos.length > 0 && (
-          <>
-            <PhotoGrid photos={photos} onPhotoPress={handlePhotoPress} />
+          <PhotoGrid
+            photos={photos}
+            onPhotoPress={handlePhotoPress}
+            footerComponent={
+              <>
+                {/* Load More button */}
+                {hasMorePages && (
+                  <View style={styles.loadMoreContainer}>
+                    <TouchableOpacity
+                      style={[styles.loadMoreButton, loading && styles.loadMoreButtonDisabled]}
+                      onPress={loadMore}
+                      disabled={loading}
+                    >
+                      {loading ? (
+                        <>
+                          <ActivityIndicator size="small" color="#ffffff" style={styles.loadMoreSpinner} />
+                          <Text style={styles.loadMoreButtonText}>Loading...</Text>
+                        </>
+                      ) : (
+                        <Text style={styles.loadMoreButtonText}>Load More</Text>
+                      )}
+                    </TouchableOpacity>
+                  </View>
+                )}
 
-            {/* Load More button */}
-            {hasMorePages && (
-              <View style={styles.loadMoreContainer}>
-                <TouchableOpacity
-                  style={[styles.loadMoreButton, loading && styles.loadMoreButtonDisabled]}
-                  onPress={loadMore}
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <>
-                      <ActivityIndicator size="small" color="#ffffff" style={styles.loadMoreSpinner} />
-                      <Text style={styles.loadMoreButtonText}>Loading...</Text>
-                    </>
-                  ) : (
-                    <Text style={styles.loadMoreButtonText}>Load More</Text>
-                  )}
-                </TouchableOpacity>
-              </View>
-            )}
-
-            {/* End of results message */}
-            {!hasMorePages && photos.length > 0 && (
-              <View style={styles.endContainer}>
-                <Text style={styles.endText}>You've reached the end of your photos.</Text>
-              </View>
-            )}
-          </>
+                {/* End of results message */}
+                {!hasMorePages && (
+                  <View style={styles.endContainer}>
+                    <Text style={styles.endText}>You've reached the end of your photos.</Text>
+                  </View>
+                )}
+              </>
+            }
+          />
         )}
       </View>
     </SafeAreaView>
