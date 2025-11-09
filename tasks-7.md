@@ -50,65 +50,136 @@
 
 ---
 
-## PR #22: Elastic Beanstalk Deployment
+## PR #22: ECS Fargate Deployment
 
-### EB CLI Setup
-- [ ] 1. Ensure awsebcli is installed: `pip install awsebcli`
-- [ ] 2. Verify installation: `eb --version`
-- [ ] 3. Navigate to backend directory: `cd backend`
-- [ ] 4. Initialize EB application: `eb init`
-- [ ] 5. Select region: us-east-2
-- [ ] 6. Create new application: rapidphoto
-- [ ] 7. Select platform: Java with Corretto 21
-- [ ] 8. Choose not to use CodeCommit
-- [ ] 9. Choose not to setup SSH (for now)
+### Prerequisites
+- [ ] 1. Verify Docker is installed: `docker --version`
+- [ ] 2. Verify AWS CLI is configured: `aws sts get-caller-identity`
+- [ ] 3. Ensure you have RDS endpoint from PR #21
+- [ ] 4. Navigate to backend directory: `cd backend`
 
-### Application Build
-- [ ] 10. Clean and package application: `./mvnw clean package -DskipTests`
-- [ ] 11. Verify JAR created in target/ directory
-- [ ] 12. Check JAR size (should be ~50-80MB)
-- [ ] 13. Test JAR locally: `java -jar target/rapidphoto-0.0.1-SNAPSHOT.jar`
-- [ ] 14. Verify application starts without errors
-- [ ] 15. Stop local application
+### Docker Setup
+- [ ] 5. Verify Dockerfile exists in backend directory
+- [ ] 6. Test Docker build locally: `docker build -t rapidphoto-backend .`
+- [ ] 7. Test Docker container locally: `docker run -p 8080:8080 -e SPRING_PROFILES_ACTIVE=dev rapidphoto-backend`
+- [ ] 8. Verify application starts: `curl http://localhost:8080/actuator/health`
+- [ ] 9. Stop local container: `docker stop $(docker ps -q --filter ancestor=rapidphoto-backend)`
 
-### EB Environment Creation
-- [ ] 16. Create EB environment: `eb create rapidphoto-prod-env`
-- [ ] 17. Select instance type: t3.micro (free tier)
-- [ ] 18. Choose to enable spot fleet requests: No
-- [ ] 19. Wait for environment creation (10-15 minutes)
-- [ ] 20. Monitor creation logs: `eb logs`
-- [ ] 21. Check for any errors during deployment
+### ECR Repository Setup
+- [ ] 10. Create ECR repository: `aws ecr create-repository --repository-name rapidphoto-backend --region us-east-2`
+- [ ] 11. Note repository URI from output (e.g., `123456789012.dkr.ecr.us-east-2.amazonaws.com/rapidphoto-backend`)
+- [ ] 12. Login to ECR: `aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin [REPOSITORY_URI]`
+- [ ] 13. Build Docker image: `docker build -t rapidphoto-backend .`
+- [ ] 14. Tag image for ECR: `docker tag rapidphoto-backend:latest [REPOSITORY_URI]:latest`
+- [ ] 15. Push image to ECR: `docker push [REPOSITORY_URI]:latest`
 
-### Environment Configuration
-- [ ] 22. Set environment variables: `eb setenv SPRING_PROFILES_ACTIVE=prod`
-- [ ] 23. Set AWS_REGION: `eb setenv AWS_REGION=us-east-2`
-- [ ] 24. Set S3_BUCKET: `eb setenv S3_BUCKET=rapidphoto-prod`
-- [ ] 25. Set RDS_HOSTNAME: `eb setenv RDS_HOSTNAME=[rds-endpoint]`
-- [ ] 26. Set RDS_PORT: `eb setenv RDS_PORT=5432`
-- [ ] 27. Set RDS_DB_NAME: `eb setenv RDS_DB_NAME=rapidphoto`
-- [ ] 28. Set RDS_USERNAME: `eb setenv RDS_USERNAME=postgres`
-- [ ] 29. Set RDS_PASSWORD: `eb setenv RDS_PASSWORD=[secure-password]`
-- [ ] 30. Verify environment variables: `eb printenv`
+### Secrets Manager Setup
+- [ ] 16. Store RDS password in Secrets Manager: `aws secretsmanager create-secret --name rapidphoto/rds/password --secret-string "[RDS_PASSWORD]" --region us-east-2`
+- [ ] 17. Verify secret created: `aws secretsmanager describe-secret --secret-id rapidphoto/rds/password --region us-east-2`
+
+### VPC and Networking Setup
+- [ ] 18. Get default VPC ID: `aws ec2 describe-vpcs --filters "Name=isDefault,Values=true" --query "Vpcs[0].VpcId" --output text --region us-east-2`
+- [ ] 19. Get default subnet IDs: `aws ec2 describe-subnets --filters "Name=vpc-id,Values=[VPC_ID]" --query "Subnets[*].SubnetId" --output text --region us-east-2`
+- [ ] 20. Create security group for ECS tasks: `aws ec2 create-security-group --group-name rapidphoto-ecs-sg --description "Security group for RapidPhoto ECS tasks" --vpc-id [VPC_ID] --region us-east-2`
+- [ ] 21. Note security group ID from output
+- [ ] 22. Add inbound rule for RDS: `aws ec2 authorize-security-group-ingress --group-id [ECS_SG_ID] --protocol tcp --port 5432 --source-group [RDS_SG_ID] --region us-east-2`
+- [ ] 23. Create security group for ALB: `aws ec2 create-security-group --group-name rapidphoto-alb-sg --description "Security group for RapidPhoto ALB" --vpc-id [VPC_ID] --region us-east-2`
+- [ ] 24. Note ALB security group ID from output
+- [ ] 25. Allow HTTP from anywhere: `aws ec2 authorize-security-group-ingress --group-id [ALB_SG_ID] --protocol tcp --port 80 --cidr 0.0.0.0/0 --region us-east-2`
+- [ ] 26. Allow HTTPS from anywhere: `aws ec2 authorize-security-group-ingress --group-id [ALB_SG_ID] --protocol tcp --port 443 --cidr 0.0.0.0/0 --region us-east-2`
+- [ ] 27. Allow ALB to communicate with ECS: `aws ec2 authorize-security-group-ingress --group-id [ECS_SG_ID] --protocol tcp --port 8080 --source-group [ALB_SG_ID] --region us-east-2`
+
+### CloudWatch Logs Setup
+- [ ] 28. Create CloudWatch log group: `aws logs create-log-group --log-group-name /ecs/rapidphoto-backend --region us-east-2`
+
+### ECS Cluster Creation
+- [ ] 29. Create ECS cluster: `aws ecs create-cluster --cluster-name rapidphoto-cluster --region us-east-2`
+- [ ] 30. Verify cluster created: `aws ecs describe-clusters --clusters rapidphoto-cluster --region us-east-2`
+
+### Task Definition Creation
+- [ ] 31. Create task-definition.json file with environment variables (see template below)
+- [ ] 32. Register task definition: `aws ecs register-task-definition --cli-input-json file://task-definition.json --region us-east-2`
+- [ ] 33. Verify task definition: `aws ecs describe-task-definition --task-definition rapidphoto-backend --region us-east-2`
+
+### Application Load Balancer Setup
+- [ ] 34. Get subnet IDs as array: `aws ec2 describe-subnets --filters "Name=vpc-id,Values=[VPC_ID]" --query "Subnets[*].SubnetId" --output json --region us-east-2`
+- [ ] 35. Create ALB: `aws elbv2 create-load-balancer --name rapidphoto-alb --subnets [SUBNET_ID_1] [SUBNET_ID_2] --security-groups [ALB_SG_ID] --region us-east-2`
+- [ ] 36. Note ALB ARN from output (e.g., `arn:aws:elasticloadbalancing:us-east-2:123456789012:loadbalancer/app/rapidphoto-alb/...`)
+- [ ] 37. Wait for ALB to be active (check status): `aws elbv2 describe-load-balancers --load-balancer-arns [ALB_ARN] --query "LoadBalancers[0].State.Code" --region us-east-2` (should return "active")
+- [ ] 38. Create target group: `aws elbv2 create-target-group --name rapidphoto-tg --protocol HTTP --port 8080 --vpc-id [VPC_ID] --target-type ip --health-check-path /actuator/health --health-check-interval-seconds 30 --health-check-timeout-seconds 5 --healthy-threshold-count 2 --unhealthy-threshold-count 3 --region us-east-2`
+- [ ] 39. Note target group ARN from output
+- [ ] 40. Create HTTP listener on ALB: `aws elbv2 create-listener --load-balancer-arn [ALB_ARN] --protocol HTTP --port 80 --default-actions Type=forward,TargetGroupArn=[TARGET_GROUP_ARN] --region us-east-2`
+
+### ECS Service Creation
+- [ ] 41. Get subnet IDs as array format: `aws ec2 describe-subnets --filters "Name=vpc-id,Values=[VPC_ID]" --query "Subnets[*].SubnetId" --output json --region us-east-2`
+- [ ] 42. Create ECS service: `aws ecs create-service --cluster rapidphoto-cluster --service-name rapidphoto-backend-service --task-definition rapidphoto-backend --desired-count 1 --launch-type FARGATE --network-configuration "awsvpcConfiguration={subnets=[SUBNET_ID_1,SUBNET_ID_2],securityGroups=[ECS_SG_ID],assignPublicIp=ENABLED}" --load-balancers "targetGroupArn=[TARGET_GROUP_ARN],containerName=rapidphoto-backend,containerPort=8080" --region us-east-2`
+- [ ] 43. Wait for service to stabilize: `aws ecs wait services-stable --cluster rapidphoto-cluster --services rapidphoto-backend-service --region us-east-2`
 
 ### Deployment Verification
-- [ ] 31. Get EB application URL: `eb open`
-- [ ] 32. Access health check: curl [eb-url]/actuator/health
-- [ ] 33. Verify response: {"status":"UP"}
-- [ ] 34. Test WebSocket endpoint: ws://[eb-url]/ws
-- [ ] 35. Test batch init endpoint with Postman
-- [ ] 36. Verify S3 presigned URLs generated correctly
-- [ ] 37. Test photo upload flow end-to-end
-- [ ] 38. Check CloudWatch logs: `eb logs`
-- [ ] 39. Verify no errors in application logs
-- [ ] 40. Check RDS connection in logs
+- [ ] 45. Get ALB DNS name: `aws elbv2 describe-load-balancers --load-balancer-arns [ALB_ARN] --query "LoadBalancers[0].DNSName" --output text --region us-east-2`
+- [ ] 46. Test health endpoint: `curl http://[ALB_DNS_NAME]/actuator/health`
+- [ ] 47. Verify response: `{"status":"UP"}`
+- [ ] 48. Test WebSocket endpoint: `wscat -c ws://[ALB_DNS_NAME]/ws` (or use browser WebSocket client)
+- [ ] 49. Test batch init endpoint: `curl -X POST http://[ALB_DNS_NAME]/api/photos/batch-init -H "Content-Type: application/json" -d '{"userId":"test-user","photos":[{"fileName":"test.jpg","contentType":"image/jpeg","size":2048576}]}'`
+- [ ] 50. Verify S3 presigned URLs in response
+- [ ] 51. Check CloudWatch logs: `aws logs tail /ecs/rapidphoto-backend --follow --region us-east-2`
+- [ ] 52. Verify no errors in application logs
+- [ ] 53. Check RDS connection in logs
+- [ ] 54. Test photo upload flow end-to-end
 
-### EB Configuration Files (Optional Enhancement)
-- [ ] 41. Create `.ebextensions/` directory in backend root
-- [ ] 42. Create `01_nginx.config` for WebSocket support
-- [ ] 43. Configure nginx to proxy WebSocket connections
-- [ ] 44. Create `02_cloudwatch.config` for enhanced logging
-- [ ] 45. Commit .ebextensions to repository
-- [ ] 46. Redeploy: `eb deploy`
+### Task Definition Template
+Create `task-definition.json` in backend directory:
+```json
+{
+  "family": "rapidphoto-backend",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "512",
+  "memory": "1024",
+  "containerDefinitions": [
+    {
+      "name": "rapidphoto-backend",
+      "image": "[REPOSITORY_URI]:latest",
+      "portMappings": [
+        {
+          "containerPort": 8080,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {"name": "SPRING_PROFILES_ACTIVE", "value": "prod"},
+        {"name": "AWS_REGION", "value": "us-east-2"},
+        {"name": "S3_BUCKET", "value": "rapidphoto-prod"},
+        {"name": "RDS_HOSTNAME", "value": "[RDS_ENDPOINT]"},
+        {"name": "RDS_PORT", "value": "5432"},
+        {"name": "RDS_DB_NAME", "value": "rapidphoto"},
+        {"name": "RDS_USERNAME", "value": "postgres"}
+      ],
+      "secrets": [
+        {
+          "name": "RDS_PASSWORD",
+          "valueFrom": "arn:aws:secretsmanager:us-east-2:[ACCOUNT_ID]:secret:rapidphoto/rds/password"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/rapidphoto-backend",
+          "awslogs-region": "us-east-2",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "healthCheck": {
+        "command": ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8080/actuator/health || exit 1"],
+        "interval": 30,
+        "timeout": 5,
+        "retries": 3,
+        "startPeriod": 60
+      }
+    }
+  ]
+}
+```
 
 ---
 
@@ -116,9 +187,9 @@
 
 ### Build Configuration
 - [ ] 1. Navigate to web-client: `cd web-client`
-- [ ] 2. Update `.env.production` with EB backend URL
-- [ ] 3. Set VITE_API_BASE_URL to EB application URL
-- [ ] 4. Set VITE_WS_URL to EB WebSocket URL (ws:// or wss://)
+- [ ] 2. Update `.env.production` with ECS ALB backend URL
+- [ ] 3. Set VITE_API_BASE_URL to ECS ALB URL
+- [ ] 4. Set VITE_WS_URL to ECS ALB WebSocket URL (ws:// or wss://)
 - [ ] 5. Build production bundle: `npm run build`
 - [ ] 6. Verify build created in `dist/` directory
 - [ ] 7. Check bundle size (should be optimized)
@@ -146,7 +217,7 @@
 - [ ] 23. Verify application loads correctly
 - [ ] 24. Test WebSocket connection to backend
 - [ ] 25. Test photo upload flow end-to-end
-- [ ] 26. Verify CORS allows requests to EB backend
+- [ ] 26. Verify CORS allows requests to ECS ALB backend
 - [ ] 27. Check browser console for errors
 
 ### CloudFront Setup (Optional - HTTPS)
@@ -167,8 +238,8 @@
 ### Production API Configuration
 - [ ] 1. Navigate to mobile-client: `cd mobile-client`
 - [ ] 2. Update `.env` with production URLs
-- [ ] 3. Set API_URL to EB backend URL
-- [ ] 4. Set WS_URL to EB WebSocket URL
+- [ ] 3. Set API_URL to ECS ALB backend URL
+- [ ] 4. Set WS_URL to ECS ALB WebSocket URL
 - [ ] 5. Test app with Expo Go: `npx expo start`
 - [ ] 6. Scan QR code on physical device
 - [ ] 7. Verify connection to production backend
@@ -267,7 +338,7 @@
 - [ ] 7. Describe Virtual Threads concurrency approach
 - [ ] 8. Add architecture diagrams (draw.io or similar)
 - [ ] 9. Document technology choices and trade-offs
-- [ ] 10. Explain S3, RDS, and Elastic Beanstalk usage
+- [ ] 10. Explain S3, RDS, and ECS Fargate usage
 
 ### Setup Instructions
 - [ ] 11. Update root `README.md` with project overview
@@ -358,7 +429,7 @@
 - [ ] 86. ✅ AI_TOOLS.md with prompts and impact
 - [ ] 87. ✅ Demo video uploaded and linked
 - [ ] 88. ✅ All three applications (backend, web, mobile) working
-- [ ] 89. ✅ Backend deployed to AWS Elastic Beanstalk
+- [ ] 89. ✅ Backend deployed to AWS ECS Fargate
 - [ ] 90. ✅ Web app deployed to S3
 - [ ] 91. ✅ Mobile app working with production backend
 - [ ] 92. ✅ Integration tests passing
@@ -381,7 +452,7 @@ I've created a comprehensive task breakdown across **7 files** (tasks-1.md throu
 
 **tasks-6.md** (PR #16-20): React Native setup, mobile services, mobile components, mobile screens
 
-**tasks-7.md** (PR #21-26): AWS deployment (RDS, Elastic Beanstalk, S3), integration testing, documentation, demo
+**tasks-7.md** (PR #21-26): AWS deployment (RDS, ECS Fargate, S3), integration testing, documentation, demo
 
 ### Key Features:
 - ✅ Each file is 300-450 lines
