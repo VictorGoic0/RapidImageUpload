@@ -234,8 +234,8 @@
 
 ### Deployment (Day 4)
 - [ ] AWS RDS PostgreSQL instance creation
-- [ ] Elastic Beanstalk environment setup
-- [ ] Backend deployment to Elastic Beanstalk
+- [ ] ECS Fargate cluster and service setup
+- [ ] Backend deployment to ECS Fargate
 - [ ] S3 bucket configuration for web hosting
 - [ ] Web frontend build and deployment
 - [ ] CloudFront distribution (optional)

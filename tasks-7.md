@@ -33,7 +33,7 @@
 - [x] 26. Edit inbound rules
 - [x] 27. Add rule: Type=PostgreSQL, Port=5432
 - [x] 28. For MVP: Source=0.0.0.0/0 (allow all - restrict later)
-- [x] 29. For production: Source=Elastic Beanstalk security group
+- [x] 29. For production: Source=ECS security group
 - [x] 30. Save rules
 - [x] 31. Note RDS endpoint hostname
 - [x] 32. Test connection from local machine: `psql -h [endpoint] -U postgres -d rapidphoto`

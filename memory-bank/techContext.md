@@ -20,7 +20,7 @@
   - Dev bucket: `rapidphoto-dev`
   - Prod bucket: `rapidphoto-prod`
   - Presigned URLs: 15-minute expiration for uploads, 60-minute for downloads
-- **Deployment**: AWS Elastic Beanstalk (backend), S3 + CloudFront (web frontend)
+- **Deployment**: AWS ECS Fargate (backend), S3 + CloudFront (web frontend)
 - **Database**: AWS RDS PostgreSQL 16 (production)
 
 ### Web Frontend
@@ -213,9 +213,9 @@ server:
 ## Deployment Architecture
 
 ### Production Stack
-- **Backend**: AWS Elastic Beanstalk (Java 21 Corretto)
+- **Backend**: AWS ECS Fargate (Java 21)
   - Application Load Balancer
-  - Auto-scaling: 2 × t3.micro EC2 instances
+  - Container-based deployment
 - **Database**: AWS RDS PostgreSQL 16 (db.t3.micro)
 - **Storage**: AWS S3 (rapidphoto-prod bucket)
 - **Web Frontend**: S3 static hosting + CloudFront CDN

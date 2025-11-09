@@ -972,7 +972,7 @@ export function usePhotoUpload() {
 
 #### Afternoon - Deployment (6 hours)
 
-**Backend Deployment to Elastic Beanstalk:**
+**Backend Deployment to ECS Fargate:**
 ```bash
 # 1. Create RDS PostgreSQL instance
 aws rds create-db-instance \
@@ -983,28 +983,22 @@ aws rds create-db-instance \
   --master-user-password [SECURE_PASSWORD] \
   --allocated-storage 20
 
-# 2. Package Spring Boot application
-./mvnw clean package -DskipTests
+# 2. Build Docker image
+docker build -t rapidphoto-backend .
 
-# 3. Initialize Elastic Beanstalk
-eb init -p "Corretto 21" rapidphoto --region us-east-2
+# 3. Create ECR repository
+aws ecr create-repository --repository-name rapidphoto-backend --region us-east-2
 
-# 4. Create environment with RDS connection
-eb create rapidphoto-prod-env \
-  --database.engine postgres \
-  --database.username postgres
+# 4. Push image to ECR
+aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin [ECR_URI]
+docker tag rapidphoto-backend:latest [ECR_URI]:latest
+docker push [ECR_URI]:latest
 
-# 5. Set environment variables
-eb setenv \
-  SPRING_PROFILES_ACTIVE=prod \
-  AWS_REGION=us-east-2 \
-  S3_BUCKET=rapidphoto-prod
+# 5. Create ECS cluster and service
+# (See tasks-7.md PR #22 for detailed ECS Fargate deployment steps)
 
-# 6. Deploy
-eb deploy
-
-# 7. Get application URL
-eb open
+# 6. Get application URL from ALB
+aws elbv2 describe-load-balancers --region us-east-2
 ```
 
 **Web Frontend Deployment to S3 + CloudFront:**
@@ -1032,12 +1026,12 @@ aws cloudfront create-distribution \
 ```
 
 **Mobile App:**
-- ✅ Update API base URL to Elastic Beanstalk endpoint
+- ✅ Update API base URL to ECS ALB endpoint
 - ✅ Test on physical device via Expo Go
 - ✅ (Optional) Create Expo build for app stores
 
 **Deliverables:**
-- Backend running on Elastic Beanstalk
+- Backend running on ECS Fargate
 - Web app hosted on S3
 - Mobile app connecting to production backend
 - All three components communicating successfully
@@ -1498,15 +1492,15 @@ EOF
 │  └─────────────────────────────────────────────────────────┘ │
 │                                                               │
 │  ┌─────────────────────────────────────────────────────────┐│
-│  │          Elastic Beanstalk Environment                   ││
+│  │          ECS Fargate Cluster                             ││
 │  │                                                           ││
 │  │  ┌─────────────────────────────────────────────────┐   ││
 │  │  │      Application Load Balancer (ALB)             │   ││
-│  │  │  HTTP: http://rapidphoto-env.elasticbeanstalk... │   ││
+│  │  │  HTTP: http://rapidphoto-alb-[id].us-east-2...  │   ││
 │  │  └────────┬─────────────────────┬───────────────────┘   ││
 │  │           │                     │                        ││
 │  │  ┌────────▼────────┐   ┌───────▼────────┐              ││
-│  │  │  EC2 Instance 1  │   │  EC2 Instance 2 │              ││
+│  │  │  Fargate Task 1  │   │  Fargate Task 2 │              ││
 │  │  │  Spring Boot App │   │  Spring Boot App │              ││
 │  │  │  (Java 21)       │   │  (Java 21)       │              ││
 │  │  └────────┬─────────┘   └───────┬─────────┘              ││
@@ -1529,7 +1523,7 @@ EOF
 │                                                               │
 │  ┌─────────────────────────────────────────────────────────┐│
 │  │          CloudWatch Logs & Metrics                       ││
-│  │    - Application logs from Elastic Beanstalk             ││
+│  │    - Application logs from ECS Fargate                  ││
 │  │    - RDS performance metrics                             ││
 │  │    - S3 request metrics                                  ││
 │  └─────────────────────────────────────────────────────────┘│
@@ -1552,7 +1546,7 @@ EOF
 
 | Service | Configuration | Estimated Cost |
 |---------|--------------|----------------|
-| Elastic Beanstalk | 2 × t3.micro EC2 (free tier eligible) | $0-15 |
+| ECS Fargate | 2 × 0.5 vCPU, 1GB RAM tasks | $15-30 |
 | RDS PostgreSQL | db.t3.micro (free tier eligible) | $0-15 |
 | S3 Storage | 10GB storage + requests | $0.50 |
 | CloudFront | 10GB data transfer | $0.85 |
@@ -1569,14 +1563,7 @@ EOF
 
 **Initial Setup:**
 ```bash
-# 1. Install Elastic Beanstalk CLI
-pip install awsebcli
-
-# 2. Initialize EB application
-cd backend
-eb init -p "Corretto 21" rapidphoto --region us-east-2
-
-# 3. Create RDS instance (one-time)
+# 1. Create RDS instance (one-time)
 aws rds create-db-instance \
   --db-instance-identifier rapidphoto-prod \
   --db-instance-class db.t3.micro \
@@ -1590,26 +1577,26 @@ aws rds create-db-instance \
   --backup-retention-period 7 \
   --publicly-accessible
 
-# 4. Create EB environment with environment variables
-eb create rapidphoto-prod-env \
-  --instance-type t3.micro \
-  --envvars \
-    SPRING_PROFILES_ACTIVE=prod,\
-    AWS_REGION=us-east-2,\
-    S3_BUCKET=rapidphoto-prod,\
-    RDS_HOSTNAME=[RDS_ENDPOINT],\
-    RDS_PORT=5432,\
-    RDS_DB_NAME=rapidphoto,\
-    RDS_USERNAME=postgres,\
-    RDS_PASSWORD=[SECURE_PASSWORD]
+# 2. Build and push Docker image to ECR
+cd backend
+docker build -t rapidphoto-backend .
+aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin [ECR_URI]
+docker tag rapidphoto-backend:latest [ECR_URI]:latest
+docker push [ECR_URI]:latest
+
+# 3. Create ECS cluster, task definition, and service
+# (See tasks-7.md PR #22 for detailed ECS Fargate deployment steps)
 ```
 
 **Continuous Deployment:**
 ```bash
 # Backend
 cd backend
-./mvnw clean package -DskipTests
-eb deploy
+docker build -t rapidphoto-backend .
+aws ecr get-login-password --region us-east-2 | docker login --username AWS --password-stdin [ECR_URI]
+docker tag rapidphoto-backend:latest [ECR_URI]:latest
+docker push [ECR_URI]:latest
+aws ecs update-service --cluster rapidphoto-cluster --service rapidphoto-backend-service --force-new-deployment --region us-east-2
 
 # Web Frontend
 cd web-client
@@ -1670,14 +1657,14 @@ aws cloudfront create-invalidation --distribution-id [ID] --paths "/*"
 | **S3 presigned URL expiration** | Set 15-minute expiration. Handle client-side renewal if needed. |
 | **100 concurrent uploads overwhelming backend** | Virtual threads handle thousands of concurrent operations efficiently. |
 | **Mobile build issues (Expo)** | Use Expo Go for development. Defer native builds to post-MVP. |
-| **AWS deployment complexity** | Use Elastic Beanstalk (simplest option). Test locally with Docker first. |
+| **AWS deployment complexity** | Use ECS Fargate with Docker. Test locally with Docker first. |
 
 ### 11.2 Timeline Risks
 
 | Risk | Mitigation Strategy |
 |------|-------------------|
 | **Feature creep (authentication, tagging)** | Defer to post-MVP. Focus on core upload/progress functionality. |
-| **Deployment takes longer than expected** | Allocate full Day 4 afternoon. Use Elastic Beanstalk for simplicity. |
+| **Deployment takes longer than expected** | Allocate full Day 4 afternoon. Use ECS Fargate with Docker for containerized deployment. |
 | **Integration test complexity** | Mock S3 service. Focus on critical paths only. |
 | **Demo video production time** | Record as you build. Final edit on Day 5 only. |
 

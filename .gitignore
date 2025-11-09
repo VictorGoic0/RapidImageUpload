@@ -275,3 +275,7 @@ temp/
 # Memory Bank (optional - uncomment if you want to ignore it)
 # memory-bank/
 
+# Elastic Beanstalk
+.elasticbeanstalk/
+.ebextensions/
+

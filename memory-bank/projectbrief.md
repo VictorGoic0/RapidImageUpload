@@ -23,7 +23,7 @@ Build a production-grade, high-performance photo upload system demonstrating arc
 - ✅ Zero UI blocking during uploads
 - ✅ Real-time progress updates every 2 seconds
 - ✅ Clean DDD/CQRS/VSA architecture implementation
-- ✅ Deployed to AWS (Elastic Beanstalk + S3 + RDS)
+- ✅ Deployed to AWS (ECS Fargate + S3 + RDS)
 
 ## Strategic Approach
 - **Presigned URLs**: Eliminate backend bandwidth bottlenecks by enabling direct client-to-S3 uploads
