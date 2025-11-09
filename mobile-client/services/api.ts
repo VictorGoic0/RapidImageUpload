@@ -20,7 +20,12 @@ interface ApiError extends Error {
  * Creates and configures an axios instance for API requests.
  */
 const createApiClient = (): AxiosInstance => {
-  const baseURL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:8080';
+  const baseURL = process.env.EXPO_PUBLIC_API_URL;
+  
+  if (!baseURL) {
+    throw new Error('EXPO_PUBLIC_API_URL environment variable is required but not set');
+  }
+  
   const timeout = 30000; // 30 seconds
 
   const apiClient = axios.create({

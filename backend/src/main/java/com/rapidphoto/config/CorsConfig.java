@@ -20,6 +20,7 @@ import java.util.List;
  * - http://localhost:5175 (Tertiary Vite dev server)
  * - http://localhost:5176 (Quaternary Vite dev server)
  * - http://localhost:5177 (Quinary Vite dev server)
+ * - http://localhost:8081 (Expo dev server)
  * 
  * Note: WebSocket CORS is configured separately in WebSocketConfig.java
  * but uses the same allowed origins from ALLOWED_ORIGINS constant.
@@ -39,7 +40,8 @@ public class CorsConfig implements WebMvcConfigurer {
         "http://localhost:5174",
         "http://localhost:5175",
         "http://localhost:5176",
-        "http://localhost:5177"
+        "http://localhost:5177",
+        "http://localhost:8081"
     );
 
     /**

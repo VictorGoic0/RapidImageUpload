@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { Platform } from 'react-native';
 import { Client } from '@stomp/stompjs';
 import type { IMessage } from '@stomp/stompjs';
 import type { PhotoProgress } from '../types/photo';
@@ -16,8 +17,22 @@ export function useWebSocket(userId: string) {
   const clientRef = useRef<Client | null>(null);
 
   useEffect(() => {
-    // Get WebSocket URL from environment or default to localhost
-    const wsUrl = process.env.EXPO_PUBLIC_WS_URL || 'ws://localhost:8080/ws';
+    // Get platform-specific WebSocket URL from environment
+    const isWeb = Platform.OS === 'web';
+    const wsUrl = isWeb 
+      ? process.env.EXPO_PUBLIC_WS_URL_WEB 
+      : process.env.EXPO_PUBLIC_WS_URL_NATIVE;
+    
+    if (!wsUrl) {
+      const envVarName = isWeb ? 'EXPO_PUBLIC_WS_URL_WEB' : 'EXPO_PUBLIC_WS_URL_NATIVE';
+      throw new Error(`${envVarName} environment variable is required but not set`);
+    }
+
+    if (__DEV__) {
+      console.log('[useWebSocket] Environment check:');
+      console.log('  Platform:', Platform.OS);
+      console.log('  Using WebSocket URL:', wsUrl);
+    }
 
     // Create and configure WebSocket client
     const client = createWebSocketClient(wsUrl);
