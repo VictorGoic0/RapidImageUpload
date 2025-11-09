@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef } from 'react';
-import * as FileSystem from 'expo-file-system';
+import { Platform } from 'react-native';
+import * as FileSystem from 'expo-file-system/legacy';
 import { initiateBatchUpload, completePhotoUpload } from '../services/api';
 import { uploadToS3 } from '../services/upload';
 import type { PhotoMetadata, PresignedUploadInfo, UploadStatus } from '../types/photo';
@@ -85,15 +86,32 @@ export function usePhotoUpload(
         // Map file URIs to PhotoMetadata objects
         // Need to get file info for each URI
         const photoMetadataPromises = fileUris.map(async (uri) => {
-          const fileInfo = await FileSystem.getInfoAsync(uri);
-          
-          if (!fileInfo.exists) {
-            throw new Error(`File not found: ${uri}`);
-          }
-
           const fileName = getFileNameFromUri(uri);
           const contentType = getMimeTypeFromUri(uri);
-          const size = fileInfo.size || 0;
+          let size = 0;
+
+          // File system operations are not available on web platform
+          if (Platform.OS === 'web') {
+            // On web, try to fetch the file to get its size
+            try {
+              const response = await fetch(uri);
+              const blob = await response.blob();
+              size = blob.size;
+            } catch (error) {
+              // If fetch fails, use estimated size (default to 2MB for images)
+              console.warn('[usePhotoUpload] Could not determine file size on web, using estimated size');
+              size = 2 * 1024 * 1024; // 2MB default
+            }
+          } else {
+            // On native platforms, use FileSystem API
+            const fileInfo = await FileSystem.getInfoAsync(uri);
+            
+            if (!fileInfo.exists) {
+              throw new Error(`File not found: ${uri}`);
+            }
+
+            size = fileInfo.size || 0;
+          }
 
           return {
             fileName,
