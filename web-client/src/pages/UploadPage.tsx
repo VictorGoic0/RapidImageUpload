@@ -1,11 +1,11 @@
 import { useState, useCallback, useMemo } from 'react';
 import { usePhotoUpload } from '@/hooks/usePhotoUpload';
-import { useThrottledProgress } from '@/hooks/useThrottledProgress';
+import { useWebSocket } from '@/hooks/useWebSocket';
 import { UploadZone } from '@/components/UploadZone';
 import { ProgressIndicator } from '@/components/ProgressIndicator';
 import { BatchProgress } from '@/components/BatchProgress';
 import { Loader2 } from 'lucide-react';
-import type { UploadStatus, PhotoProgress } from '@/types/photo';
+import type { UploadStatus } from '@/types/photo';
 import { UPLOAD_STATUS } from '@/types/photo';
 
 /**
@@ -15,43 +15,20 @@ import { UPLOAD_STATUS } from '@/types/photo';
 const MOCK_USER_ID = '550e8400-e29b-41d4-a716-446655440000';
 
 /**
- * Props for UploadPage component.
- */
-interface UploadPageProps {
-  websocketConnected: boolean;
-  websocketProgress: Map<string, PhotoProgress>;
-  websocketSendProgress: (progressData: PhotoProgress) => void;
-}
-
-/**
  * Upload page component that handles photo uploads with progress tracking.
  */
-export function UploadPage({
-  websocketConnected,
-  websocketProgress,
-  websocketSendProgress,
-}: UploadPageProps) {
-  // Initialize throttled progress callback
-  const throttledProgress = useThrottledProgress(websocketSendProgress);
-
-  // Create progress callback for usePhotoUpload
-  const handleProgressUpdate = useCallback(
-    (photoId: string, progressPercent: number, fileName: string, status: UploadStatus) => {
-      throttledProgress(photoId, progressPercent, {
-        fileName,
-        status,
-        message: status === UPLOAD_STATUS.COMPLETED ? 'Upload completed' : 'Uploading...',
-        timestamp: new Date().toISOString(),
-      });
-    },
-    [throttledProgress]
-  );
-
-  // Initialize photo upload hook
-  const { uploading, error, uploadResults, uploadPhotos, cleanup } = usePhotoUpload(
+export function UploadPage() {
+  // Initialize photo upload hook (no progress callback needed for raw WebSocket)
+  const { uploading, error, uploadResults, batchId, uploadPhotos, cleanup } = usePhotoUpload(
     MOCK_USER_ID,
-    handleProgressUpdate
+    () => {} // Empty callback since we're using raw WebSocket for progress
   );
+
+  // Get WebSocket base URL from environment
+  const wsBaseUrl = import.meta.env.VITE_WS_URL || 'ws://localhost:8080';
+
+  // Initialize WebSocket hook with batch ID
+  const { progress: websocketProgress } = useWebSocket(batchId, wsBaseUrl);
 
   // State for selected files
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
@@ -114,21 +91,8 @@ export function UploadPage({
     <div className="min-h-screen w-full bg-gray-50 dark:bg-gray-900">
       <div className="w-full px-12 py-12">
         {/* Page title */}
-        <div className="flex items-center justify-between mb-12">
+        <div className="mb-12">
           <h1 className="text-5xl font-bold text-gray-900 dark:text-gray-100">Upload Photos</h1>
-          
-          {/* WebSocket connection status indicator */}
-          <div className="flex items-center gap-3">
-            <div
-              className={`w-4 h-4 rounded-full ${
-                websocketConnected ? 'bg-green-500' : 'bg-red-500'
-              }`}
-              title={websocketConnected ? 'Connected' : 'Disconnected'}
-            />
-            <span className="text-base font-medium text-gray-700 dark:text-gray-300">
-              {websocketConnected ? 'Connected' : 'Disconnected'}
-            </span>
-          </div>
         </div>
 
         {/* Upload Zone - show when not uploading or when uploads are complete */}

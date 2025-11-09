@@ -49,6 +49,8 @@ export interface PresignedUploadInfo {
  * Matches BatchUploadResponse from backend.
  */
 export interface BatchUploadResponse {
+  /** Batch ID for WebSocket progress tracking */
+  batchId: string;
   /** List of presigned upload information for each photo */
   uploads: PresignedUploadInfo[];
   /** Total number of photos in the batch */

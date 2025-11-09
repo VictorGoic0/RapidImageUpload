@@ -69,6 +69,7 @@ export function usePhotoUpload(
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [uploadResults, setUploadResults] = useState<Map<string, UploadResult>>(new Map());
+  const [batchId, setBatchId] = useState<string | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
 
   const uploadPhotos = useCallback(
@@ -138,6 +139,9 @@ export function usePhotoUpload(
 
         // Call initiateBatchUpload API with metadata
         const batchResponse = await initiateBatchUpload(userId, photoMetadata);
+        
+        // Store batch ID for WebSocket connection
+        setBatchId(batchResponse.batchId);
 
         // Create a map of fileName to presigned info for easy lookup
         const presignedMap = new Map<string, PresignedUploadInfo>();
@@ -205,8 +209,8 @@ export function usePhotoUpload(
               }
             );
 
-            // On upload success: call completePhotoUpload API
-            await completePhotoUpload(presignedInfo.photoId, userId, presignedInfo.s3Key);
+            // On upload success: call completePhotoUpload API with batch ID
+            await completePhotoUpload(presignedInfo.photoId, userId, presignedInfo.s3Key, batchResponse.batchId);
 
             // Update uploadResults Map with COMPLETED status
             setUploadResults((prev) => {
@@ -272,6 +276,7 @@ export function usePhotoUpload(
     uploading,
     error,
     uploadResults,
+    batchId,
     uploadPhotos,
     cleanup,
   };

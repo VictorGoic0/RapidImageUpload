@@ -66,21 +66,21 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
      */
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        // Use centralized CORS origins from CorsConfig
-        // For WebSocket, we use setAllowedOrigins for exact matching (more secure)
-        // setAllowedOriginPatterns would allow wildcards, but exact origins are preferred
+        // Use centralized CORS origins from CorsConfig for web endpoints
         String[] allowedOrigins = CorsConfig.ALLOWED_ORIGINS.toArray(new String[0]);
         
         // Native WebSocket endpoint for mobile clients (iOS, Android, React Native)
+        // Mobile apps don't send Origin headers, so we allow any origin
         registry.addEndpoint("/ws")
-                .setAllowedOrigins(allowedOrigins);
+                .setAllowedOriginPatterns("*");
         
         // SockJS endpoint for web browsers (with fallback support)
+        // Web browsers send Origin headers, so we use strict origin checking
         registry.addEndpoint("/ws-sockjs")
                 .setAllowedOrigins(allowedOrigins)
                 .withSockJS();
         
-        log.info("STOMP endpoints registered: /ws (native WebSocket), /ws-sockjs (SockJS) (CORS: {} origins)", 
+        log.info("STOMP endpoints registered: /ws (native WebSocket - any origin), /ws-sockjs (SockJS - {} origins)", 
                  CorsConfig.ALLOWED_ORIGINS.size());
     }
 }

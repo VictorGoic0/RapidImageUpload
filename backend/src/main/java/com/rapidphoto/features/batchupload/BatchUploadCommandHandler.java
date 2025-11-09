@@ -13,6 +13,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Command handler for batch photo upload operations.
@@ -37,8 +38,11 @@ public class BatchUploadCommandHandler {
         long startTime = System.currentTimeMillis();
         int photoCount = command.photos().size();
         
-        log.info("Starting batch upload for userId: {}, photoCount: {}", 
-                 command.userId().value(), photoCount);
+        // Generate batch ID for WebSocket progress tracking
+        String batchId = UUID.randomUUID().toString();
+        
+        log.info("Starting batch upload for userId: {}, batchId: {}, photoCount: {}", 
+                 command.userId().value(), batchId, photoCount);
 
         try {
             // Create Photo entities
@@ -91,14 +95,15 @@ public class BatchUploadCommandHandler {
 
             // Create response
             BatchUploadResponse response = new BatchUploadResponse(
+                batchId,
                 uploadInfos,
                 uploadInfos.size(),
                 Instant.now()
             );
 
             long duration = System.currentTimeMillis() - startTime;
-            log.info("Batch upload completed successfully for userId: {}, photoCount: {}, duration: {}ms", 
-                     command.userId().value(), photoCount, duration);
+            log.info("Batch upload completed successfully for userId: {}, batchId: {}, photoCount: {}, duration: {}ms", 
+                     command.userId().value(), batchId, photoCount, duration);
 
             return response;
 

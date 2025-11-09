@@ -6,6 +6,8 @@ import com.rapidphoto.domain.PhotoRepository;
 import com.rapidphoto.domain.UserId;
 import com.rapidphoto.infrastructure.s3.S3Service;
 import com.rapidphoto.infrastructure.s3.S3UploadException;
+import com.rapidphoto.infrastructure.websocket.BatchUploadProgress;
+import com.rapidphoto.infrastructure.websocket.UploadProgressWebSocketEndpoint;
 import com.rapidphoto.infrastructure.websocket.WebSocketProgressService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,10 +89,28 @@ public class PhotoCompletionCommandHandler {
                     command.photoId().value(), command.s3Key(), savedPhoto.getUploadedAt());
 
             // Send WebSocket notification
-            webSocketService.notifyUploadComplete(
-                    command.userId(),
-                    command.photoId(),
-                    photo.getFileName());
+            // If batch ID is present, send to raw WebSocket; otherwise use legacy STOMP
+            if (command.batchId() != null && !command.batchId().isBlank()) {
+                // TODO: We need to know total photos and completed count for the batch
+                // For now, send completion update without batch totals
+                // Client can track totals locally
+                BatchUploadProgress progress = BatchUploadProgress.completed(
+                    command.batchId(),
+                    command.photoId().value().toString(),
+                    photo.getFileName(),
+                    null,  // totalPhotos - client tracks this
+                    null   // completedPhotos - client tracks this
+                );
+                UploadProgressWebSocketEndpoint.sendProgressUpdate(command.batchId(), progress);
+                log.info("Sent raw WebSocket completion update: batchId={}, photoId={}",
+                        command.batchId(), command.photoId().value());
+            } else {
+                // Legacy STOMP notification (for backwards compatibility)
+                webSocketService.notifyUploadComplete(
+                        command.userId(),
+                        command.photoId(),
+                        photo.getFileName());
+            }
 
             // Create and return response
             LocalDateTime uploadedAt = savedPhoto.getUploadedAt();

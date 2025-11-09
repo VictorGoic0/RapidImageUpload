@@ -1,34 +1,123 @@
-import { Client } from '@stomp/stompjs';
-import SockJS from 'sockjs-client';
-
 /**
- * Creates and configures a STOMP WebSocket client for real-time communication.
- * Uses SockJS as a fallback for browsers that don't support native WebSocket.
- *
- * @param url - The WebSocket server URL (e.g., 'http://localhost:8080/ws')
- * @returns Configured STOMP Client instance
+ * Raw WebSocket client for batch upload progress tracking.
+ * 
+ * Connects to /ws/upload-progress/{batchId} endpoint and receives JSON progress updates.
+ * No STOMP protocol - simple WebSocket communication.
  */
-export function createWebSocketClient(url: string): Client {
-  const brokerURL = import.meta.env.VITE_WS_URL || url;
 
-  const client = new Client({
-    // Use SockJS as the WebSocket factory for better browser compatibility
-    webSocketFactory: () => {
-      return new SockJS(brokerURL) as unknown as WebSocket;
-    },
-    // Enable debug logging in development
-    debug: (str) => {
+export interface ProgressCallback {
+  (message: any): void;
+}
+
+export interface WebSocketClientConfig {
+  batchId: string;
+  baseUrl: string; // e.g., 'ws://localhost:8080' or 'wss://your-app.com'
+  onOpen?: () => void;
+  onMessage: ProgressCallback;
+  onError?: (error: Event) => void;
+  onClose?: (event: CloseEvent) => void;
+}
+
+export class UploadProgressWebSocketClient {
+  private ws: WebSocket | null = null;
+  private config: WebSocketClientConfig;
+  private reconnectAttempts = 0;
+  private maxReconnectAttempts = 5;
+  private reconnectDelay = 5000; // 5 seconds
+  private reconnectTimeoutId: number | null = null;
+  private isManualClose = false;
+
+  constructor(config: WebSocketClientConfig) {
+    this.config = config;
+  }
+
+  /**
+   * Connects to the WebSocket endpoint for batch progress tracking
+   */
+  connect(): void {
+    const url = `${this.config.baseUrl}/ws/upload-progress/${this.config.batchId}`;
+    
+    if (import.meta.env.DEV) {
+      console.log('[WebSocket] Connecting to:', url);
+    }
+
+    try {
+      this.ws = new WebSocket(url);
+
+      this.ws.onopen = () => {
+        if (import.meta.env.DEV) {
+          console.log('[WebSocket] Connected to batch:', this.config.batchId);
+        }
+        this.reconnectAttempts = 0; // Reset on successful connection
+        this.config.onOpen?.();
+      };
+
+      this.ws.onmessage = (event) => {
+        try {
+          const message = JSON.parse(event.data);
+          if (import.meta.env.DEV) {
+            console.log('[WebSocket] Message received:', message);
+          }
+          this.config.onMessage(message);
+        } catch (error) {
+          console.error('[WebSocket] Failed to parse message:', event.data, error);
+        }
+      };
+
+      this.ws.onerror = (error) => {
+        console.error('[WebSocket] Error:', error);
+        this.config.onError?.(error);
+      };
+
+      this.ws.onclose = (event) => {
+        if (import.meta.env.DEV) {
+          console.log('[WebSocket] Closed:', event.code, event.reason);
+        }
+        
+        this.config.onClose?.(event);
+
+        // Auto-reconnect if not manually closed and within retry limit
+        if (!this.isManualClose && this.reconnectAttempts < this.maxReconnectAttempts) {
+          this.reconnectAttempts++;
+          if (import.meta.env.DEV) {
+            console.log(`[WebSocket] Reconnecting in ${this.reconnectDelay}ms (attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts})`);
+          }
+          this.reconnectTimeoutId = window.setTimeout(() => {
+            this.connect();
+          }, this.reconnectDelay);
+        }
+      };
+    } catch (error) {
+      console.error('[WebSocket] Connection failed:', error);
+      this.config.onError?.(error as Event);
+    }
+  }
+
+  /**
+   * Disconnects from the WebSocket
+   */
+  disconnect(): void {
+    this.isManualClose = true;
+    
+    if (this.reconnectTimeoutId !== null) {
+      window.clearTimeout(this.reconnectTimeoutId);
+      this.reconnectTimeoutId = null;
+    }
+
+    if (this.ws) {
       if (import.meta.env.DEV) {
-        console.log('[STOMP]', str);
+        console.log('[WebSocket] Disconnecting from batch:', this.config.batchId);
       }
-    },
-    // Configure automatic reconnection with 5 second delay
-    reconnectDelay: 5000,
-    // Heartbeat configuration (matching backend: 10 seconds)
-    heartbeatIncoming: 20000,
-    heartbeatOutgoing: 10000,
-  });
+      this.ws.close();
+      this.ws = null;
+    }
+  }
 
-  return client;
+  /**
+   * Checks if WebSocket is connected
+   */
+  isConnected(): boolean {
+    return this.ws?.readyState === WebSocket.OPEN;
+  }
 }
 

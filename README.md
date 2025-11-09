@@ -10,7 +10,7 @@ RapidPhotoUpload handles up to 100 concurrent photo uploads while maintaining a 
 
 - **High Performance**: Handle 100 concurrent photo uploads (2MB each) within 90 seconds
 - **Non-Blocking UI**: Zero UI blocking during upload operations
-- **Real-Time Progress**: Live progress updates via WebSocket with 2-second throttling
+- **Real-Time Progress**: Live progress updates via raw WebSocket connections
 - **Clean Architecture**: DDD + CQRS + Vertical Slice Architecture
 - **Multi-Platform**: Web (React) and Mobile (React Native/Expo)
 
@@ -21,7 +21,7 @@ RapidPhotoUpload handles up to 100 concurrent photo uploads while maintaining a 
 - Spring Boot 3.3+
 - PostgreSQL 16
 - AWS S3 for photo storage
-- WebSocket (STOMP) for real-time updates
+- Raw WebSocket (JSR-356) for real-time updates
 
 ### Frontend
 - **Web**: React 19.1.1 + TypeScript + Vite
@@ -30,7 +30,7 @@ RapidPhotoUpload handles up to 100 concurrent photo uploads while maintaining a 
   - **Icons**: Lucide React
   - **Routing**: React Router DOM
   - **HTTP Client**: Axios
-  - **WebSocket**: STOMP.js with SockJS fallback
+  - **WebSocket**: Native WebSocket API
 - **Mobile**: React Native via Expo SDK 51+
 
 ## Prerequisites
@@ -151,7 +151,7 @@ rapidphoto/
 - **CQRS**: Separate command (write) and query (read) handlers
 - **VSA**: Features organized in self-contained vertical slices
 - **Presigned URLs**: Direct client-to-S3 uploads (zero backend bandwidth)
-- **WebSocket Throttling**: 2-second throttling reduces 10,000 events to ~500
+- **Raw WebSocket**: Efficient real-time progress updates per batch upload
 
 ## AWS Region
 

@@ -1,126 +1,112 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { Platform } from 'react-native';
-import { Client } from '@stomp/stompjs';
-import type { IMessage } from '@stomp/stompjs';
-import type { PhotoProgress } from '../types/photo';
-import { createWebSocketClient } from '../services/websocket';
+import { useState, useEffect, useRef } from 'react';
+import { UploadProgressWebSocketClient } from '../services/websocket';
+
+export interface BatchProgress {
+  batchId: string;
+  photoId: string;
+  fileName: string;
+  status: 'PENDING' | 'UPLOADING' | 'COMPLETED' | 'FAILED';
+  progressPercentage: number;
+  totalPhotos?: number;
+  completedPhotos?: number;
+  message: string;
+  timestamp: string;
+}
 
 /**
- * Hook for managing WebSocket connection and receiving photo upload progress updates.
+ * Hook for managing raw WebSocket connection for batch upload progress tracking.
+ * 
+ * Connects to /ws/upload-progress/{batchId} endpoint and receives JSON progress updates.
+ * No STOMP protocol - simple WebSocket communication.
  *
- * @param userId - The user ID for subscribing to user-specific progress updates
- * @returns Object containing connection status, progress map, and sendProgress function
+ * @param batchId - The batch ID to monitor (from batch upload response)
+ * @param baseUrl - WebSocket base URL (e.g., 'ws://localhost:8080' or 'wss://your-app.com')
+ * @returns Object containing connection status and progress map
  */
-export function useWebSocket(userId: string) {
+export function useWebSocket(batchId: string | null, baseUrl: string) {
   const [connected, setConnected] = useState(false);
-  const [progress, setProgress] = useState<Map<string, PhotoProgress>>(new Map());
-  const clientRef = useRef<Client | null>(null);
+  const [progress, setProgress] = useState<Map<string, BatchProgress>>(new Map());
+  const clientRef = useRef<UploadProgressWebSocketClient | null>(null);
 
   useEffect(() => {
-    // Get platform-specific WebSocket URL from environment
-    const isWeb = Platform.OS === 'web';
-    const wsUrl = isWeb 
-      ? process.env.EXPO_PUBLIC_WS_URL_WEB 
-      : process.env.EXPO_PUBLIC_WS_URL_NATIVE;
-    
-    if (!wsUrl) {
-      const envVarName = isWeb ? 'EXPO_PUBLIC_WS_URL_WEB' : 'EXPO_PUBLIC_WS_URL_NATIVE';
-      throw new Error(`${envVarName} environment variable is required but not set`);
+    // Only connect if we have a batch ID
+    if (!batchId) {
+      if (__DEV__) {
+        console.log('[useWebSocket] No batchId provided, skipping connection');
+      }
+      return;
     }
 
     if (__DEV__) {
-      console.log('[useWebSocket] Environment check:');
-      console.log('  Platform:', Platform.OS);
-      console.log('  Using WebSocket URL:', wsUrl);
+      console.log('[useWebSocket] Initializing connection for batch:', batchId);
+      console.log('[useWebSocket] Base URL:', baseUrl);
     }
 
-    // Create and configure WebSocket client
-    const client = createWebSocketClient(wsUrl);
-
-    // Handle successful connection
-    client.onConnect = () => {
-      setConnected(true);
-      console.log('[WebSocket] Connected');
-
-      // Subscribe to user-specific progress queue
-      // Backend sends progress updates to /user/queue/progress
-      client.subscribe(`/user/queue/progress`, (message: IMessage) => {
-        try {
-          const progressUpdate: PhotoProgress = JSON.parse(message.body);
-          
-          // Update progress map with new progress update (use photoId as key)
-          setProgress((prev) => {
-            const updated = new Map(prev);
-            updated.set(progressUpdate.photoId, progressUpdate);
-            return updated;
-          });
-        } catch (error) {
-          console.error('[WebSocket] Error parsing progress message:', error);
+    // Create WebSocket client
+    const client = new UploadProgressWebSocketClient({
+      batchId,
+      baseUrl,
+      onOpen: () => {
+        setConnected(true);
+        if (__DEV__) {
+          console.log('[useWebSocket] Connected to batch:', batchId);
         }
-      });
-    };
+      },
+      onMessage: (message: BatchProgress) => {
+        // Handle different message types
+        if (message.type === 'connected') {
+          // Initial connection confirmation
+          if (__DEV__) {
+            console.log('[useWebSocket] Connection confirmed:', message.message);
+          }
+          return;
+        }
 
-    // Handle STOMP protocol errors
-    client.onStompError = (frame) => {
-      console.error('[WebSocket] STOMP error:', frame);
-    };
+        // Update progress map with new progress update (use photoId as key)
+        setProgress((prev) => {
+          const updated = new Map(prev);
+          updated.set(message.photoId, message);
+          return updated;
+        });
 
-    // Handle disconnection
-    client.onDisconnect = () => {
-      setConnected(false);
-      console.log('[WebSocket] Disconnected');
-    };
+        if (__DEV__) {
+          console.log('[useWebSocket] Progress update:', {
+            photoId: message.photoId,
+            fileName: message.fileName,
+            status: message.status,
+            progress: message.progressPercentage,
+          });
+        }
+      },
+      onError: (error) => {
+        console.error('[useWebSocket] WebSocket error:', error);
+      },
+      onClose: (event) => {
+        setConnected(false);
+        if (__DEV__) {
+          console.log('[useWebSocket] Connection closed:', event.code, event.reason);
+        }
+      },
+    });
 
-    // Handle WebSocket errors
-    client.onWebSocketError = (event) => {
-      console.error('[WebSocket] WebSocket error:', event);
-    };
+    // Connect
+    client.connect();
 
-    // Activate the connection
-    client.activate();
-
-    // Store client reference for cleanup and sending messages
+    // Store client reference for cleanup
     clientRef.current = client;
 
-    // Cleanup function: deactivate connection on unmount or userId change
+    // Cleanup function: disconnect on unmount or batchId change
     return () => {
       if (clientRef.current) {
-        clientRef.current.deactivate();
+        clientRef.current.disconnect();
         clientRef.current = null;
       }
     };
-  }, [userId]);
-
-  /**
-   * Sends a progress update message to the server.
-   * Note: This is typically used for client-side progress reporting.
-   * Server-side progress is automatically received via subscription.
-   *
-   * @param progressData - PhotoProgress object to send
-   */
-  const sendProgress = useCallback(
-    (progressData: PhotoProgress) => {
-      if (!clientRef.current || !clientRef.current.connected) {
-        console.warn('[WebSocket] Cannot send progress: not connected');
-        return;
-      }
-
-      try {
-        clientRef.current.publish({
-          destination: '/app/upload-progress',
-          body: JSON.stringify(progressData),
-        });
-      } catch (error) {
-        console.error('[WebSocket] Error sending progress:', error);
-      }
-    },
-    []
-  );
+  }, [batchId, baseUrl]);
 
   return {
     connected,
     progress,
-    sendProgress,
   };
 }
 

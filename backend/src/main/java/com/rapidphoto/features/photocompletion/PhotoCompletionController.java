@@ -49,7 +49,8 @@ public class PhotoCompletionController {
             CompletePhotoUploadCommand command = new CompletePhotoUploadCommand(
                     photoIdObj,
                     userIdObj,
-                    request.s3Key()
+                    request.s3Key(),
+                    request.batchId()
             );
 
             // Handle command
@@ -103,10 +104,14 @@ public class PhotoCompletionController {
 
     /**
      * Request DTO for photo completion endpoint.
+     * Optionally includes batch ID for WebSocket progress tracking.
      */
     public record CompletePhotoRequest(
         @NotBlank(message = "S3 key cannot be blank")
-        String s3Key
+        String s3Key,
+        
+        // Optional: batch ID for WebSocket progress updates
+        String batchId
     ) {
     }
 }

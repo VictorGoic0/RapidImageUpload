@@ -62,7 +62,7 @@ class PhotoCompletionIntegrationTest {
         String s3Key = "users/" + testUserId.value() + "/photos/test-key";
         
         PhotoCompletionController.CompletePhotoRequest request = 
-            new PhotoCompletionController.CompletePhotoRequest(s3Key);
+            new PhotoCompletionController.CompletePhotoRequest(s3Key, null);
 
         when(s3Service.verifyObjectExists(s3Key)).thenReturn(true);
 
@@ -99,7 +99,7 @@ class PhotoCompletionIntegrationTest {
         String s3Key = "users/" + testUserId.value() + "/photos/test-key";
         
         PhotoCompletionController.CompletePhotoRequest request = 
-            new PhotoCompletionController.CompletePhotoRequest(s3Key);
+            new PhotoCompletionController.CompletePhotoRequest(s3Key, null);
 
         // When & Then
         mockMvc.perform(post("/api/photos/{photoId}/complete", nonExistentPhotoId.value())
@@ -119,7 +119,7 @@ class PhotoCompletionIntegrationTest {
         String s3Key = "users/" + testUserId.value() + "/photos/test-key";
         
         PhotoCompletionController.CompletePhotoRequest request = 
-            new PhotoCompletionController.CompletePhotoRequest(s3Key);
+            new PhotoCompletionController.CompletePhotoRequest(s3Key, null);
 
         when(s3Service.verifyObjectExists(s3Key)).thenReturn(false);
 
@@ -147,7 +147,7 @@ class PhotoCompletionIntegrationTest {
         photo = photoRepository.save(photo);
         
         PhotoCompletionController.CompletePhotoRequest request = 
-            new PhotoCompletionController.CompletePhotoRequest(s3Key);
+            new PhotoCompletionController.CompletePhotoRequest(s3Key, null);
 
         when(s3Service.verifyObjectExists(s3Key)).thenReturn(true);
 

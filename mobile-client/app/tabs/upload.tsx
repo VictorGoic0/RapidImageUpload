@@ -1,13 +1,12 @@
 import React, { useState, useCallback, useMemo } from 'react';
-import { SafeAreaView, ScrollView, View, Text, TouchableOpacity, ActivityIndicator, StyleSheet } from 'react-native';
+import { SafeAreaView, ScrollView, View, Text, TouchableOpacity, ActivityIndicator, StyleSheet, Platform } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { PhotoPicker } from '../../components/PhotoPicker';
 import { UploadProgress } from '../../components/UploadProgress';
 import { BatchProgress } from '../../components/BatchProgress';
 import { useWebSocket } from '../../hooks/useWebSocket';
 import { usePhotoUpload } from '../../hooks/usePhotoUpload';
-import { useThrottledProgress } from '../../hooks/useThrottledProgress';
-import type { UploadStatus, PhotoProgress } from '../../types/photo';
+import type { UploadStatus } from '../../types/photo';
 import { UPLOAD_STATUS } from '../../types/photo';
 
 /**
@@ -21,30 +20,23 @@ const MOCK_USER_ID = '550e8400-e29b-41d4-a716-446655440000';
  * Upload screen component that handles photo uploads with progress tracking.
  */
 export default function UploadScreen() {
-  // Initialize WebSocket hook
-  const { connected, progress: websocketProgress, sendProgress } = useWebSocket(MOCK_USER_ID);
-
-  // Initialize throttled progress callback
-  const throttledProgress = useThrottledProgress(sendProgress);
-
-  // Create progress callback for usePhotoUpload
-  const handleProgressUpdate = useCallback(
-    (photoId: string, progressPercent: number, fileName: string, status: UploadStatus) => {
-      throttledProgress(photoId, progressPercent, {
-        fileName,
-        status,
-        message: status === UPLOAD_STATUS.COMPLETED ? 'Upload completed' : 'Uploading...',
-        timestamp: new Date().toISOString(),
-      });
-    },
-    [throttledProgress]
-  );
-
-  // Initialize photo upload hook
-  const { uploading, error, uploadResults, uploadPhotos, cleanup } = usePhotoUpload(
+  // Initialize photo upload hook (no progress callback needed for raw WebSocket)
+  const { uploading, error, uploadResults, batchId, uploadPhotos, cleanup } = usePhotoUpload(
     MOCK_USER_ID,
-    handleProgressUpdate
+    () => {} // Empty callback since we're using raw WebSocket for progress
   );
+
+  // Get WebSocket base URL from environment (platform-specific)
+  const wsBaseUrl = Platform.OS === 'web'
+    ? process.env.EXPO_PUBLIC_WS_URL_WEB
+    : process.env.EXPO_PUBLIC_WS_URL_NATIVE;
+
+  if (!wsBaseUrl) {
+    throw new Error('WebSocket URL not configured in environment variables');
+  }
+
+  // Initialize WebSocket hook with batch ID
+  const { progress: websocketProgress } = useWebSocket(batchId, wsBaseUrl);
 
   // State for selected URIs
   const [selectedUris, setSelectedUris] = useState<string[]>([]);
@@ -110,19 +102,6 @@ export default function UploadScreen() {
         {/* Screen title */}
         <View style={styles.header}>
           <Text style={styles.title}>Upload Photos</Text>
-          
-          {/* WebSocket connection status indicator */}
-          <View style={styles.connectionIndicator}>
-            <View
-              style={[
-                styles.connectionDot,
-                { backgroundColor: connected ? '#10b981' : '#ef4444' },
-              ]}
-            />
-            <Text style={styles.connectionText}>
-              {connected ? 'Connected' : 'Disconnected'}
-            </Text>
-          </View>
         </View>
 
         {/* Welcome Card - show when no uploads in progress */}
@@ -216,30 +195,12 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
     marginBottom: 24,
   },
   title: {
     fontSize: 32,
     fontWeight: '700',
     color: '#111827',
-  },
-  connectionIndicator: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  connectionDot: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-  },
-  connectionText: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#374151',
   },
   welcomeCard: {
     backgroundColor: '#ffffff',

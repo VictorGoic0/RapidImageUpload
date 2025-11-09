@@ -117,17 +117,19 @@ export async function initiateBatchUpload(
  * @param photoId - The photo ID
  * @param userId - The user ID
  * @param s3Key - The S3 key where the file was uploaded
+ * @param batchId - Optional batch ID for WebSocket progress tracking
  * @returns Promise resolving to completion response with status
  * @throws Error if the request fails
  */
 export async function completePhotoUpload(
   photoId: string,
   userId: string,
-  s3Key: string
+  s3Key: string,
+  batchId?: string
 ): Promise<PhotoCompletionResponse> {
   const response = await apiClient.post<PhotoCompletionResponse>(
     `/api/photos/${photoId}/complete`,
-    { s3Key },
+    { s3Key, batchId },
     {
       params: { userId },
     }
