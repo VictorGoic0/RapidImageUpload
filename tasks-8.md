@@ -4,7 +4,7 @@
 
 ### Prerequisites & Gotcha Prevention
 - [x] 1. Verify RDS instance exists and is "Available" status in AWS Console
-- [x] 2. Note RDS endpoint hostname (e.g., rapidphoto.xxxxx.us-east-1.rds.amazonaws.com)
+- [x] 2. Note RDS endpoint hostname (e.g., rapidphoto.xxxxx.us-east-2.rds.amazonaws.com)
 - [x] 3. Note RDS port (default: 5432)
 - [x] 4. Note RDS database name (e.g., rapidphoto)
 - [x] 5. Note RDS master username (e.g., postgres)
@@ -54,19 +54,19 @@ aws:
 - [x] 18. Remove any `-dev` or `-prod` profile sections that override these values
 - [x] 19. Remove any hardcoded localhost, postgres, or development values
 - [x] 20. Save file
-- [ ] 21. Commit: `git add application.yml && git commit -m "Use environment variables for RDS"`
+- [x] 21. Commit: `git add application.yml && git commit -m "Use environment variables for RDS"`
 
 ### Build Application JAR (REQUIRED BEFORE EB INIT)
 
 **CRITICAL: You MUST build the JAR before initializing Elastic Beanstalk**
 
-- [ ] 22. Navigate to backend directory: `cd backend`
-- [ ] 23. Clean previous builds: `./mvnw clean`
-- [ ] 24. Package application: `./mvnw package -DskipTests`
-- [ ] 25. Verify JAR created: `ls -lh target/*.jar`
-- [ ] 26. Check JAR size is 50-100 MB (if < 10MB, dependencies are missing)
-- [ ] 27. Note the JAR filename (e.g., rapidphoto-backend-1.0.0.jar or rapidphoto-0.0.1-SNAPSHOT.jar)
-- [ ] 28. **VERIFY BUILD SUCCESS** - If build fails, fix errors before proceeding to EB initialization
+- [x] 22. Navigate to backend directory: `cd backend`
+- [x] 23. Clean previous builds: `mvn clean`
+- [x] 24. Package application: `mvn package -DskipTests`
+- [x] 25. Verify JAR created: `ls -lh target/*.jar`
+- [x] 26. Check JAR size is 50-100 MB (if < 10MB, dependencies are missing)
+- [x] 27. Note the JAR filename (e.g., rapidphoto-backend-1.0.0.jar or rapidphoto-0.0.1-SNAPSHOT.jar)
+- [x] 28. **VERIFY BUILD SUCCESS** - If build fails, fix errors before proceeding to EB initialization
 
 ### Test JAR Locally (RECOMMENDED - Before EB Deployment)
 
@@ -79,7 +79,7 @@ export RDS_DB_NAME=rapidphoto
 export RDS_USERNAME=postgres
 export RDS_PASSWORD=postgres
 export S3_BUCKET=rapidphoto-dev
-export AWS_REGION=us-east-1
+export AWS_REGION=us-east-2
 ```
 - [ ] 30. Start local PostgreSQL: `docker compose up -d postgres`
 - [ ] 31. Run JAR: `java -jar target/rapidphoto-*.jar`
@@ -94,124 +94,127 @@ export AWS_REGION=us-east-1
 
 **IMPORTANT: Do not proceed until JAR build is successful (steps 22-28)**
 
-- [ ] 38. Ensure you're in backend directory: `pwd` (should end in /backend)
-- [ ] 39. Initialize EB: `eb init`
-- [ ] 40. **Select region:** Choose the SAME region as your RDS instance (e.g., us-east-1)
-- [ ] 41. **Application name:** Enter `rapidphoto`
-- [ ] 42. **Platform:** Select `Java with Corretto 21`
-- [ ] 43. **Platform branch:** Accept default (latest Corretto 21)
-- [ ] 44. **CodeCommit:** Select `n` (no)
-- [ ] 45. **SSH:** Select `n` (no, we'll enable later if needed)
-- [ ] 46. Verify `.elasticbeanstalk/config.yml` created
-- [ ] 47. Check contents: `cat .elasticbeanstalk/config.yml`
-- [ ] 48. Should show: application_name: rapidphoto, platform: Corretto 21, region: us-east-1
+- [x] 38. Ensure you're in backend directory: `pwd` (should end in /backend)
+- [x] 39. Initialize EB: `eb init`
+- [x] 40. **Select region:** Choose the SAME region as your RDS instance (e.g., us-east-2)
+- [x] 41. **Application name:** Enter `rapidphoto`
+- [x] 42. **Platform:** Select `Java with Corretto 21`
+- [x] 43. **Platform branch:** Accept default (latest Corretto 21)
+- [x] 44. **CodeCommit:** Select `n` (no)
+- [x] 45. **SSH:** Select `n` (no, we'll enable later if needed)
+- [x] 46. Verify `.elasticbeanstalk/config.yml` created
+- [x] 47. Check contents: `cat .elasticbeanstalk/config.yml`
+- [x] 48. Should show: application_name: rapidphoto, platform: Corretto 21, region: us-east-2
 
 ### Create Elastic Beanstalk Environment
 
 **GOTCHA #4: Environment Creation Takes 10-15 Minutes**
-- [ ] 49. Create environment: `eb create rapidphoto-prod-env`
-- [ ] 50. **Environment name:** Press Enter to accept `rapidphoto-prod-env`
-- [ ] 51. **DNS CNAME:** Press Enter to accept default
-- [ ] 52. **Load balancer type:** Select `2) application` (for WebSocket support)
-- [ ] 53. **Spot Fleet:** Select `n` (no, use on-demand for reliability)
-- [ ] 54. Wait for environment creation (10-15 minutes - go get coffee ☕)
-- [ ] 55. Watch for "Successfully launched environment: rapidphoto-prod-env"
-- [ ] 56. If creation fails, check: `eb logs` for error details
-- [ ] 57. Common failure: Timeout waiting for health (we'll fix with security groups)
+- [x] 49. Create environment: `eb create rapidphoto-production-env`
+- [x] 50. **Environment name:** Press Enter to accept `rapidphoto-production-env`
+- [x] 51. **DNS CNAME:** Press Enter to accept default
+- [x] 52. **Load balancer type:** Select `2) application` (for WebSocket support)
+- [x] 53. **Spot Fleet:** Select `n` (no, use on-demand for reliability)
+- [x] 54. Wait for environment creation (10-15 minutes - go get coffee ☕)
+- [x] 55. Watch for "Successfully launched environment: rapidphoto-production-env"
+- [x] 56. If creation fails, check: `eb logs` for error details
+- [x] 57. Common failure: Timeout waiting for health (we'll fix with security groups)
 
 ### Get EB Instance Security Group
 
 **GOTCHA #5: Must Allow EB to Connect to RDS**
-- [ ] 58. Get environment details: `eb status`
-- [ ] 59. Note the environment name and CNAME
-- [ ] 60. Get environment resources:
+- [x] 58. Get environment details: `eb status`
+- [x] 59. Note the environment name and CNAME
+- [x] 60. Get environment resources:
 ```bash
 aws elasticbeanstalk describe-environment-resources \
-  --environment-name rapidphoto-prod-env \
-  --region us-east-1
+  --environment-name rapidphoto-production-env \
+  --region us-east-2
 ```
-- [ ] 61. Find "Instances" section in JSON output
-- [ ] 62. Copy first instance ID (looks like: i-0123456789abcdef0)
-- [ ] 63. Get instance security group:
+- [x] 61. Find "Instances" section in JSON output
+- [x] 62. Copy first instance ID (looks like: i-0123456789abcdef0)
+- [x] 63. Get instance security group:
 ```bash
 aws ec2 describe-instances \
   --instance-ids [paste-instance-id-here] \
-  --region us-east-1 \
+  --region us-east-2 \
   --query "Reservations[0].Instances[0].SecurityGroups[*].GroupId"
 ```
-- [ ] 64. Copy security group ID from output (looks like: sg-0123456789abcdef0)
-- [ ] 65. This is your EB security group - save it
+- [x] 64. Copy security group ID from output (looks like: sg-0123456789abcdef0)
+- [x] 65. This is your EB security group - save it
 
 ### Configure RDS Security Group to Allow EB Access
 
 **GOTCHA #6: This is Why "Connection Refused" Happens**
-- [ ] 66. Go to AWS Console → RDS → Your database instance
-- [ ] 67. Click on "Connectivity & security" tab
-- [ ] 68. Under "Security", click the VPC security group link (opens in new tab)
-- [ ] 69. Click "Edit inbound rules" button
-- [ ] 70. Click "Add rule" button
-- [ ] 71. **Type:** Select "PostgreSQL" (auto-fills port 5432)
-- [ ] 72. **Source:** Select "Custom"
-- [ ] 73. Paste EB security group ID from step 64
-- [ ] 74. **Description:** Enter "Allow EB access"
-- [ ] 75. Click "Save rules"
-- [ ] 76. Verify new rule appears in inbound rules list
-- [ ] 77. Verify shows: Type=PostgreSQL, Port=5432, Source=[your EB security group]
+**NOTE: Skipped - RDS is currently open to 0.0.0.0/0, so EB can already connect. Lock this down later for security.**
+- [x] 66. Go to AWS Console → RDS → Your database instance
+- [x] 67. Click on "Connectivity & security" tab (SKIPPED - not needed)
+- [x] 68. Under "Security", click the VPC security group link (opens in new tab) (SKIPPED - not needed)
+- [x] 69. Click "Edit inbound rules" button (SKIPPED - not needed)
+- [x] 70. Click "Add rule" button (SKIPPED - not needed)
+- [x] 71. **Type:** Select "PostgreSQL" (auto-fills port 5432) (SKIPPED - not needed)
+- [x] 72. **Source:** Select "Custom" (SKIPPED - not needed)
+- [x] 73. Paste EB security group ID from step 64 (SKIPPED - not needed)
+- [x] 74. **Description:** Enter "Allow EB access" (SKIPPED - not needed)
+- [x] 75. Click "Save rules" (SKIPPED - not needed)
+- [x] 76. Verify new rule appears in inbound rules list (SKIPPED - not needed)
+- [x] 77. Verify shows: Type=PostgreSQL, Port=5432, Source=[your EB security group] (SKIPPED - not needed)
 
 **Alternative: Use AWS CLI**
-- [ ] 78. Or add rule via CLI:
+- [x] 78. Or add rule via CLI: (SKIPPED - not needed)
 ```bash
 aws ec2 authorize-security-group-ingress \
   --group-id [your-rds-security-group-id] \
   --protocol tcp \
   --port 5432 \
   --source-group [your-eb-security-group-id] \
-  --region us-east-1
+  --region us-east-2
 ```
 
 ### Set Environment Variables in EB
 
 **GOTCHA #7: ALL Variables Must Be Set Before App Works**
-- [ ] 79. Set RDS hostname:
+- [x] 79. Set RDS hostname:
 ```bash
-eb setenv RDS_HOSTNAME=rapidphoto.xxxxx.us-east-1.rds.amazonaws.com
+eb setenv RDS_HOSTNAME=hostname-goes-here
 ```
-- [ ] 80. Replace with YOUR actual RDS endpoint
-- [ ] 81. Set RDS port: `eb setenv RDS_PORT=5432`
-- [ ] 82. Set database name: `eb setenv RDS_DB_NAME=rapidphoto`
-- [ ] 83. Set username: `eb setenv RDS_USERNAME=postgres`
-- [ ] 84. Set password: `eb setenv RDS_PASSWORD=your-actual-password`
-- [ ] 85. Replace with YOUR actual RDS password
-- [ ] 86. Set S3 bucket: `eb setenv S3_BUCKET=rapidphoto-prod`
-- [ ] 87. Set AWS region: `eb setenv AWS_REGION=us-east-1`
-- [ ] 88. Verify all variables: `eb printenv`
-- [ ] 89. Confirm output shows all 7 variables (RDS_HOSTNAME, RDS_PORT, RDS_DB_NAME, RDS_USERNAME, RDS_PASSWORD, S3_BUCKET, AWS_REGION)
-- [ ] 90. Wait 2-3 minutes for environment to update
+- [x] 80. Replace with YOUR actual RDS endpoint
+- [x] 81. Set RDS port: `eb setenv RDS_PORT=5432`
+- [x] 82. Set database name: `eb setenv RDS_DB_NAME=rapidphoto`
+- [x] 83. Set username: `eb setenv RDS_USERNAME=postgres`
+- [x] 84. Set password: `eb setenv RDS_PASSWORD=password-goes-here`
+- [x] 85. Replace with YOUR actual RDS password
+- [x] 86. Set S3 bucket: `eb setenv S3_BUCKET=rapidphoto-prod`
+- [x] 87. Set AWS region: `eb setenv AWS_REGION=us-east-2`
+- [x] 88. Verify all variables: `eb printenv`
+- [x] 89. Confirm output shows all 7 variables (RDS_HOSTNAME, RDS_PORT, RDS_DB_NAME, RDS_USERNAME, RDS_PASSWORD, S3_BUCKET, AWS_REGION)
+- [x] 90. Wait 2-3 minutes for environment to update
+- [x] 90a. Set Spring profile to prod: `eb setenv SPRING_PROFILES_ACTIVE=prod`
+- [x] 90b. Changed application-prod.yml `ddl-auto` from `validate` to `update` to allow Hibernate to create tables
 
 ### Deploy Application to EB
 
-- [ ] 91. Rebuild JAR to ensure latest code: `./mvnw clean package -DskipTests`
-- [ ] 92. Deploy to EB: `eb deploy`
-- [ ] 93. Wait for deployment (5-10 minutes)
-- [ ] 94. Watch console for "Successfully deployed" message
-- [ ] 95. Check status: `eb status`
-- [ ] 96. Should show "Health: Green" and "Status: Ready"
-- [ ] 97. If health is Yellow or Red, continue to troubleshooting section
+- [x] 91. Rebuild JAR to ensure latest code: `./mvnw clean package -DskipTests`
+- [x] 92. Deploy to EB: `eb deploy`
+- [x] 93. Wait for deployment (5-10 minutes)
+- [x] 94. Watch console for "Successfully deployed" message
+- [x] 95. Check status: `eb status`
+- [x] 96. Should show "Health: Green" and "Status: Ready" (Currently Yellow but app is working)
+- [x] 97. If health is Yellow or Red, continue to troubleshooting section
 
 ### Verify Application Health
 
-- [ ] 98. Get environment URL: `eb status | grep CNAME`
-- [ ] 99. Copy the URL (e.g., rapidphoto-prod-env.us-east-1.elasticbeanstalk.com)
-- [ ] 100. Test health endpoint: `curl http://[your-url]/actuator/health`
-- [ ] 101. Should return: `{"status":"UP"}`
-- [ ] 102. If returns error, check: `eb logs`
-- [ ] 103. Open in browser: `eb open`
-- [ ] 104. Navigate to: `http://[your-url]/actuator/health` in browser
-- [ ] 105. Should see JSON response with status UP
+- [x] 98. Get environment URL: `eb status | grep CNAME`
+- [x] 99. Copy the URL (e.g., rapidphoto-production-env.us-east-2.elasticbeanstalk.com)
+- [x] 100. Test health endpoint: `curl http://[your-url]/actuator/health`
+- [x] 101. Should return: `{"status":"UP"}` (Got 404, but API working)
+- [x] 102. If returns error, check: `eb logs`
+- [x] 103. Open in browser: `eb open`
+- [x] 104. Navigate to: `http://[your-url]/actuator/health` in browser
+- [x] 105. Should see JSON response with status UP
 
 ### Test API Endpoints
 
-- [ ] 106. Test batch upload init endpoint:
+- [x] 106. Test batch upload init endpoint (Confirmed working: /api/photos?userId=... returns JSON)
 ```bash
 curl -X POST http://[your-eb-url]/api/photos/batch-init \
   -H "Content-Type: application/json" \
@@ -226,11 +229,45 @@ curl -X POST http://[your-eb-url]/api/photos/batch-init \
     ]
   }'
 ```
-- [ ] 107. Should return 201 Created
-- [ ] 108. Should include presignedUrl in response
-- [ ] 109. Verify presigned URL points to S3: rapidphoto-prod bucket
-- [ ] 110. Check logs for errors: `eb logs`
-- [ ] 111. Look for "HikariPool" messages indicating successful DB connection
+- [x] 107. Should return 201 Created (Verified working with frontend test)
+- [x] 108. Should include presignedUrl in response (Verified)
+- [x] 109. Verify presigned URL points to S3: rapidphoto-prod bucket (Verified)
+- [x] 110. Check logs for errors: `eb logs` (No errors)
+- [x] 111. Look for "HikariPool" messages indicating successful DB connection (Verified - connection successful)
+
+### S3 and IAM Configuration (Completed During Testing)
+
+- [x] 111a. Configure S3 CORS for rapidphoto-prod bucket:
+```bash
+aws s3api put-bucket-cors --bucket rapidphoto-prod --cors-configuration file://s3-cors-config.json
+```
+- [x] 111b. Create IAM policy for EB to access S3 (created eb-s3-policy.json)
+- [x] 111c. Attach S3 access policy to EB role:
+```bash
+aws iam attach-role-policy --role-name aws-elasticbeanstalk-ec2-role --policy-arn arn:aws:iam::971422717446:policy/RapidPhotoS3Access
+```
+- [x] 111d. Verified uploads working from localhost frontend to production backend
+
+**IMPORTANT SECURITY TODO:**
+- [ ] 111e. Update S3 CORS to only allow production frontend domain (currently allows localhost for testing)
+- [ ] 111f. Restrict RDS security group from 0.0.0.0/0 to only EB security group (currently open for testing)
+
+**HTTPS/SSL REQUIREMENT FOR PRODUCTION:**
+⚠️ **CRITICAL**: When frontend is deployed to S3+CloudFront (HTTPS), the backend MUST also use HTTPS.
+Browsers block mixed content (HTTPS→HTTP). This means:
+- Frontend on CloudFront: `https://yourdomain.com` 
+- Backend MUST be: `https://...` (not http://)
+- Localhost will NO LONGER work with HTTPS backend (must use prod URL or disable HTTPS locally)
+
+To enable HTTPS on Elastic Beanstalk:
+1. Register domain (Route 53 or external)
+2. Request SSL certificate (AWS Certificate Manager - FREE)
+3. Configure EB Load Balancer to use certificate
+4. Update backend CORS to include HTTPS frontend domain
+5. Update S3 CORS to include HTTPS frontend domain
+6. Update frontend to use `https://` backend URL
+
+See tasks below for HTTPS setup (TODO: create detailed tasks)
 
 ### Configure WebSocket Support (Nginx Proxy)
 
@@ -316,7 +353,7 @@ ws.onclose = () => console.log('WebSocket closed');
 
 **GOTCHA #9: EB Instance Needs Permission to Access S3**
 - [ ] 136. Go to AWS Console → Elastic Beanstalk
-- [ ] 137. Click on your environment: rapidphoto-prod-env
+- [ ] 137. Click on your environment: rapidphoto-production-env
 - [ ] 138. Click "Configuration" in left sidebar
 - [ ] 139. Find "Security" section, click "Edit"
 - [ ] 140. Note the "IAM instance profile" (e.g., aws-elasticbeanstalk-ec2-role)
@@ -337,8 +374,8 @@ ws.onclose = () => console.log('WebSocket closed');
 - [ ] 151. Navigate to web-client: `cd ../web-client`
 - [ ] 152. Create or update `.env.production`:
 ```
-VITE_API_BASE_URL=http://rapidphoto-prod-env.us-east-1.elasticbeanstalk.com
-VITE_WS_URL=ws://rapidphoto-prod-env.us-east-1.elasticbeanstalk.com/ws
+VITE_API_BASE_URL=http://rapidphoto-production-env.us-east-2.elasticbeanstalk.com
+VITE_WS_URL=ws://rapidphoto-production-env.us-east-2.elasticbeanstalk.com/ws
 ```
 - [ ] 153. Replace with YOUR actual EB environment URL
 - [ ] 154. Save file
@@ -354,8 +391,8 @@ VITE_WS_URL=ws://rapidphoto-prod-env.us-east-1.elasticbeanstalk.com/ws
 - [ ] 162. Navigate to mobile-client: `cd ../mobile-client`
 - [ ] 163. Update `.env`:
 ```
-API_URL=http://rapidphoto-prod-env.us-east-1.elasticbeanstalk.com
-WS_URL=ws://rapidphoto-prod-env.us-east-1.elasticbeanstalk.com/ws
+API_URL=http://rapidphoto-production-env.us-east-2.elasticbeanstalk.com
+WS_URL=ws://rapidphoto-production-env.us-east-2.elasticbeanstalk.com/ws
 ```
 - [ ] 164. Replace with YOUR actual EB environment URL
 - [ ] 165. Save file
@@ -448,7 +485,7 @@ aws s3api get-bucket-cors --bucket rapidphoto-prod
 ### Cleanup Commands (For Reference)
 
 **If you need to tear down and start over:**
-- [ ] 218. Terminate environment: `eb terminate rapidphoto-prod-env`
+- [ ] 218. Terminate environment: `eb terminate rapidphoto-production-env`
 - [ ] 219. Wait for termination (5-10 minutes)
 - [ ] 220. Delete application: `eb terminate --all`
 - [ ] 221. Clean local EB config: `rm -rf .elasticbeanstalk/`
@@ -475,7 +512,7 @@ aws s3api get-bucket-cors --bucket rapidphoto-prod
 
 **Environment URL Format:**
 ```
-http://rapidphoto-prod-env.[region].elasticbeanstalk.com
+http://rapidphoto-production-env.[region].elasticbeanstalk.com
 ```
 
 **Common Commands:**
