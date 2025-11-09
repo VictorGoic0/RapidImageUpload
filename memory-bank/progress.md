@@ -1,6 +1,21 @@
 # Progress: RapidPhotoUpload
 
 ## What Works
+- **Raw WebSocket Implementation (PR #24 Complete - 2025-11-09)**:
+  - Backend JSR-356 WebSocket endpoint at `/ws/upload-progress/{batchId}`
+  - Batch-based session management (one connection per upload batch)
+  - Static broadcast method for sending progress to all batch subscribers
+  - BatchUploadProgress DTO with factory methods (uploading, completed, failed)
+  - batchId generation in BatchUploadCommandHandler
+  - Optional batchId in photo completion flow for WebSocket updates
+  - Mobile and web clients using native WebSocket API (no libraries)
+  - Connection only established when uploading (on-demand)
+  - Auto-reconnect with exponential backoff (up to 5 attempts)
+  - All STOMP dependencies removed from both clients
+  - Documentation updated to reflect raw WebSocket usage
+  - Deployed to Elastic Beanstalk and tested successfully
+
+## What Works
 - **Development Environment**: Fully configured and operational
   - Java 21 (OpenJDK 21.0.9) installed and verified
   - Docker Desktop running with PostgreSQL 16 container
@@ -287,9 +302,12 @@
 - [x] Mobile UI components (PR #19 Complete)
 - [x] Mobile screens (PR #20 Complete)
 
-### Phase 5: Deployment (Not Started)
-- [ ] AWS infrastructure
-- [ ] Production deployment
+### Phase 5: Deployment (In Progress)
+- [x] AWS infrastructure (Elastic Beanstalk configured)
+- [x] Backend deployed to production (EBS with ALB)
+- [x] WebSocket support configured (raw WebSocket working)
+- [ ] Final production testing
+- [ ] Performance optimization
 
 ### Phase 6: Testing & Documentation (In Progress)
 - [x] Integration tests (PR #9 Complete)
@@ -306,12 +324,13 @@
 - **UI responsiveness**: 60fps maintained
 
 ## Success Criteria Status
-- [ ] 100 concurrent uploads within 90 seconds
-- [ ] Zero UI blocking during uploads
-- [ ] Real-time progress updates (2-second intervals)
+- [ ] 100 concurrent uploads within 90 seconds (needs performance testing)
+- [x] Zero UI blocking during uploads (React 19 concurrent features working)
+- [x] Real-time progress updates via WebSocket (raw WebSocket implementation)
 - [x] DDD/CQRS/VSA architecture implemented (Backend complete)
-- [ ] Deployed to AWS
+- [x] Deployed to AWS (Backend on Elastic Beanstalk with ALB)
 - [x] Integration tests passing (PR #9 Complete - 13 test cases)
+- [x] WebSocket working in production (raw WebSocket on EBS)
 - [ ] Demo video completed
 - [ ] Documentation complete
 

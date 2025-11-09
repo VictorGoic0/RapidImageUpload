@@ -1,9 +1,56 @@
 # Active Context: RapidPhotoUpload
 
 ## Current Status
-**Phase**: Frontend Implementation - Mobile Complete
-**Date**: 2025-01-XX
-**Focus**: Mobile client fully implemented - all PRs #17-20 complete
+**Phase**: WebSocket Migration Complete
+**Date**: 2025-11-09
+**Focus**: Raw WebSocket implementation complete - STOMP replaced across entire stack
+
+## Recent Changes
+- **PR #24 Complete: Raw WebSocket Implementation (2025-11-09)**:
+  - Replaced STOMP over WebSocket with raw WebSocket (JSR-356) across entire stack
+  - **Backend Changes**:
+    - Created `UploadProgressWebSocketEndpoint.java` using `@ServerEndpoint` annotation
+    - Endpoint: `/ws/upload-progress/{batchId}` for batch-specific connections
+    - Session management per batch ID using ConcurrentHashMap
+    - Static `sendProgressUpdate()` method for broadcasting to batch sessions
+    - Created `BatchUploadProgress.java` DTO with factory methods
+    - Added `batchId` field to `BatchUploadResponse` (generated in handler)
+    - Updated `CompletePhotoUploadCommand` and `CompletePhotoRequest` with optional batchId
+    - Updated `PhotoCompletionCommandHandler` to send WebSocket updates when batchId present
+    - Fixed test compilation errors (added null batchId parameter)
+    - Deployed to Elastic Beanstalk successfully
+  - **Mobile Client Changes**:
+    - Rewrote `services/websocket.ts` as `UploadProgressWebSocketClient` class
+    - Removed STOMP client, uses native WebSocket API
+    - Rewrote `hooks/useWebSocket.ts` to connect only when batchId exists
+    - Updated `hooks/usePhotoUpload.ts` to return batchId, pass to completion API
+    - Updated `services/api.ts` to accept optional batchId parameter
+    - Updated `types/photo.ts` to include batchId in BatchUploadResponse
+    - Updated `app/tabs/upload.tsx` to remove connection indicator
+    - Updated `.env` with base WebSocket URL (no endpoint path)
+    - Tested and working on iOS simulator
+  - **Web Client Changes**:
+    - Rewrote `services/websocket.ts` as `UploadProgressWebSocketClient` class
+    - Removed SockJS/STOMP, uses native WebSocket API
+    - Rewrote `hooks/useWebSocket.ts` to connect only when batchId exists
+    - Updated `hooks/usePhotoUpload.ts` to return batchId, pass to completion API
+    - Updated `services/api.ts` to accept optional batchId parameter
+    - Updated `types/photo.ts` to include batchId in BatchUploadResponse
+    - Updated `pages/UploadPage.tsx` to manage own WebSocket, removed connection indicator
+    - Updated `App.tsx` to remove global WebSocket connection
+    - Tested and working in browser
+  - **Cleanup**:
+    - Removed `@stomp/stompjs`, `sockjs-client`, `@types/sockjs-client` from web-client
+    - Removed `@stomp/stompjs`, `sockjs-client`, `@types/sockjs-client`, `text-encoding` from mobile-client
+    - Updated README.md to reflect raw WebSocket usage
+    - Deleted `websocket-ebs-setup.md` STOMP troubleshooting doc
+  - **Architecture Benefits**:
+    - One WebSocket connection per batch (not per photo)
+    - Backend sends individual photo progress through batch connection
+    - Frontend maps updates by photoId to UI components
+    - Simpler than STOMP, works perfectly on EBS
+    - Auto-reconnect with exponential backoff (up to 5 attempts)
+    - Graceful disconnection on upload completion
 
 ## Recent Changes
 - **PR #20 Complete: Mobile Screens (2025-01-XX)**:
@@ -345,7 +392,13 @@
 - Cursor rules directory initialized
 
 ## Current Work Focus
-1. **Frontend Implementation** - **WEB COMPLETE, MOBILE COMPLETE**
+1. **WebSocket Migration** - **COMPLETE (PR #24)**
+   - ✅ Raw WebSocket implementation
+   - ✅ STOMP dependencies removed
+   - ✅ Backend deployed to EBS
+   - ✅ Mobile and web clients updated and tested
+   - ✅ Documentation updated
+2. **Frontend Implementation** - **WEB COMPLETE, MOBILE COMPLETE**
    - ✅ Upload components and hooks (PR #13 Complete)
    - ✅ Upload Page & Integration (PR #14 Complete)
    - ✅ Photo Gallery Page (PR #15 Complete)
@@ -354,8 +407,8 @@
    - ✅ Mobile hooks & state management (PR #18 Complete)
    - ✅ Mobile UI components (PR #19 Complete)
    - ✅ Mobile screens (PR #20 Complete)
-   - **NEXT**: Deployment to AWS
-   - **NEXT**: Testing & Documentation
+   - **NEXT**: Production testing & optimization
+   - **NEXT**: Final documentation & demo preparation
 
 ## Next Steps (Immediate)
 1. ✅ Implement upload components and hooks (PR #13 Complete)
@@ -372,16 +425,20 @@
 
 ### Architecture Decisions
 - **Presigned URLs**: Chosen to eliminate backend bandwidth bottleneck
-- **WebSocket Throttling**: 2-second intervals to reduce backend load while maintaining real-time feel
+- **Raw WebSocket**: Replaced STOMP for simpler, more reliable real-time updates on EBS
+- **Batch-Based Connections**: One WebSocket per batch upload (not per photo) for efficiency
 - **Virtual Threads**: Leveraging Java 21 for high concurrency without thread pool exhaustion
 - **Vertical Slices**: Organizing by feature (batch-upload, photo-query, photo-completion) for maintainability
 
 ### Technical Decisions
 - **PostgreSQL 16**: Latest stable version for metadata storage
 - **Spring Boot 3.3+**: Required for Java 21 and virtual threads support
+- **JSR-356 WebSocket**: Standard Java WebSocket API for server endpoints
+- **Native WebSocket API**: Browser and React Native built-in WebSocket (no libraries needed)
 - **React 19.1.0**: Latest stable version (web and mobile)
 - **React Native 0.81.4**: Compatible with React 19
 - **Expo SDK 54**: Compatible with React 19 and React Native 0.81.4
+- **Elastic Beanstalk**: Application Load Balancer with WebSocket support
 
 ### Pending Decisions
 - Migration tool: Flyway vs Liquibase (to be decided during implementation)
