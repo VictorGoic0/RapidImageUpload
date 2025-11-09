@@ -3,49 +3,49 @@
 ## PR #21: AWS RDS Setup
 
 ### RDS Instance Creation
-- [ ] 1. Open AWS Console and navigate to RDS
-- [ ] 2. Click "Create database"
-- [ ] 3. Select "Standard create"
-- [ ] 4. Choose PostgreSQL engine
-- [ ] 5. Select version 16.x
-- [ ] 6. Choose "Free tier" template (or "Production" if needed)
-- [ ] 7. Set DB instance identifier: `rapidphoto-prod`
-- [ ] 8. Set master username: `postgres`
-- [ ] 9. Set master password: [SECURE_PASSWORD]
-- [ ] 10. Confirm password
-- [ ] 11. Select db.t3.micro instance class (free tier eligible)
-- [ ] 12. Configure storage: 20 GB gp2
-- [ ] 13. Enable storage autoscaling (optional)
-- [ ] 14. Set maximum storage threshold: 100 GB
-- [ ] 15. Keep VPC as default
-- [ ] 16. Create new DB subnet group or use existing
-- [ ] 17. Set "Public access" to Yes (for MVP - restrict later)
-- [ ] 18. Create new VPC security group: `rapidphoto-db-sg`
-- [ ] 19. Set database name: `rapidphoto`
-- [ ] 20. Keep port as 5432
-- [ ] 21. Enable automated backups with 7-day retention
-- [ ] 22. Click "Create database"
-- [ ] 23. Wait for instance to be "Available" (5-10 minutes)
+- [x] 1. Open AWS Console and navigate to RDS
+- [x] 2. Click "Create database"
+- [x] 3. Select "Standard create"
+- [x] 4. Choose PostgreSQL engine
+- [x] 5. Select version 16.x
+- [x] 6. Choose "Free tier" template (or "Production" if needed)
+- [x] 7. Set DB instance identifier: `rapidphoto-prod`
+- [x] 8. Set master username: `postgres`
+- [x] 9. Set master password: [SECURE_PASSWORD]
+- [x] 10. Confirm password
+- [x] 11. Select db.t3.micro instance class (free tier eligible)
+- [x] 12. Configure storage: 20 GB gp2
+- [x] 13. Enable storage autoscaling (optional)
+- [x] 14. Set maximum storage threshold: 100 GB
+- [x] 15. Keep VPC as default
+- [x] 16. Create new DB subnet group or use existing
+- [x] 17. Set "Public access" to Yes (for MVP - restrict later)
+- [x] 18. Create new VPC security group: `rapidphoto-db-sg`
+- [x] 19. Set database name: `rapidphoto`
+- [x] 20. Keep port as 5432
+- [x] 21. Enable automated backups with 7-day retention
+- [x] 22. Click "Create database"
+- [x] 23. Wait for instance to be "Available" (5-10 minutes)
 
 ### RDS Security Configuration
-- [ ] 24. Navigate to RDS instance details
-- [ ] 25. Click on VPC security group
-- [ ] 26. Edit inbound rules
-- [ ] 27. Add rule: Type=PostgreSQL, Port=5432
-- [ ] 28. For MVP: Source=0.0.0.0/0 (allow all - restrict later)
-- [ ] 29. For production: Source=Elastic Beanstalk security group
-- [ ] 30. Save rules
-- [ ] 31. Note RDS endpoint hostname
-- [ ] 32. Test connection from local machine: `psql -h [endpoint] -U postgres -d rapidphoto`
-- [ ] 33. Enter password and verify connection
+- [x] 24. Navigate to RDS instance details
+- [x] 25. Click on VPC security group
+- [x] 26. Edit inbound rules
+- [x] 27. Add rule: Type=PostgreSQL, Port=5432
+- [x] 28. For MVP: Source=0.0.0.0/0 (allow all - restrict later)
+- [x] 29. For production: Source=Elastic Beanstalk security group
+- [x] 30. Save rules
+- [x] 31. Note RDS endpoint hostname
+- [x] 32. Test connection from local machine: `psql -h [endpoint] -U postgres -d rapidphoto`
+- [x] 33. Enter password and verify connection
 
 ### Database Initialization
-- [ ] 34. Connect to RDS from local: `psql -h [endpoint] -U postgres -d rapidphoto`
-- [ ] 35. Verify database created: `\l`
-- [ ] 36. Update application-prod.yml with RDS endpoint
-- [ ] 37. Set RDS_HOSTNAME environment variable placeholder
-- [ ] 38. Set RDS_USERNAME placeholder
-- [ ] 39. Set RDS_PASSWORD placeholder
+- [x] 34. Connect to RDS from local: `psql -h [endpoint] -U postgres -d rapidphoto`
+- [x] 35. Verify database created: `\l`
+- [x] 36. Update application-prod.yml with RDS endpoint
+- [x] 37. Set RDS_HOSTNAME environment variable placeholder
+- [x] 38. Set RDS_USERNAME placeholder
+- [x] 39. Set RDS_PASSWORD placeholder
 - [ ] 40. Commit configuration changes
 
 ---
