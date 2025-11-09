@@ -6,6 +6,11 @@ spring:
   threads:
     virtual:
       enabled: true
+  datasource:
+    url: jdbc:postgresql://${RDS_HOSTNAME:localhost}:${RDS_PORT:5432}/${RDS_DB_NAME:rapidphoto}
+    username: ${RDS_USERNAME:postgres}
+    password: ${RDS_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       ddl-auto: update
@@ -22,41 +27,10 @@ spring:
         queue-capacity: 1000
 
 server:
-  port: 8080
-
----
-# Development Profile
-spring:
-  config:
-    activate:
-      on-profile: dev
-  datasource:
-    url: jdbc:postgresql://localhost:5432/rapidphoto
-    username: postgres
-    password: postgres
-    driver-class-name: org.postgresql.Driver
+  port: 5000
 
 aws:
   s3:
-    bucket: rapidphoto-dev
-    region: us-east-2
-
----
-# Production Profile
-spring:
-  config:
-    activate:
-      on-profile: prod
-  server:
-    port: 5000
-  datasource:
-    url: jdbc:postgresql://${RDS_HOSTNAME}:${RDS_PORT:5432}/${RDS_DB_NAME}
-    username: ${RDS_USERNAME}
-    password: ${RDS_PASSWORD}
-    driver-class-name: org.postgresql.Driver
-
-aws:
-  s3:
-    bucket: ${S3_BUCKET}
-    region: ${AWS_REGION}
+    bucket: ${S3_BUCKET:rapidphoto-dev}
+    region: ${AWS_REGION:us-east-2}
 

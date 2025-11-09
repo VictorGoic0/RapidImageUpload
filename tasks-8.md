@@ -3,33 +3,33 @@
 ## PR #23: Elastic Beanstalk Deployment with Existing RDS
 
 ### Prerequisites & Gotcha Prevention
-- [ ] 1. Verify RDS instance exists and is "Available" status in AWS Console
-- [ ] 2. Note RDS endpoint hostname (e.g., rapidphoto.xxxxx.us-east-1.rds.amazonaws.com)
-- [ ] 3. Note RDS port (default: 5432)
-- [ ] 4. Note RDS database name (e.g., rapidphoto)
-- [ ] 5. Note RDS master username (e.g., postgres)
-- [ ] 6. Have RDS master password ready (you'll need it multiple times)
-- [ ] 7. Note RDS VPC ID from RDS instance details page
-- [ ] 8. Note RDS security group ID from RDS instance details → Connectivity & security
-- [ ] 9. Verify EB CLI installed: `eb --version` (if not: `pip install awsebcli`)
-- [ ] 10. Verify AWS CLI configured: `aws sts get-caller-identity` (should show your account)
+- [x] 1. Verify RDS instance exists and is "Available" status in AWS Console
+- [x] 2. Note RDS endpoint hostname (e.g., rapidphoto.xxxxx.us-east-1.rds.amazonaws.com)
+- [x] 3. Note RDS port (default: 5432)
+- [x] 4. Note RDS database name (e.g., rapidphoto)
+- [x] 5. Note RDS master username (e.g., postgres)
+- [x] 6. Have RDS master password ready (you'll need it multiple times)
+- [x] 7. Note RDS VPC ID from RDS instance details page
+- [x] 8. Note RDS security group ID from RDS instance details → Connectivity & security
+- [x] 9. Verify EB CLI installed: `eb --version` (if not: `pip install awsebcli`)
+- [x] 10. Verify AWS CLI configured: `aws sts get-caller-identity` (should show your account)
 
 ### Spring Boot Configuration Changes (CRITICAL - Port 5000)
 
 **GOTCHA #1: Elastic Beanstalk Expects Port 5000, NOT 8080**
-- [ ] 11. Open `backend/src/main/resources/application.yml`
-- [ ] 12. Find or add server configuration section
-- [ ] 13. Set server port to 5000:
+- [x] 11. Open `backend/src/main/resources/application.yml`
+- [x] 12. Find or add server configuration section
+- [x] 13. Set server port to 5000:
 ```yaml
 server:
   port: 5000
 ```
-- [ ] 14. Save file
-- [ ] 15. **VERIFY THIS IS SET** - This is the #1 cause of EB deployment failures
+- [x] 14. Save file
+- [x] 15. **VERIFY THIS IS SET** - This is the #1 cause of EB deployment failures
 - [ ] 16. Commit change: `git add application.yml && git commit -m "Set port 5000 for EB"`
 
 **GOTCHA #2: Environment Variables Must Be Used (No Hardcoded Values)**
-- [ ] 17. In same `application.yml` file, update datasource configuration:
+- [x] 17. In same `application.yml` file, update datasource configuration:
 ```yaml
 spring:
   datasource:
@@ -51,9 +51,9 @@ aws:
     bucket: ${S3_BUCKET}
     region: ${AWS_REGION}
 ```
-- [ ] 18. Remove any `-dev` or `-prod` profile sections that override these values
-- [ ] 19. Remove any hardcoded localhost, postgres, or development values
-- [ ] 20. Save file
+- [x] 18. Remove any `-dev` or `-prod` profile sections that override these values
+- [x] 19. Remove any hardcoded localhost, postgres, or development values
+- [x] 20. Save file
 - [ ] 21. Commit: `git add application.yml && git commit -m "Use environment variables for RDS"`
 
 ### Build Application JAR (REQUIRED BEFORE EB INIT)
