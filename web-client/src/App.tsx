@@ -11,13 +11,15 @@ import './App.css';
 function App() {
   return (
     <BrowserRouter>
-      <div className="w-full min-h-screen">
-        <Navigation />
-        <Routes>
-          <Route path="/" element={<UploadPage />} />
-          <Route path="/upload" element={<UploadPage />} />
-          <Route path="/gallery" element={<GalleryPage />} />
-        </Routes>
+      <div className="w-full min-h-screen bg-gray-50 dark:bg-gray-900">
+        <div className="max-w-[1400px] mx-auto">
+          <Navigation />
+          <Routes>
+            <Route path="/" element={<UploadPage />} />
+            <Route path="/upload" element={<UploadPage />} />
+            <Route path="/gallery" element={<GalleryPage />} />
+          </Routes>
+        </div>
       </div>
     </BrowserRouter>
   );

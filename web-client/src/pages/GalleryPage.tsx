@@ -23,7 +23,7 @@ export function GalleryPage() {
   const hasMorePages = currentPage < totalPages - 1;
 
   return (
-    <div className="min-h-screen w-full bg-gray-50 dark:bg-gray-900">
+    <div className="w-full">
       <div className="w-full px-4 sm:px-6 lg:px-12 py-8 sm:py-12">
         {/* Page header */}
         <div className="flex items-center justify-between mb-8 sm:mb-12">

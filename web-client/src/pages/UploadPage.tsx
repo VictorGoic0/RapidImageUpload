@@ -88,7 +88,7 @@ export function UploadPage() {
     );
 
   return (
-    <div className="min-h-screen w-full bg-gray-50 dark:bg-gray-900">
+    <div className="w-full">
       <div className="w-full px-12 py-12">
         {/* Page title */}
         <div className="mb-12">
