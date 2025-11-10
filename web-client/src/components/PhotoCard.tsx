@@ -1,13 +1,15 @@
 import { useState } from 'react';
-import { Download, Calendar } from 'lucide-react';
+import { Download, Calendar, Trash2 } from 'lucide-react';
 import type { Photo } from '@/types/photo';
 import { UPLOAD_STATUS } from '@/types/photo';
+import { DeleteConfirmationModal } from '@/components/DeleteConfirmationModal';
 
 /**
  * Props for PhotoCard component.
  */
 interface PhotoCardProps {
   photo: Photo;
+  onDelete?: (photoId: string) => void;
 }
 
 /**
@@ -57,8 +59,9 @@ function getStatusBadgeColor(status: string): string {
 /**
  * Photo card component that displays a single photo with metadata and download functionality.
  */
-export function PhotoCard({ photo }: PhotoCardProps) {
+export function PhotoCard({ photo, onDelete }: PhotoCardProps) {
   const [imageError, setImageError] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const openImageInNewTab = () => {
     if (photo.downloadUrl && photo.status === UPLOAD_STATUS.COMPLETED) {
@@ -92,6 +95,22 @@ export function PhotoCard({ photo }: PhotoCardProps) {
       console.error('Failed to download file:', err);
       alert('Failed to download file');
     }
+  };
+
+  const handleDeleteClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent card click from firing
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    if (onDelete) {
+      onDelete(photo.photoId);
+    }
+    setIsDeleteModalOpen(false);
+  };
+
+  const handleDeleteCancel = () => {
+    setIsDeleteModalOpen(false);
   };
 
   const isDownloadDisabled = photo.status !== UPLOAD_STATUS.COMPLETED || !photo.downloadUrl;
@@ -133,14 +152,24 @@ export function PhotoCard({ photo }: PhotoCardProps) {
 
       {/* Metadata section */}
       <div className="p-4 space-y-3">
-        {/* File name */}
-        <div className="flex items-start justify-between gap-2">
+        {/* File name with delete button */}
+        <div className="flex items-start justify-between gap-2 min-w-0">
           <h3
             className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate flex-1"
             title={photo.fileName}
           >
             {truncatedFileName}
           </h3>
+          {onDelete && (
+            <button
+              onClick={handleDeleteClick}
+              className="flex-shrink-0 p-1.5 text-gray-400 hover:text-red-600 dark:text-gray-500 dark:hover:text-red-500 transition-colors rounded hover:bg-gray-100 dark:hover:bg-gray-700"
+              title="Delete photo"
+              aria-label="Delete photo"
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+          )}
         </div>
 
         {/* File size and date */}
@@ -174,6 +203,15 @@ export function PhotoCard({ photo }: PhotoCardProps) {
           </button>
         </div>
       </div>
+
+      {/* Delete confirmation modal */}
+      {onDelete && (
+        <DeleteConfirmationModal
+          isOpen={isDeleteModalOpen}
+          onConfirm={handleDeleteConfirm}
+          onCancel={handleDeleteCancel}
+        />
+      )}
     </div>
   );
 }

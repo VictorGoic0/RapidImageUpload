@@ -172,3 +172,19 @@ export async function getPhotoById(photoId: string, userId: string): Promise<Pho
   return response.data;
 }
 
+/**
+ * Deletes a photo by ID.
+ *
+ * @param photoId - The photo ID to delete
+ * @returns Promise that resolves when deletion is complete
+ * @throws Error if the request fails
+ */
+export async function deletePhoto(photoId: string): Promise<void> {
+  try {
+    await apiClient.delete(`/api/photos/${photoId}`);
+  } catch (error) {
+    console.error('Failed to delete photo:', error);
+    throw error;
+  }
+}
+

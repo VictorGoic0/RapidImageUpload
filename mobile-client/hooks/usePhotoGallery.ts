@@ -64,6 +64,13 @@ export function usePhotoGallery(userId: string) {
     }
   }, [currentPage, totalPages, loading, fetchPhotos]);
 
+  /**
+   * Removes a photo from the photos array by ID.
+   */
+  const removePhoto = useCallback((photoId: string) => {
+    setPhotos((prev) => prev.filter((p) => p.photoId !== photoId));
+  }, []);
+
   return {
     photos,
     loading,
@@ -72,6 +79,7 @@ export function usePhotoGallery(userId: string) {
     totalPages,
     loadMore,
     refetch: () => fetchPhotos(0, false),
+    removePhoto,
   };
 }
 

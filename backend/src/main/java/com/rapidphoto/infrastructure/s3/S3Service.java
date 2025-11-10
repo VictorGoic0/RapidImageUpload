@@ -16,6 +16,7 @@ import software.amazon.awssdk.services.s3.presigner.model.PresignedPutObjectRequ
 import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 
 import java.time.Duration;
 import java.util.UUID;
@@ -191,6 +192,37 @@ public class S3Service {
         } catch (Exception e) {
             log.error("Unexpected error verifying object existence for key: {}", key, e);
             throw new S3UploadException("Unexpected error verifying object existence", e);
+        }
+    }
+
+    /**
+     * Deletes an object from S3.
+     * If the object doesn't exist (NoSuchKeyException), logs a warning but returns successfully.
+     * 
+     * @param key The S3 key of the object to delete
+     * @throws S3UploadException if deletion fails due to an S3 error (other than not found)
+     */
+    public void deleteObject(String key) {
+        try {
+            log.debug("Deleting object from S3: key={}", key);
+
+            DeleteObjectRequest deleteRequest = DeleteObjectRequest.builder()
+                    .bucket(s3Properties.bucket())
+                    .key(key)
+                    .build();
+
+            s3Client.deleteObject(deleteRequest);
+            
+            log.info("Successfully deleted object from S3: key={}", key);
+        } catch (NoSuchKeyException e) {
+            log.warn("Object does not exist in S3 (already deleted or never existed): key={}", key);
+            // Return successfully - object doesn't exist, which is the desired state
+        } catch (S3Exception e) {
+            log.error("Failed to delete object from S3: key={}, error={}", key, e.getMessage(), e);
+            throw new S3UploadException("Failed to delete object from S3: " + e.getMessage(), e);
+        } catch (Exception e) {
+            log.error("Unexpected error deleting object from S3: key={}", key, e);
+            throw new S3UploadException("Unexpected error deleting object from S3", e);
         }
     }
 }

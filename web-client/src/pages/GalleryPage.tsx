@@ -1,6 +1,7 @@
 import { usePhotoGallery } from '@/hooks/usePhotoGallery';
 import { PhotoCard } from '@/components/PhotoCard';
 import { RefreshCw, ImageOff, Loader2 } from 'lucide-react';
+import { deletePhoto } from '@/services/api';
 
 /**
  * Mock userId constant for MVP (hardcoded UUID).
@@ -13,11 +14,28 @@ const MOCK_USER_ID = '550e8400-e29b-41d4-a716-446655440000';
  * Gallery page component that displays user's photos in a grid layout with pagination.
  */
 export function GalleryPage() {
-  const { photos, loading, error, currentPage, totalPages, loadMore, refetch } =
+  const { photos, loading, error, currentPage, totalPages, loadMore, refetch, removePhoto } =
     usePhotoGallery(MOCK_USER_ID);
 
   const handleRefresh = () => {
     refetch();
+  };
+
+  const handleDeletePhoto = async (photoId: string) => {
+    try {
+      // Optimistically remove photo from UI
+      removePhoto(photoId);
+      
+      // Call API to delete photo
+      await deletePhoto(photoId);
+      
+      // Photo already removed from UI, no need to do anything else
+    } catch (err) {
+      console.error('Failed to delete photo:', err);
+      // On error, refetch to restore the photo in case deletion failed
+      refetch();
+      // TODO: Could show a toast notification here in the future
+    }
   };
 
   const hasMorePages = currentPage < totalPages - 1;
@@ -74,7 +92,7 @@ export function GalleryPage() {
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 mb-8">
               {photos.map((photo) => (
-                <PhotoCard key={photo.photoId} photo={photo} />
+                <PhotoCard key={photo.photoId} photo={photo} onDelete={handleDeletePhoto} />
               ))}
             </div>
 

@@ -3,6 +3,7 @@ import { SafeAreaView, View, Text, TouchableOpacity, ActivityIndicator, StyleShe
 import { StatusBar } from 'expo-status-bar';
 import { PhotoGrid } from '../../components/PhotoGrid';
 import { usePhotoGallery } from '../../hooks/usePhotoGallery';
+import { deletePhoto } from '../../services/api';
 import type { Photo } from '../../types/photo';
 import { UPLOAD_STATUS } from '../../types/photo';
 
@@ -18,7 +19,7 @@ const MOCK_USER_ID = '550e8400-e29b-41d4-a716-446655440000';
  */
 export default function GalleryScreen() {
   // Initialize photo gallery hook
-  const { photos, loading, error, currentPage, totalPages, loadMore, refetch } =
+  const { photos, loading, error, currentPage, totalPages, loadMore, refetch, removePhoto } =
     usePhotoGallery(MOCK_USER_ID);
 
   // Handle refresh
@@ -36,6 +37,24 @@ export default function GalleryScreen() {
       });
     } else {
       Alert.alert('Photo Not Available', 'This photo is not yet available for viewing.');
+    }
+  };
+
+  // Handle photo deletion
+  const handleDeletePhoto = async (photoId: string) => {
+    try {
+      // Optimistically remove photo from UI
+      removePhoto(photoId);
+      
+      // Call API to delete photo
+      await deletePhoto(photoId);
+      
+      // Photo already removed from UI, no need to do anything else
+    } catch (err) {
+      console.error('Failed to delete photo:', err);
+      // On error, refetch to restore the photo in case deletion failed
+      refetch();
+      Alert.alert('Error', 'Failed to delete photo. Please try again.');
     }
   };
 
@@ -92,6 +111,7 @@ export default function GalleryScreen() {
           <PhotoGrid
             photos={photos}
             onPhotoPress={handlePhotoPress}
+            onDeletePhoto={handleDeletePhoto}
             footerComponent={
               <>
                 {/* Load More button */}

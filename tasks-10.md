@@ -5,122 +5,122 @@
 ### Backend - Delete Photo Feature (VSA)
 
 #### Domain Layer
-- [ ] 1. No changes needed to Photo entity (existing methods sufficient)
-- [ ] 2. Verify PhotoRepository has `findByIdAndUserId` method (already exists)
-- [ ] 3. Verify PhotoRepository extends JpaRepository with delete capability
+- [x] 1. No changes needed to Photo entity (existing methods sufficient)
+- [x] 2. Verify PhotoRepository has `findByIdAndUserId` method (already exists)
+- [x] 3. Verify PhotoRepository extends JpaRepository with delete capability
 
 #### S3 Service Enhancement
-- [ ] 4. Navigate to `backend/src/main/java/com/rapidphoto/infrastructure/s3/S3Service.java`
-- [ ] 5. Add `deleteObject(String key)` method
-- [ ] 6. Implement using S3Client.deleteObject()
-- [ ] 7. Add try-catch for S3Exception
-- [ ] 8. If object doesn't exist (NoSuchKeyException), log warning but return successfully
-- [ ] 9. Add logging for successful deletion
-- [ ] 10. Add logging for errors (other than NoSuchKeyException)
+- [x] 4. Navigate to `backend/src/main/java/com/rapidphoto/infrastructure/s3/S3Service.java`
+- [x] 5. Add `deleteObject(String key)` method
+- [x] 6. Implement using S3Client.deleteObject()
+- [x] 7. Add try-catch for S3Exception
+- [x] 8. If object doesn't exist (NoSuchKeyException), log warning but return successfully
+- [x] 9. Add logging for successful deletion
+- [x] 10. Add logging for errors (other than NoSuchKeyException)
 
 #### Photo Delete Feature (CQRS Command)
-- [ ] 11. Create `backend/src/main/java/com/rapidphoto/features/photodelete/` directory
-- [ ] 12. Create `DeletePhotoCommand.java` record
-- [ ] 13. Add fields: PhotoId photoId, UserId userId (for authorization)
-- [ ] 14. Create `DeletePhotoCommandHandler.java`
-- [ ] 15. Inject PhotoRepository and S3Service
-- [ ] 16. Implement `handle(DeletePhotoCommand command)` method
-- [ ] 17. Find photo by ID (use PhotoRepository.findById)
-- [ ] 18. If photo not found, throw PhotoNotFoundException
-- [ ] 19. If found, attempt to delete from S3 (use photo.getS3Key())
-- [ ] 20. If S3 deletion fails with NoSuchKeyException, log warning and continue
-- [ ] 21. If S3 deletion fails with other exception, log error and continue (fallback strategy)
-- [ ] 22. Delete photo from database (PhotoRepository.delete)
-- [ ] 23. Log successful deletion
-- [ ] 24. Return void (or DeletePhotoResponse if we want confirmation)
+- [x] 11. Create `backend/src/main/java/com/rapidphoto/features/photodelete/` directory
+- [x] 12. Create `DeletePhotoCommand.java` record
+- [x] 13. Add fields: PhotoId photoId, UserId userId (for authorization)
+- [x] 14. Create `DeletePhotoCommandHandler.java`
+- [x] 15. Inject PhotoRepository and S3Service
+- [x] 16. Implement `handle(DeletePhotoCommand command)` method
+- [x] 17. Find photo by ID (use PhotoRepository.findById)
+- [x] 18. If photo not found, throw PhotoNotFoundException
+- [x] 19. If found, attempt to delete from S3 (use photo.getS3Key())
+- [x] 20. If S3 deletion fails with NoSuchKeyException, log warning and continue
+- [x] 21. If S3 deletion fails with other exception, log error and continue (fallback strategy)
+- [x] 22. Delete photo from database (PhotoRepository.delete)
+- [x] 23. Log successful deletion
+- [x] 24. Return void (or DeletePhotoResponse if we want confirmation)
 
 #### Delete Photo Controller
-- [ ] 25. Create `DeletePhotoController.java` in `features/photodelete/`
-- [ ] 26. Add @RestController and @RequestMapping("/api/photos")
-- [ ] 27. Inject DeletePhotoCommandHandler
-- [ ] 28. Create DELETE endpoint: `@DeleteMapping("/{photoId}")`
-- [ ] 29. Accept @PathVariable String photoId (no userId check for MVP)
-- [ ] 30. Convert photoId to PhotoId object
-- [ ] 31. Create DeletePhotoCommand (use a default/mock userId for now)
-- [ ] 32. Call commandHandler.handle(command)
-- [ ] 33. Return ResponseEntity.noContent() (204 No Content)
-- [ ] 34. Add exception handling for PhotoNotFoundException (404)
-- [ ] 35. Add exception handling for IllegalArgumentException (400)
-- [ ] 36. Add exception handling for general exceptions (500)
-- [ ] 37. Add logging for delete requests
+- [x] 25. Create `DeletePhotoController.java` in `features/photodelete/`
+- [x] 26. Add @RestController and @RequestMapping("/api/photos")
+- [x] 27. Inject DeletePhotoCommandHandler
+- [x] 28. Create DELETE endpoint: `@DeleteMapping("/{photoId}")`
+- [x] 29. Accept @PathVariable String photoId (no userId check for MVP)
+- [x] 30. Convert photoId to PhotoId object
+- [x] 31. Create DeletePhotoCommand (use a default/mock userId for now)
+- [x] 32. Call commandHandler.handle(command)
+- [x] 33. Return ResponseEntity.noContent() (204 No Content)
+- [x] 34. Add exception handling for PhotoNotFoundException (404)
+- [x] 35. Add exception handling for IllegalArgumentException (400)
+- [x] 36. Add exception handling for general exceptions (500)
+- [x] 37. Add logging for delete requests
 
 ---
 
 ### Web Client - Delete Functionality
 
 #### API Service
-- [ ] 38. Navigate to `web-client/src/services/api.ts`
-- [ ] 39. Add `deletePhoto(photoId: string)` function
-- [ ] 40. Implement DELETE request to `/api/photos/${photoId}`
-- [ ] 41. Return Promise<void>
-- [ ] 42. Add error handling and logging
+- [x] 38. Navigate to `web-client/src/services/api.ts`
+- [x] 39. Add `deletePhoto(photoId: string)` function
+- [x] 40. Implement DELETE request to `/api/photos/${photoId}`
+- [x] 41. Return Promise<void>
+- [x] 42. Add error handling and logging
 
 #### Photo Card Component
-- [ ] 43. Navigate to `web-client/src/components/PhotoCard.tsx`
-- [ ] 44. Add delete button with trash icon (lucide-react Trash2 icon)
-- [ ] 45. Position delete button to the right of photo title
-- [ ] 46. Add CSS to truncate title if it would push button outside container
-- [ ] 47. Style button to be low-profile (small, subtle color)
-- [ ] 48. Add onClick handler to open confirmation modal
-- [ ] 49. Add state for confirmation modal open/closed
+- [x] 43. Navigate to `web-client/src/components/PhotoCard.tsx`
+- [x] 44. Add delete button with trash icon (lucide-react Trash2 icon)
+- [x] 45. Position delete button to the right of photo title
+- [x] 46. Add CSS to truncate title if it would push button outside container
+- [x] 47. Style button to be low-profile (small, subtle color)
+- [x] 48. Add onClick handler to open confirmation modal
+- [x] 49. Add state for confirmation modal open/closed
 
 #### Delete Confirmation Modal
-- [ ] 50. Create `web-client/src/components/DeleteConfirmationModal.tsx`
-- [ ] 51. Use shadcn/ui Dialog component
-- [ ] 52. Add title: "Delete Photo"
-- [ ] 53. Add message: "Are you sure you want to delete this photo? This action cannot be undone."
-- [ ] 54. Add Cancel button (closes modal)
-- [ ] 55. Add Delete button (styled as destructive/danger)
-- [ ] 56. Accept onConfirm callback prop
-- [ ] 57. Accept onCancel callback prop
-- [ ] 58. Accept isOpen prop
+- [x] 50. Create `web-client/src/components/DeleteConfirmationModal.tsx`
+- [x] 51. Use shadcn/ui Dialog component
+- [x] 52. Add title: "Delete Photo"
+- [x] 53. Add message: "Are you sure you want to delete this photo? This action cannot be undone."
+- [x] 54. Add Cancel button (closes modal)
+- [x] 55. Add Delete button (styled as destructive/danger)
+- [x] 56. Accept onConfirm callback prop
+- [x] 57. Accept onCancel callback prop
+- [x] 58. Accept isOpen prop
 
 #### Gallery Page Integration
-- [ ] 59. Navigate to `web-client/src/pages/GalleryPage.tsx`
-- [ ] 60. Add delete handler function `handleDeletePhoto(photoId: string)`
-- [ ] 61. Call deletePhoto API function
-- [ ] 62. On success, optimistically remove photo from photos state
-- [ ] 63. Filter out deleted photo: `setPhotos(prev => prev.filter(p => p.id !== photoId))`
-- [ ] 64. Add error handling (log error, could show toast in future)
-- [ ] 65. Pass delete handler to PhotoCard components
+- [x] 59. Navigate to `web-client/src/pages/GalleryPage.tsx`
+- [x] 60. Add delete handler function `handleDeletePhoto(photoId: string)`
+- [x] 61. Call deletePhoto API function
+- [x] 62. On success, optimistically remove photo from photos state
+- [x] 63. Filter out deleted photo: `setPhotos(prev => prev.filter(p => p.id !== photoId))`
+- [x] 64. Add error handling (log error, could show toast in future)
+- [x] 65. Pass delete handler to PhotoCard components
 
 ---
 
 ### Mobile Client - Delete Functionality
 
 #### API Service
-- [ ] 66. Navigate to `mobile-client/services/api.ts`
-- [ ] 67. Add `deletePhoto(photoId: string)` function
-- [ ] 68. Implement DELETE request to `/api/photos/${photoId}`
-- [ ] 69. Return Promise<void>
-- [ ] 70. Add error handling and logging
+- [x] 66. Navigate to `mobile-client/services/api.ts`
+- [x] 67. Add `deletePhoto(photoId: string)` function
+- [x] 68. Implement DELETE request to `/api/photos/${photoId}`
+- [x] 69. Return Promise<void>
+- [x] 70. Add error handling and logging
 
 #### Photo Grid Component
-- [ ] 71. Navigate to `mobile-client/components/PhotoGrid.tsx`
-- [ ] 72. Add long-press handler to photo cards (use React Native onLongPress)
-- [ ] 73. On long press, trigger confirmation alert
-- [ ] 74. Create state for selected photo ID
+- [x] 71. Navigate to `mobile-client/components/PhotoGrid.tsx`
+- [x] 72. Add long-press handler to photo cards (use React Native onLongPress)
+- [x] 73. On long press, trigger confirmation alert
+- [x] 74. Create state for selected photo ID
 
 #### Delete Confirmation
-- [ ] 75. Use React Native Alert.alert for confirmation
-- [ ] 76. Title: "Delete Photo"
-- [ ] 77. Message: "Do you want to delete this photo?"
-- [ ] 78. Buttons: "Cancel" and "Delete"
-- [ ] 79. On Delete press, call delete handler
+- [x] 75. Use React Native Alert.alert for confirmation
+- [x] 76. Title: "Delete Photo"
+- [x] 77. Message: "Do you want to delete this photo?"
+- [x] 78. Buttons: "Cancel" and "Delete"
+- [x] 79. On Delete press, call delete handler
 
 #### Gallery Screen Integration
-- [ ] 80. Navigate to `mobile-client/app/tabs/gallery.tsx`
-- [ ] 81. Add delete handler function `handleDeletePhoto(photoId: string)`
-- [ ] 82. Call deletePhoto API function
-- [ ] 83. On success, optimistically remove photo from photos state
-- [ ] 84. Filter out deleted photo: `setPhotos(prev => prev.filter(p => p.id !== photoId))`
-- [ ] 85. Add error handling (log error)
-- [ ] 86. Pass delete handler to PhotoGrid component
+- [x] 80. Navigate to `mobile-client/app/tabs/gallery.tsx`
+- [x] 81. Add delete handler function `handleDeletePhoto(photoId: string)`
+- [x] 82. Call deletePhoto API function
+- [x] 83. On success, optimistically remove photo from photos state
+- [x] 84. Filter out deleted photo: `setPhotos(prev => prev.filter(p => p.id !== photoId))`
+- [x] 85. Add error handling (log error)
+- [x] 86. Pass delete handler to PhotoGrid component
 
 ---
 

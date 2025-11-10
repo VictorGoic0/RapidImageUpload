@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import type { Photo } from '../types/photo';
 import { UPLOAD_STATUS } from '../types/photo';
 
@@ -11,6 +11,8 @@ interface PhotoGridProps {
   photos: Photo[];
   /** Callback function called when a photo is pressed */
   onPhotoPress: (photo: Photo) => void;
+  /** Callback function called when a photo should be deleted */
+  onDeletePhoto?: (photoId: string) => void;
   /** Whether there are more pages to load */
   hasMorePages?: boolean;
   /** Footer component to render at the bottom of the list */
@@ -51,16 +53,46 @@ function getStatusBadgeColor(status: string): string {
 /**
  * Renders a single photo item in the grid.
  */
-function renderPhotoItem({ item: photo, onPress }: { item: Photo; onPress: (photo: Photo) => void }) {
+function renderPhotoItem({ 
+  item: photo, 
+  onPress, 
+  onDelete 
+}: { 
+  item: Photo; 
+  onPress: (photo: Photo) => void;
+  onDelete?: (photoId: string) => void;
+}) {
   const showImage = photo.downloadUrl && photo.status === UPLOAD_STATUS.COMPLETED;
   const statusBadgeColor = getStatusBadgeColor(photo.status);
   const truncatedFileName =
     photo.fileName.length > 20 ? `${photo.fileName.substring(0, 20)}...` : photo.fileName;
 
+  const handleLongPress = () => {
+    if (onDelete) {
+      Alert.alert(
+        'Delete Photo',
+        'Do you want to delete this photo?',
+        [
+          {
+            text: 'Cancel',
+            style: 'cancel',
+          },
+          {
+            text: 'Delete',
+            style: 'destructive',
+            onPress: () => onDelete(photo.photoId),
+          },
+        ],
+        { cancelable: true }
+      );
+    }
+  };
+
   return (
     <TouchableOpacity
       style={styles.photoCard}
       onPress={() => onPress(photo)}
+      onLongPress={handleLongPress}
       activeOpacity={0.7}
     >
       {/* Image container */}
@@ -102,11 +134,11 @@ function renderPhotoItem({ item: photo, onPress }: { item: Photo; onPress: (phot
 /**
  * Component for displaying photos in a grid layout.
  */
-export function PhotoGrid({ photos, onPhotoPress, footerComponent }: PhotoGridProps) {
+export function PhotoGrid({ photos, onPhotoPress, onDeletePhoto, footerComponent }: PhotoGridProps) {
   return (
     <FlatList
       data={photos}
-      renderItem={({ item }) => renderPhotoItem({ item, onPress: onPhotoPress })}
+      renderItem={({ item }) => renderPhotoItem({ item, onPress: onPhotoPress, onDelete: onDeletePhoto })}
       keyExtractor={(item) => item.photoId}
       numColumns={2}
       columnWrapperStyle={styles.row}
