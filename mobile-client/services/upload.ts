@@ -70,6 +70,10 @@ export async function uploadToS3(
   } else {
     // Native platform: use Expo FileSystem API
     try {
+      // Throttle progress updates to prevent overwhelming React Native bridge
+      let lastProgressTime = 0;
+      const THROTTLE_MS = 100;
+
       await FileSystem.uploadAsync(presignedUrl, fileUri, {
         httpMethod: 'PUT',
         uploadType: FileSystem.FileSystemUploadType.BINARY_CONTENT,
@@ -80,7 +84,13 @@ export async function uploadToS3(
           const { totalBytesSent, totalBytesExpectedToSend } = uploadProgressEvent;
           if (totalBytesExpectedToSend > 0) {
             const percent = Math.round((totalBytesSent / totalBytesExpectedToSend) * 100);
-            onProgress(percent);
+            const now = Date.now();
+            
+            // Only call onProgress if enough time has passed or if upload is complete
+            if (now - lastProgressTime >= THROTTLE_MS || percent === 100) {
+              onProgress(percent);
+              lastProgressTime = now;
+            }
           }
         },
       });
