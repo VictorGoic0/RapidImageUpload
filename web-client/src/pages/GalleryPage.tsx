@@ -1,21 +1,16 @@
+import { useAuth } from '@/contexts/AuthContext';
 import { usePhotoGallery } from '@/hooks/usePhotoGallery';
 import { PhotoCard } from '@/components/PhotoCard';
 import { RefreshCw, ImageOff, Loader2 } from 'lucide-react';
 import { deletePhoto } from '@/services/api';
 
 /**
- * Mock userId constant for MVP (hardcoded UUID).
- * In production, this would come from authentication context.
- * Should match the userId used in UploadPage.
- */
-const MOCK_USER_ID = '550e8400-e29b-41d4-a716-446655440000';
-
-/**
  * Gallery page component that displays user's photos in a grid layout with pagination.
  */
 export function GalleryPage() {
+  const { user } = useAuth();
   const { photos, loading, error, currentPage, totalPages, loadMore, refetch, removePhoto } =
-    usePhotoGallery(MOCK_USER_ID);
+    usePhotoGallery(user?.userId || '');
 
   const handleRefresh = () => {
     refetch();

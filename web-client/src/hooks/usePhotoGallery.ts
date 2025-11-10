@@ -24,7 +24,7 @@ export function usePhotoGallery(userId: string) {
       setError(null);
 
       try {
-        const response: PhotoQueryResponse = await getUserPhotos(userId, page, 20);
+        const response: PhotoQueryResponse = await getUserPhotos(page, 20, userId);
         
         if (append) {
           // Append new photos to existing array

@@ -61,7 +61,7 @@ export function usePhotoUpload(
         setUploadResults(initialResults);
 
         // Call initiateBatchUpload API with metadata
-        const batchResponse = await initiateBatchUpload(userId, photoMetadata);
+        const batchResponse = await initiateBatchUpload(photoMetadata, userId);
         
         // Store batch ID for WebSocket connection
         setBatchId(batchResponse.batchId);
@@ -122,7 +122,7 @@ export function usePhotoUpload(
             });
 
             // On upload success: call completePhotoUpload API with batch ID
-            await completePhotoUpload(presignedInfo.photoId, userId, presignedInfo.s3Key, batchResponse.batchId);
+            await completePhotoUpload(presignedInfo.photoId, presignedInfo.s3Key, batchResponse.batchId, userId);
 
             // Update uploadResults Map with COMPLETED status
             setUploadResults((prev) => {

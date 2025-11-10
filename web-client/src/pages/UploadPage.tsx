@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
 import { usePhotoUpload } from '@/hooks/usePhotoUpload';
 import { useWebSocket } from '@/hooks/useWebSocket';
 import { UploadZone } from '@/components/UploadZone';
@@ -9,18 +10,14 @@ import type { UploadStatus } from '@/types/photo';
 import { UPLOAD_STATUS } from '@/types/photo';
 
 /**
- * Mock userId constant for MVP (hardcoded UUID).
- * In production, this would come from authentication context.
- */
-const MOCK_USER_ID = '550e8400-e29b-41d4-a716-446655440000';
-
-/**
  * Upload page component that handles photo uploads with progress tracking.
  */
 export function UploadPage() {
+  const { user } = useAuth();
+  
   // Initialize photo upload hook (no progress callback needed for raw WebSocket)
   const { uploading, error, uploadResults, batchId, uploadPhotos, cleanup } = usePhotoUpload(
-    MOCK_USER_ID,
+    user?.userId || '',
     () => {} // Empty callback since we're using raw WebSocket for progress
   );
 
