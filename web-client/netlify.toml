@@ -1,0 +1,40 @@
+# Netlify Configuration for RapidPhotoUpload Web Client
+
+[build]
+  # Build command
+  command = "npm run build"
+  
+  # Directory with the deployed content
+  publish = "dist"
+  
+  # Base directory for the build
+  base = "web-client"
+
+# SPA Redirect Rule - Handles client-side routing
+# This prevents 404 errors when refreshing on non-home routes
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Security Headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Cache Control for Static Assets
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Cache Control for HTML
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
+

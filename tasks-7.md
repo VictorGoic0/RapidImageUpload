@@ -50,53 +50,69 @@
 
 ---
 
-## PR #23: Web Frontend Deployment to S3
+## PR #23: Web Frontend Deployment to Netlify
 
 ### Build Configuration
 - [ ] 1. Navigate to web-client: `cd web-client`
-- [ ] 2. Update `.env.production` with ECS ALB backend URL
-- [ ] 3. Set VITE_API_BASE_URL to ECS ALB URL
-- [ ] 4. Set VITE_WS_URL to ECS ALB WebSocket URL (ws:// or wss://)
-- [ ] 5. Build production bundle: `npm run build`
-- [ ] 6. Verify build created in `dist/` directory
-- [ ] 7. Check bundle size (should be optimized)
-- [ ] 8. Test build locally: `npm run preview`
+- [ ] 2. Create `.env.production` file in web-client root
+- [ ] 3. Set VITE_API_BASE_URL to backend ECS ALB URL
+- [ ] 4. Set VITE_WS_URL to backend ECS ALB WebSocket URL (wss:// for production)
+- [ ] 5. Verify netlify.toml exists in web-client root (for SPA routing)
+- [ ] 6. Test production build locally: `npm run build`
+- [ ] 7. Verify build created in `dist/` directory
+- [ ] 8. Check bundle size (should be optimized)
+- [ ] 9. Test build locally: `npm run preview`
+- [ ] 10. Verify SPA routing works locally (refresh on non-home routes)
 
-### S3 Static Hosting Setup
-- [ ] 9. Create S3 bucket for web hosting: `aws s3 mb s3://rapidphoto-web-prod`
-- [ ] 10. Enable static website hosting on bucket
-- [ ] 11. Configure index document: `index.html`
-- [ ] 12. Configure error document: `index.html` (for SPA routing)
-- [ ] 13. Make bucket public with bucket policy
-- [ ] 14. Create bucket policy JSON for public read access
-- [ ] 15. Apply bucket policy: `aws s3api put-bucket-policy --bucket rapidphoto-web-prod --policy file://policy.json`
-- [ ] 16. Disable "Block all public access" settings
+### Netlify Account & Site Setup
+- [ ] 11. Sign up for Netlify account at netlify.com (if needed)
+- [ ] 12. Login to Netlify dashboard
+- [ ] 13. Click "Add new site" → "Import an existing project"
+- [ ] 14. Connect to GitHub repository
+- [ ] 15. Authorize Netlify to access repository
+- [ ] 16. Select RapidPhotoUpload repository
+- [ ] 17. Configure build settings:
+- [ ] 18. - Base directory: `web-client`
+- [ ] 19. - Build command: `npm run build`
+- [ ] 20. - Publish directory: `web-client/dist`
+- [ ] 21. Click "Add environment variables"
+- [ ] 22. Add VITE_API_BASE_URL with backend ECS ALB URL
+- [ ] 23. Add VITE_WS_URL with backend WebSocket URL
+- [ ] 24. Click "Deploy site"
 
-### Upload Build Files
-- [ ] 17. Sync build to S3: `aws s3 sync dist/ s3://rapidphoto-web-prod --delete`
-- [ ] 18. Set cache-control headers for assets: `aws s3 cp dist/assets/ s3://rapidphoto-web-prod/assets/ --recursive --cache-control "max-age=31536000"`
-- [ ] 19. Set no-cache for HTML: `aws s3 cp dist/index.html s3://rapidphoto-web-prod/index.html --cache-control "no-cache"`
-- [ ] 20. Verify files uploaded: `aws s3 ls s3://rapidphoto-web-prod`
+### Deployment & Verification
+- [ ] 25. Wait for initial deployment (2-5 minutes)
+- [ ] 26. View deployment logs for any errors
+- [ ] 27. Get Netlify site URL (e.g., https://randomname.netlify.app)
+- [ ] 28. Access site in browser
+- [ ] 29. Verify application loads correctly
+- [ ] 30. Test navigation between pages
+- [ ] 31. Refresh page on /gallery route (should not 404)
+- [ ] 32. Refresh page on /upload route (should not 404)
+- [ ] 33. Test WebSocket connection to backend
+- [ ] 34. Test photo upload flow end-to-end
+- [ ] 35. Verify CORS allows requests from Netlify domain
+- [ ] 36. Check browser console for errors
+- [ ] 37. Test on mobile device
 
-### Website Access Test
-- [ ] 21. Get S3 website URL from bucket properties
-- [ ] 22. Access URL in browser: `http://rapidphoto-web-prod.s3-website-us-east-2.amazonaws.com`
-- [ ] 23. Verify application loads correctly
-- [ ] 24. Test WebSocket connection to backend
-- [ ] 25. Test photo upload flow end-to-end
-- [ ] 26. Verify CORS allows requests to ECS ALB backend
-- [ ] 27. Check browser console for errors
+### Custom Domain Setup (Optional)
+- [ ] 38. Click "Domain settings" in Netlify dashboard
+- [ ] 39. Click "Add custom domain"
+- [ ] 40. Enter your domain name
+- [ ] 41. Follow DNS configuration instructions
+- [ ] 42. Add DNS records at your domain registrar
+- [ ] 43. Wait for DNS propagation (up to 24 hours)
+- [ ] 44. Enable HTTPS (Netlify auto-provisions SSL)
+- [ ] 45. Verify custom domain works with HTTPS
 
-### CloudFront Setup (Optional - HTTPS)
-- [ ] 28. Create CloudFront distribution for S3 bucket
-- [ ] 29. Set origin to S3 website endpoint
-- [ ] 30. Configure default cache behavior
-- [ ] 31. Enable HTTPS only
-- [ ] 32. Request SSL certificate via ACM (if custom domain)
-- [ ] 33. Wait for distribution deployment (15-20 minutes)
-- [ ] 34. Test CloudFront URL
-- [ ] 35. Update DNS (if using custom domain)
-- [ ] 36. Create invalidation for /* to clear cache
+### Continuous Deployment Setup
+- [ ] 46. Verify auto-deploy is enabled for main branch
+- [ ] 47. Make a test commit to main branch
+- [ ] 48. Verify Netlify automatically triggers deployment
+- [ ] 49. Check deployment status in Netlify dashboard
+- [ ] 50. Verify changes appear on live site
+- [ ] 51. Set up deploy notifications (optional, email or Slack)
+- [ ] 52. Configure branch deploys for preview (optional)
 
 ---
 
