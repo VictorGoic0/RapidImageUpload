@@ -1,6 +1,37 @@
 # Progress: RapidPhotoUpload
 
 ## What Works
+- **Mocked User Authentication (PR #26 Complete - 2025-01-XX)**:
+  - Backend User entity with id (UUID), username (unique), password (plain text for MVP), and createdAt timestamp
+  - UserRepository with findByUsername() and existsByUsername() methods
+  - Photo entity updated with @ManyToOne relationship to User entity
+  - Foreign key constraint fk_photo_user from photos.user_id to users.id
+  - Database schema migration handled automatically by Hibernate ddl-auto: update
+  - Auth feature following VSA pattern:
+    - RegisterUserCommand and LoginUserCommand records
+    - RegisterUserCommandHandler with duplicate username validation
+    - LoginUserCommandHandler with username/password authentication
+    - AuthenticationException and DuplicateUsernameException custom exceptions
+    - AuthController with POST /api/auth/register and POST /api/auth/login endpoints
+  - BatchUploadCommandHandler updated to use EntityManager.getReference() for User proxy
+  - Integration tests updated to create User entities before Photo entities
+  - Web client authentication:
+    - Auth service with localStorage persistence
+    - AuthContext with AuthProvider and useAuth hook
+    - LoginPage and RegisterPage components
+    - ProtectedRoute component for route protection
+    - Navigation component with logout button (transparent bg, darker on hover, red text on hover)
+    - All API calls use authenticated user ID
+  - Mobile client authentication:
+    - Auth service with AsyncStorage persistence
+    - AuthContext with AuthProvider and useAuth hook
+    - Login and Register screens
+    - RootLayoutNav component for protected navigation
+    - Auth route group layout (app/auth/_layout.tsx)
+    - Tab layout with logout button and username display
+    - All API calls use authenticated user ID
+  - All 150 tasks completed (backend: 50, web: 53, mobile: 47)
+
 - **Photo Delete Functionality (PR #25 Complete - 2025-01-XX)**:
   - Backend delete photo feature with CQRS pattern
   - S3Service.deleteObject() method with NoSuchKeyException handling
@@ -186,6 +217,7 @@
 - [x] Photo query feature (PR #8 Complete)
 - [x] Backend integration tests (PR #9 Complete)
 - [x] Photo delete feature (PR #25 Complete)
+- [x] Mocked user authentication (PR #26 Complete)
 
 ### Web Frontend (Day 3)
 - [x] React + Vite + TypeScript project setup (PR #10 Complete)
@@ -246,6 +278,13 @@
   - PhotoCard with delete button (Trash2 icon)
   - Optimistic UI updates
   - Error handling with refetch on failure
+- [x] User authentication (PR #26 Complete)
+  - Auth service with localStorage persistence
+  - AuthContext with AuthProvider and useAuth hook
+  - LoginPage and RegisterPage components
+  - ProtectedRoute component for route protection
+  - Navigation component with logout button
+  - All API calls use authenticated user ID
 
 ### Mobile Frontend (Day 4)
 - [x] Expo project with TypeScript (PR #16 Complete)
@@ -277,6 +316,14 @@
   - React Native Alert.alert confirmation
   - Optimistic UI updates
   - Error handling with refetch on failure
+- [x] User authentication (PR #26 Complete)
+  - Auth service with AsyncStorage persistence
+  - AuthContext with AuthProvider and useAuth hook
+  - Login and Register screens
+  - RootLayoutNav component for protected navigation
+  - Auth route group layout
+  - Tab layout with logout button and username display
+  - All API calls use authenticated user ID
 
 ### Deployment (Day 4)
 - [x] AWS RDS PostgreSQL instance creation (PR #21 Complete)

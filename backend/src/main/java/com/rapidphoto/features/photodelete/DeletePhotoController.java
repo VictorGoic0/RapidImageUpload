@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * REST controller for photo deletion operations.
@@ -22,9 +21,6 @@ public class DeletePhotoController {
 
     private static final Logger log = LoggerFactory.getLogger(DeletePhotoController.class);
     
-    // Mock userId for MVP (will be replaced with authentication in PR #26)
-    private static final UserId MOCK_USER_ID = new UserId(UUID.fromString("00000000-0000-0000-0000-000000000000"));
-
     private final DeletePhotoCommandHandler commandHandler;
 
     public DeletePhotoController(DeletePhotoCommandHandler commandHandler) {
@@ -32,17 +28,22 @@ public class DeletePhotoController {
     }
 
     @DeleteMapping("/{photoId}")
-    public ResponseEntity<?> deletePhoto(@PathVariable String photoId) {
-        log.info("Received photo deletion request: photoId={}", photoId);
+    public ResponseEntity<?> deletePhoto(
+            @PathVariable String photoId,
+            @RequestParam String userId) {
+        log.info("Received photo deletion request: photoId={}, userId={}", photoId, userId);
 
         try {
             // Convert String photoId to PhotoId object
             PhotoId photoIdObj = PhotoId.fromString(photoId);
+            
+            // Convert String userId to UserId object
+            UserId userIdObj = UserId.fromString(userId);
 
-            // Create DeletePhotoCommand with mock userId for MVP
+            // Create DeletePhotoCommand with userId for authorization
             DeletePhotoCommand command = new DeletePhotoCommand(
                     photoIdObj,
-                    MOCK_USER_ID
+                    userIdObj
             );
 
             // Handle command
@@ -57,7 +58,8 @@ public class DeletePhotoController {
             error.put("error", "Invalid UUID format: " + e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         } catch (PhotoNotFoundException e) {
-            log.warn("Photo not found: photoId={}", photoId);
+            log.warn("Photo not found or unauthorized: photoId={}, userId={}, error={}", 
+                    photoId, userId, e.getMessage());
             Map<String, String> error = new HashMap<>();
             error.put("error", e.getMessage());
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);

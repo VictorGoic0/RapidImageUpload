@@ -37,11 +37,14 @@ public class DeletePhotoCommandHandler {
                  command.photoId().value(), command.userId().value());
 
         try {
-            // Find photo by ID
-            Optional<Photo> photoOpt = photoRepository.findById(command.photoId());
+            // Find photo by ID and userId for authorization check
+            Optional<Photo> photoOpt = photoRepository.findByIdAndUserId(
+                    command.photoId(), 
+                    command.userId());
 
             if (photoOpt.isEmpty()) {
-                log.warn("Photo not found: photoId={}", command.photoId().value());
+                log.warn("Photo not found or does not belong to user: photoId={}, userId={}", 
+                        command.photoId().value(), command.userId().value());
                 throw new PhotoNotFoundException(
                     String.format("Photo not found for photoId=%s", command.photoId().value()));
             }

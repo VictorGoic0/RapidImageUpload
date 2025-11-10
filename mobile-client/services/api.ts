@@ -201,12 +201,21 @@ export async function getPhotoById(photoId: string, userId?: string): Promise<Ph
  * Deletes a photo by ID.
  *
  * @param photoId - The photo ID to delete
+ * @param userId - Optional user ID (if not provided, uses authenticated user)
  * @returns Promise that resolves when deletion is complete
- * @throws Error if the request fails
+ * @throws Error if the request fails or user is not authenticated
  */
-export async function deletePhoto(photoId: string): Promise<void> {
+export async function deletePhoto(photoId: string, userId?: string): Promise<void> {
+  const authenticatedUserId = userId || (await getCurrentUser())?.userId;
+  
+  if (!authenticatedUserId) {
+    throw new Error('User not authenticated');
+  }
+
   try {
-    await apiClient.delete(`/api/photos/${photoId}`);
+    await apiClient.delete(`/api/photos/${photoId}`, {
+      params: { userId: authenticatedUserId },
+    });
   } catch (error) {
     console.error('Failed to delete photo:', error);
     throw error;

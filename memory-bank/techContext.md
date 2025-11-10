@@ -46,13 +46,16 @@
 - **HTTP Client**: Axios 1.13.2
   - API client timeout: 90 seconds (configured for large file uploads)
   - Request/response interceptors for logging and error handling
-- **WebSocket**: @stomp/stompjs 7.2.1, sockjs-client 1.6.1
-  - Global polyfill in `index.html` for `global is not defined` error
-  - Vite `optimizeDeps` configured for sockjs-client
+- **WebSocket**: Native WebSocket API (no libraries)
+  - Raw WebSocket implementation (JSR-356 on backend)
 - **UI Components**: Shadcn/ui (Radix UI), Tailwind CSS 3.4.18
 - **Icons**: Lucide React 0.553.0
 - **Styling**: Tailwind CSS with tailwindcss-animate plugin (ES module import syntax)
 - **Navigation**: Underlined active state (not button-style)
+- **Authentication**: React Context API with localStorage persistence
+  - AuthContext provides global authentication state
+  - ProtectedRoute component for route protection
+  - LoginPage and RegisterPage components
 
 ### Mobile Frontend
 - **Framework**: React Native 0.81.4 via Expo SDK 54
@@ -61,12 +64,17 @@
 - **Navigation**: Expo Router (file-based routing)
 - **Image Picker**: expo-image-picker ~17.0.8
 - **File System**: expo-file-system ~19.0.17
-- **WebSocket**: Same STOMP library as web (@stomp/stompjs 7.2.1)
+- **WebSocket**: Native WebSocket API (no libraries)
 - **HTTP Client**: Axios 1.13.2 (same as web)
 - **Environment Variables**: Expo native support (EXPO_PUBLIC_* prefix)
 - **Package Manager**: npm
 - **Styling**: React Native StyleSheet (no Tailwind)
 - **Icons**: Unicode emoji (📤, 🖼️) for tab navigation
+- **Authentication**: React Context API with AsyncStorage persistence
+  - AuthContext provides global authentication state
+  - RootLayoutNav component handles protected navigation
+  - Login and Register screens
+  - AsyncStorage package: @react-native-async-storage/async-storage
 
 ## Development Environment
 
@@ -122,7 +130,7 @@ spring:
     active: dev
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: update  # Automatically creates/updates schema (users table, photos.user_id foreign key)
     show-sql: true
 
 # Development Profile

@@ -8,6 +8,11 @@
 - **Photo** (Entity): Represents uploaded image with lifecycle
   - Business logic methods: `markAsCompleted()`, `markAsFailed()`
   - Validation: Can only complete pending uploads
+  - @ManyToOne relationship with User entity
+  - Factory method: `createPending(User, ...)` (deprecated `createPending(UserId, ...)`)
+- **User** (Entity): Represents authenticated user
+  - Fields: id (UUID), username (unique), password (plain text for MVP), createdAt
+  - Factory method: `User.create(username, password)`
 - **PhotoId** (Value Object): UUID-based identifier, @Embeddable
 - **UserId** (Value Object): UUID-based identifier, @Embeddable
 - **UploadStatus** (Enum): PENDING, UPLOADING, COMPLETED, FAILED
@@ -19,6 +24,8 @@
 
 **Repositories:**
 - `PhotoRepository`: Data access abstraction (Spring Data JPA)
+- `UserRepository`: Data access abstraction for User entity (Spring Data JPA)
+  - Methods: `findByUsername()`, `existsByUsername()`
 
 **Key Rule**: Business logic lives IN domain objects, not in services or controllers.
 
@@ -85,11 +92,24 @@
     - DeletePhotoCommandHandler.java
     - PhotoNotFoundException.java
 
+  /auth/                   # Complete feature in one slice
+    - AuthController.java
+    - RegisterUserCommand.java
+    - LoginUserCommand.java
+    - RegisterUserCommandHandler.java
+    - LoginUserCommandHandler.java
+    - RegisterUserResponse.java
+    - LoginUserResponse.java
+    - AuthenticationException.java
+    - DuplicateUsernameException.java
+
 /domain/                  # Shared across features
   - Photo.java
+  - User.java
   - PhotoId.java
   - UserId.java
   - PhotoRepository.java
+  - UserRepository.java
   - UploadStatus.java
 
 /infrastructure/          # Shared services
@@ -102,9 +122,18 @@
 
 ## System Flow Patterns
 
+### Authentication Flow
+1. User registers via POST `/api/auth/register` with username and password
+2. Backend creates User entity, returns { userId, username }
+3. Client stores user in localStorage (web) or AsyncStorage (mobile)
+4. User logs in via POST `/api/auth/login` with username and password
+5. Backend validates credentials, returns { userId, username }
+6. Client stores user and sets authenticated state
+7. All subsequent API calls include authenticated userId (from context/storage)
+
 ### Upload Process (Presigned URL Strategy)
-1. Client → POST `/api/photos/batch-init` with photo metadata
-2. Backend creates Photo entities (PENDING), generates presigned URLs
+1. Client → POST `/api/photos/batch-init` with photo metadata and authenticated userId
+2. Backend creates Photo entities (PENDING) associated with User, generates presigned URLs
 3. Client receives presigned URLs, uploads directly to S3 via XHR PUT
 4. Client tracks progress locally (instant UI), sends throttled updates via WebSocket
 5. Client → POST `/api/photos/{photoId}/complete` when upload finishes
@@ -176,11 +205,36 @@ xhr.upload.addEventListener('progress', (e) => {
 
 **Key Rule**: Never hardcode CORS origins in controllers or WebSocket config. Always use `CorsConfig.ALLOWED_ORIGINS`.
 
+## Authentication Patterns
+
+### User Entity Management
+- User entity created via `User.create(username, password)` factory method
+- UserRepository provides `findByUsername()` and `existsByUsername()` methods
+- Photo entities must be associated with User via `@ManyToOne` relationship
+- Use `EntityManager.getReference(User.class, userId)` to create User proxy for Photo creation (avoids unnecessary database query)
+
+### Authentication State Management
+- **Web Client**: AuthContext with localStorage persistence
+  - `useAuth()` hook provides `user`, `isAuthenticated`, `loading`, `login()`, `register()`, `logout()`
+  - ProtectedRoute component redirects to `/login` if not authenticated
+  - Navigation component displays username and logout button when authenticated
+- **Mobile Client**: AuthContext with AsyncStorage persistence
+  - `useAuth()` hook provides same interface as web
+  - RootLayoutNav component handles authentication checks and redirects
+  - Tab layout displays username in header and logout button
+
+### Database Schema Migration
+- Hibernate `ddl-auto: update` handles schema changes automatically
+- Creates `users` table on application startup
+- Adds foreign key `user_id` column to `photos` table
+- Existing photos with mock user IDs remain valid (no data migration needed)
+
 ## Error Handling Patterns
 
 ### Domain Validation
 - Business rules enforced in domain objects (e.g., `Photo.markAsCompleted()`)
 - Throw `IllegalStateException` for invalid state transitions
+- Authentication errors: `AuthenticationException` for login failures, `DuplicateUsernameException` for registration conflicts
 
 ### Infrastructure Errors
 - S3 operations wrapped in try-catch with custom `S3UploadException`

@@ -1,11 +1,91 @@
 # Active Context: RapidPhotoUpload
 
 ## Current Status
-**Phase**: Photo Delete Functionality Complete
+**Phase**: Mocked User Authentication Complete
 **Date**: 2025-01-XX
-**Focus**: PR #25 (Photo Delete Functionality) complete for backend, web, and mobile clients
+**Focus**: PR #26 (Mocked User Authentication) complete for backend, web, and mobile clients
 
 ## Recent Changes
+- **PR #26 Complete: Mocked User Authentication (2025-01-XX)**:
+  - **Backend Implementation**:
+    - Created `User` domain entity with `id` (UUID), `username` (unique), `password` (plain text for MVP), and `createdAt` timestamp
+    - Created `UserRepository` with `findByUsername()` and `existsByUsername()` methods
+    - Updated `Photo` entity to include `@ManyToOne` relationship with `User` entity
+    - Added foreign key constraint `fk_photo_user` from `photos.user_id` to `users.id`
+    - Deprecated `Photo.createPending(UserId, ...)` and introduced `Photo.createPending(User, ...)` for proper JPA relationship management
+    - Updated `BatchUploadCommandHandler` to use `EntityManager.getReference()` to create User proxy before creating Photo entities
+    - Created `/features/auth` directory following VSA pattern:
+      - `RegisterUserCommand` and `LoginUserCommand` records
+      - `RegisterUserResponse` and `LoginUserResponse` records
+      - `RegisterUserCommandHandler` with duplicate username validation
+      - `LoginUserCommandHandler` with username/password authentication
+      - `AuthenticationException` and `DuplicateUsernameException` custom exceptions
+      - `AuthController` with POST `/api/auth/register` and POST `/api/auth/login` endpoints
+    - Updated integration tests (`PhotoCompletionIntegrationTest`, `PhotoQueryIntegrationTest`) to create and save `User` entities before creating `Photo` entities
+    - Database schema migration handled automatically by Hibernate `ddl-auto: update`:
+      - Creates `users` table on application startup
+      - Adds foreign key `user_id` column to `photos` table
+      - Existing photos with mock user IDs remain valid (no data migration needed)
+  - **Web Client Implementation**:
+    - Created `services/auth.ts` with `register()`, `login()`, `logout()`, `getCurrentUser()`, `isAuthenticated()`, and `saveUser()` functions
+    - Uses `localStorage` for persistent user storage
+    - Created `contexts/AuthContext.tsx` with `AuthProvider` and `useAuth` hook:
+      - Manages `user` state (userId, username)
+      - Loads user from `localStorage` on mount
+      - Provides `login`, `register`, `logout` functions
+      - Handles navigation on auth state changes
+    - Created `pages/LoginPage.tsx` with username/password form, error handling, and loading states
+    - Created `pages/RegisterPage.tsx` with username/password form, duplicate username error handling, and loading states
+    - Created `components/ProtectedRoute.tsx` to protect routes based on authentication status
+    - Updated `App.tsx`:
+      - Wrapped application with `AuthProvider`
+      - Added public routes for `/login` and `/register`
+      - Wrapped `/upload` and `/gallery` routes with `ProtectedRoute`
+      - Set default route (`/`) to redirect to `/gallery` (protected)
+      - Added catch-all route (`*`) to redirect to `/login`
+    - Updated `components/Navigation.tsx`:
+      - Integrated `useAuth` hook
+      - Displays username and logout button when authenticated
+      - Logout button styling: transparent background, darker on hover, red text on hover
+    - Updated `services/api.ts`:
+      - All API functions now accept optional `userId` parameter
+      - If `userId` not provided, retrieves from `getCurrentUser()`
+      - Throws error if no authenticated user found
+    - Updated `pages/UploadPage.tsx` and `pages/GalleryPage.tsx` to use authenticated user ID from `useAuth()`
+    - Updated `hooks/usePhotoUpload.ts` and `hooks/usePhotoGallery.ts` to pass authenticated user ID to API functions
+  - **Mobile Client Implementation**:
+    - Created `services/auth.ts` with `register()`, `login()`, `logout()`, `getCurrentUser()`, `isAuthenticated()`, and `saveUser()` functions
+    - Uses `@react-native-async-storage/async-storage` for persistent user storage
+    - Created `contexts/AuthContext.tsx` with `AuthProvider` and `useAuth` hook:
+      - Manages `user` state (userId, username)
+      - Loads user from `AsyncStorage` on mount
+      - Provides `login`, `register`, `logout` functions
+      - Navigation handled by `RootLayoutNav` (no programmatic navigation in context)
+    - Created `app/auth/login.tsx` with username/password form, error alerts, and loading states
+    - Created `app/auth/register.tsx` with username/password form, duplicate username error alerts, and loading states
+    - Created `app/auth/_layout.tsx` to properly register auth route group in Expo Router
+    - Updated `app/_layout.tsx`:
+      - Wrapped navigation with `AuthProvider`
+      - Created `RootLayoutNav` component to handle authentication checks and redirects
+      - Uses `useSegments()` to detect auth routes
+      - Redirects to `/auth/login` if not authenticated and not in auth route
+      - Redirects to `/tabs/gallery` if authenticated and in auth route
+      - Added loading indicator while authentication state is being determined
+    - Updated `app/index.tsx` to act as initial redirect based on authentication status
+    - Updated `app/tabs/_layout.tsx`:
+      - Integrated `useAuth` hook
+      - Added logout button in `headerRight`
+      - Updated `headerTitle` for `upload` and `gallery` tabs to include `user.username`
+      - Set `initialRouteName` to `gallery`
+    - Updated `services/api.ts`:
+      - All API functions now accept optional `userId` parameter
+      - If `userId` not provided, retrieves from `(await getCurrentUser())?.userId`
+      - Throws error if no authenticated user found
+    - Updated `app/tabs/upload.tsx` and `app/tabs/gallery.tsx` to use authenticated user ID from `useAuth()`
+    - Updated `hooks/usePhotoUpload.ts` and `hooks/usePhotoGallery.ts` to pass authenticated user ID to API functions
+  - **Testing**: Verified working on local backend, web client, and mobile client
+  - **All tasks completed**: 150/150 tasks (backend: 50, web: 53, mobile: 47)
+
 - **PR #25 Complete: Photo Delete Functionality (2025-01-XX)**:
   - **Backend Implementation**:
     - Added `deleteObject(String key)` method to S3Service
@@ -460,14 +540,22 @@
 - Cursor rules directory initialized
 
 ## Current Work Focus
-1. **Photo Delete Functionality** - **COMPLETE (PR #25)**
+1. **Mocked User Authentication** - **COMPLETE (PR #26)**
+   - ✅ Backend User entity and repository
+   - ✅ Photo-User foreign key relationship
+   - ✅ Auth feature with register/login endpoints
+   - ✅ Web client auth context and protected routes
+   - ✅ Mobile client auth context and protected navigation
+   - ✅ All API calls use authenticated user ID
+   - ✅ Database schema migration handled automatically
+2. **Photo Delete Functionality** - **COMPLETE (PR #25)**
    - ✅ Backend delete feature with CQRS pattern
    - ✅ S3Service.deleteObject() with error handling
    - ✅ Web client delete with confirmation modal
    - ✅ Mobile client delete with long-press and Alert
    - ✅ Optimistic UI updates on both clients
    - ✅ Error handling and logging throughout
-2. **WebSocket Migration** - **COMPLETE (PR #24)**
+3. **WebSocket Migration** - **COMPLETE (PR #24)**
    - ✅ Raw WebSocket implementation
    - ✅ STOMP dependencies removed
    - ✅ Backend deployed to EBS
@@ -502,7 +590,7 @@
 7. ✅ Deploy web frontend to Netlify (PR #23 Complete)
 8. ✅ Configure backend SSL on Elastic Beanstalk (PR #23 Complete)
 9. ✅ Implement Photo Delete Functionality (PR #25 Complete)
-10. Implement Mocked User Authentication (PR #26)
+10. ✅ Implement Mocked User Authentication (PR #26 Complete)
 11. Implement Photo Authorization (PR #29)
 12. Final documentation & demo preparation
 
@@ -539,8 +627,10 @@
 - None currently
 
 ## Notes
-- MVP uses mocked user IDs; JWT authentication deferred to post-MVP
-- Focus on core upload/progress functionality first
+- ✅ Mocked user authentication implemented (PR #26)
+- MVP uses plain text passwords; JWT authentication deferred to post-MVP
+- All photos are now associated with users via foreign key relationship
+- Database schema changes handled automatically by Hibernate `ddl-auto: update`
 - ✅ Deployment to AWS complete (Elastic Beanstalk with ALB and SSL)
 - ✅ Web frontend deployed to Netlify
 - Mobile app deployment (PR #24) removed from MVP scope - using Expo Go for testing

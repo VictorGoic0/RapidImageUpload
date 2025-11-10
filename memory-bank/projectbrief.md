@@ -16,7 +16,7 @@ Build a production-grade, high-performance photo upload system demonstrating arc
 - **Platforms**: Web (React) and Mobile (React Native/Expo)
 - **Storage**: AWS S3 with presigned URLs (direct client-to-S3 uploads)
 - **Database**: PostgreSQL 16 for metadata storage
-- **Authentication**: MVP uses mocked user IDs; JWT post-MVP
+- **Authentication**: MVP uses mocked user authentication (username/password, plain text); JWT post-MVP
 
 ## Success Metrics
 - ✅ 100 concurrent uploads complete within 90 seconds
