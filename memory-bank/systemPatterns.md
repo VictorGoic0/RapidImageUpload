@@ -35,6 +35,12 @@
   - PhotoCompletionController
   - PhotoCompletionCommandHandler
   - CompletePhotoUploadCommand
+
+/features/photodelete/
+  - DeletePhotoController
+  - DeletePhotoCommandHandler
+  - DeletePhotoCommand
+  - PhotoNotFoundException
 ```
 
 **Query Side (Reads):**
@@ -72,6 +78,12 @@
     - PhotoCompletionController.java
     - CompletePhotoUploadCommand.java
     - PhotoCompletionCommandHandler.java
+  
+  /photodelete/           # Complete feature in one slice
+    - DeletePhotoController.java
+    - DeletePhotoCommand.java
+    - DeletePhotoCommandHandler.java
+    - PhotoNotFoundException.java
 
 /domain/                  # Shared across features
   - Photo.java
@@ -81,7 +93,7 @@
   - UploadStatus.java
 
 /infrastructure/          # Shared services
-  - S3Service.java
+  - S3Service.java (includes deleteObject method)
   - WebSocketProgressService.java
   - DatabaseConfig.java
 ```

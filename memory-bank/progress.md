@@ -1,6 +1,26 @@
 # Progress: RapidPhotoUpload
 
 ## What Works
+- **Photo Delete Functionality (PR #25 Complete - 2025-01-XX)**:
+  - Backend delete photo feature with CQRS pattern
+  - S3Service.deleteObject() method with NoSuchKeyException handling
+  - DeletePhotoCommand and DeletePhotoCommandHandler
+  - DeletePhotoController with DELETE `/api/photos/{photoId}` endpoint
+  - PhotoNotFoundException for delete operations
+  - Web client delete functionality:
+    - deletePhoto API function
+    - DeleteConfirmationModal with shadcn/ui Dialog
+    - PhotoCard with delete button (Trash2 icon)
+    - Optimistic UI updates in GalleryPage
+  - Mobile client delete functionality:
+    - deletePhoto API function
+    - PhotoGrid with long-press handler
+    - React Native Alert.alert confirmation
+    - Optimistic UI updates in GalleryScreen
+  - removePhoto function added to usePhotoGallery hooks (web and mobile)
+  - All delete operations include error handling and logging
+  - Deployed and tested on local backend
+
 - **Raw WebSocket Implementation (PR #24 Complete - 2025-11-09)**:
   - Backend JSR-356 WebSocket endpoint at `/ws/upload-progress/{batchId}`
   - Batch-based session management (one connection per upload batch)
@@ -165,6 +185,7 @@
 - [x] Photo completion feature (PR #7 Complete)
 - [x] Photo query feature (PR #8 Complete)
 - [x] Backend integration tests (PR #9 Complete)
+- [x] Photo delete feature (PR #25 Complete)
 
 ### Web Frontend (Day 3)
 - [x] React + Vite + TypeScript project setup (PR #10 Complete)
@@ -172,7 +193,7 @@
 - [x] API service layer (axios) (PR #11 Complete)
   - Axios instance with 90-second timeout
   - Request/response interceptors for logging and error handling
-  - Functions: initiateBatchUpload, completePhotoUpload, getUserPhotos, getPhotoById
+  - Functions: initiateBatchUpload, completePhotoUpload, getUserPhotos, getPhotoById, deletePhoto
 - [x] Type definitions (PR #11 Complete)
   - UploadStatus, PhotoMetadata, PresignedUploadInfo, BatchUploadResponse
   - Photo, PhotoProgress, PhotoQueryResponse, PhotoCompletionResponse
@@ -220,6 +241,11 @@
   - Load more pagination functionality
   - Empty state and error handling
   - Refresh functionality
+- [x] Photo delete functionality (PR #25 Complete)
+  - DeleteConfirmationModal with shadcn/ui Dialog
+  - PhotoCard with delete button (Trash2 icon)
+  - Optimistic UI updates
+  - Error handling with refetch on failure
 
 ### Mobile Frontend (Day 4)
 - [x] Expo project with TypeScript (PR #16 Complete)
@@ -235,7 +261,7 @@
   - useWebSocket hook (same logic as web)
   - useThrottledProgress hook (exact copy from web)
   - usePhotoUpload hook (adapted for file URIs)
-  - usePhotoGallery hook (exact copy from web)
+  - usePhotoGallery hook (exact copy from web, includes removePhoto)
 - [x] UI components (PR #19 Complete)
   - PhotoPicker component (gallery and camera)
   - UploadProgress component (individual file progress)
@@ -246,6 +272,11 @@
   - Gallery screen with pagination
   - Tab navigation layout
   - Root layout and entry point
+- [x] Photo delete functionality (PR #25 Complete)
+  - PhotoGrid with long-press handler
+  - React Native Alert.alert confirmation
+  - Optimistic UI updates
+  - Error handling with refetch on failure
 
 ### Deployment (Day 4)
 - [x] AWS RDS PostgreSQL instance creation (PR #21 Complete)

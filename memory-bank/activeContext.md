@@ -1,9 +1,63 @@
 # Active Context: RapidPhotoUpload
 
 ## Current Status
-**Phase**: Production Deployment Complete
+**Phase**: Photo Delete Functionality Complete
 **Date**: 2025-01-XX
-**Focus**: Web frontend deployed to Netlify, backend SSL configured, all deployment tasks complete
+**Focus**: PR #25 (Photo Delete Functionality) complete for backend, web, and mobile clients
+
+## Recent Changes
+- **PR #25 Complete: Photo Delete Functionality (2025-01-XX)**:
+  - **Backend Implementation**:
+    - Added `deleteObject(String key)` method to S3Service
+    - Handles NoSuchKeyException gracefully (logs warning, returns successfully)
+    - Created `photodelete` feature directory following VSA pattern
+    - `DeletePhotoCommand` record with PhotoId and UserId fields
+    - `DeletePhotoCommandHandler` with @Transactional:
+      - Finds photo by ID using PhotoRepository.findById
+      - Attempts S3 deletion (continues on failure with fallback strategy)
+      - Deletes photo from database
+      - Proper error handling and logging
+    - `DeletePhotoController` with DELETE `/api/photos/{photoId}` endpoint
+    - PhotoNotFoundException for delete operations
+    - Exception handling: 404 (not found), 400 (invalid UUID), 500 (general errors)
+    - Mock userId for MVP (will be replaced with authentication in PR #26)
+  - **Web Client Implementation**:
+    - Added `deletePhoto(photoId: string)` to api.ts
+    - Created shadcn/ui Dialog component (`components/ui/dialog.tsx`)
+    - Created `DeleteConfirmationModal` component with:
+      - Title: "Delete Photo"
+      - Message: "Are you sure you want to delete this photo? This action cannot be undone."
+      - Cancel and Delete buttons (Delete styled as destructive)
+      - Event propagation prevention to avoid card click conflicts
+    - Updated `PhotoCard` component:
+      - Added delete button with Trash2 icon (lucide-react)
+      - Positioned to right of photo title
+      - Low-profile styling (subtle gray, turns red on hover)
+      - Opens confirmation modal on click
+    - Updated `GalleryPage`:
+      - Added `handleDeletePhoto` function with optimistic UI updates
+      - Calls deletePhoto API function
+      - Removes photo from state immediately
+      - Refetches on error to restore photo
+    - Added `removePhoto` function to `usePhotoGallery` hook
+  - **Mobile Client Implementation**:
+    - Added `deletePhoto(photoId: string)` to api.ts
+    - Updated `PhotoGrid` component:
+      - Added `onDeletePhoto` prop
+      - Added `onLongPress` handler to photo cards
+      - Shows React Native Alert.alert on long press
+    - Alert confirmation:
+      - Title: "Delete Photo"
+      - Message: "Do you want to delete this photo?"
+      - Buttons: "Cancel" and "Delete" (destructive style)
+    - Updated `GalleryScreen`:
+      - Added `handleDeletePhoto` function with optimistic UI updates
+      - Calls deletePhoto API function
+      - Removes photo from state immediately
+      - Shows Alert on error and refetches to restore photo
+    - Added `removePhoto` function to `usePhotoGallery` hook
+  - **Testing**: Verified working on local backend
+  - **All tasks completed**: 86/86 tasks (backend: 37, web: 28, mobile: 21)
 
 ## Recent Changes
 - **PR #23 Complete: Web Frontend Deployment to Netlify (2025-01-XX)**:
@@ -406,28 +460,37 @@
 - Cursor rules directory initialized
 
 ## Current Work Focus
-1. **WebSocket Migration** - **COMPLETE (PR #24)**
+1. **Photo Delete Functionality** - **COMPLETE (PR #25)**
+   - ✅ Backend delete feature with CQRS pattern
+   - ✅ S3Service.deleteObject() with error handling
+   - ✅ Web client delete with confirmation modal
+   - ✅ Mobile client delete with long-press and Alert
+   - ✅ Optimistic UI updates on both clients
+   - ✅ Error handling and logging throughout
+2. **WebSocket Migration** - **COMPLETE (PR #24)**
    - ✅ Raw WebSocket implementation
    - ✅ STOMP dependencies removed
    - ✅ Backend deployed to EBS
    - ✅ Mobile and web clients updated and tested
    - ✅ Documentation updated
-2. **Frontend Implementation** - **WEB COMPLETE, MOBILE COMPLETE**
+3. **Frontend Implementation** - **WEB COMPLETE, MOBILE COMPLETE**
    - ✅ Upload components and hooks (PR #13 Complete)
    - ✅ Upload Page & Integration (PR #14 Complete)
    - ✅ Photo Gallery Page (PR #15 Complete)
+   - ✅ Photo Delete Functionality (PR #25 Complete)
    - ✅ Mobile client project initialized with React 19 and React Native 0.81.4 (PR #16 Complete)
    - ✅ Mobile services & type definitions (PR #17 Complete)
    - ✅ Mobile hooks & state management (PR #18 Complete)
    - ✅ Mobile UI components (PR #19 Complete)
    - ✅ Mobile screens (PR #20 Complete)
-3. **Production Deployment** - **COMPLETE (PR #23)**
+   - ✅ Mobile Photo Delete Functionality (PR #25 Complete)
+4. **Production Deployment** - **COMPLETE (PR #23)**
    - ✅ Web frontend deployed to Netlify
    - ✅ Backend SSL certificate configured on ALB
    - ✅ HTTPS/WSS connections working
    - ✅ CORS updated for Netlify domain
    - ✅ End-to-end testing complete
-   - **NEXT**: Final documentation & demo preparation
+   - **NEXT**: Authentication (PR #26) and Authorization (PR #29)
 
 ## Next Steps (Immediate)
 1. ✅ Implement upload components and hooks (PR #13 Complete)
@@ -438,7 +501,10 @@
 6. ✅ Set up React Native mobile frontend (PR #16-20 Complete)
 7. ✅ Deploy web frontend to Netlify (PR #23 Complete)
 8. ✅ Configure backend SSL on Elastic Beanstalk (PR #23 Complete)
-9. Final documentation & demo preparation (PR #25-26)
+9. ✅ Implement Photo Delete Functionality (PR #25 Complete)
+10. Implement Mocked User Authentication (PR #26)
+11. Implement Photo Authorization (PR #29)
+12. Final documentation & demo preparation
 
 ## Active Decisions & Considerations
 

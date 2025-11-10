@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# RapidPhotoUpload Backend Deployment Script
+# Builds the Spring Boot application and deploys to AWS Elastic Beanstalk
+
+set -e  # Exit on any error
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+BACKEND_DIR="${SCRIPT_DIR}/backend"
+
+echo "🚀 Starting backend deployment..."
+echo "📁 Backend directory: ${BACKEND_DIR}"
+
+# Navigate to backend directory
+cd "${BACKEND_DIR}"
+
+# Build the application for production
+echo ""
+echo "🔨 Building backend application..."
+mvn clean package -DskipTests
+
+# Check if build was successful
+if [ $? -ne 0 ]; then
+    echo "❌ Build failed. Deployment aborted."
+    exit 1
+fi
+
+echo ""
+echo "✅ Build successful!"
+echo "📦 JAR file location: ${BACKEND_DIR}/target/rapidphoto-backend-1.0.0.jar"
+
+# Deploy to Elastic Beanstalk
+echo ""
+echo "☁️  Deploying to AWS Elastic Beanstalk..."
+eb deploy
+
+if [ $? -eq 0 ]; then
+    echo ""
+    echo "✅ Deployment successful!"
+else
+    echo ""
+    echo "❌ Deployment failed."
+    exit 1
+fi
+
