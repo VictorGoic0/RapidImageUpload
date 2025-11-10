@@ -6,12 +6,12 @@ import type { PhotoProgress } from '../types/photo';
  * Sends updates at most once per throttleMs, or immediately when progress reaches 100%.
  *
  * @param sendProgress - Function to send progress updates (from useWebSocket hook)
- * @param throttleMs - Minimum milliseconds between progress updates (default: 2000)
+ * @param throttleMs - Minimum milliseconds between progress updates (default: 300)
  * @returns Throttled function to send progress updates
  */
 export function useThrottledProgress(
   sendProgress: (progress: PhotoProgress) => void,
-  throttleMs: number = 2000
+  throttleMs: number = 300
 ) {
   // Map to track last update time for each photo
   const lastUpdateRef = useRef<Map<string, number>>(new Map());
