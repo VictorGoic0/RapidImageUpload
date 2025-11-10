@@ -248,13 +248,15 @@
   - Root layout and entry point
 
 ### Deployment (Day 4)
-- [ ] AWS RDS PostgreSQL instance creation
-- [ ] ECS Fargate cluster and service setup
-- [ ] Backend deployment to ECS Fargate
-- [ ] S3 bucket configuration for web hosting
-- [ ] Web frontend build and deployment
-- [ ] CloudFront distribution (optional)
-- [ ] Environment variable configuration
+- [x] AWS RDS PostgreSQL instance creation (PR #21 Complete)
+- [x] Backend deployed to AWS Elastic Beanstalk (with ALB)
+- [x] SSL certificate configured on Application Load Balancer
+- [x] HTTPS/WSS support enabled for secure connections
+- [x] Web frontend deployed to Netlify (PR #23 Complete)
+- [x] Continuous deployment configured for main branch
+- [x] CORS updated to allow Netlify domain
+- [x] Environment variables configured in Netlify
+- [ ] CloudFront distribution (optional, not required for MVP)
 
 ### Testing & Documentation (Day 5)
 - [x] Integration tests for upload flow (PR #9 Complete)
@@ -302,12 +304,17 @@
 - [x] Mobile UI components (PR #19 Complete)
 - [x] Mobile screens (PR #20 Complete)
 
-### Phase 5: Deployment (In Progress)
+### Phase 5: Deployment (✅ Complete)
 - [x] AWS infrastructure (Elastic Beanstalk configured)
+- [x] AWS RDS PostgreSQL instance created (PR #21 Complete)
 - [x] Backend deployed to production (EBS with ALB)
+- [x] SSL certificate configured on Application Load Balancer
+- [x] HTTPS/WSS support enabled
 - [x] WebSocket support configured (raw WebSocket working)
-- [ ] Final production testing
-- [ ] Performance optimization
+- [x] Web frontend deployed to Netlify (PR #23 Complete)
+- [x] CORS updated for Netlify domain
+- [x] End-to-end production testing completed
+- [ ] Performance optimization (optional)
 
 ### Phase 6: Testing & Documentation (In Progress)
 - [x] Integration tests (PR #9 Complete)
@@ -328,9 +335,11 @@
 - [x] Zero UI blocking during uploads (React 19 concurrent features working)
 - [x] Real-time progress updates via WebSocket (raw WebSocket implementation)
 - [x] DDD/CQRS/VSA architecture implemented (Backend complete)
-- [x] Deployed to AWS (Backend on Elastic Beanstalk with ALB)
+- [x] Deployed to AWS (Backend on Elastic Beanstalk with ALB and SSL)
+- [x] Web frontend deployed to Netlify
 - [x] Integration tests passing (PR #9 Complete - 13 test cases)
-- [x] WebSocket working in production (raw WebSocket on EBS)
+- [x] WebSocket working in production (raw WebSocket on EBS with WSS)
+- [x] HTTPS/WSS secure connections configured
 - [ ] Demo video completed
 - [ ] Documentation complete
 

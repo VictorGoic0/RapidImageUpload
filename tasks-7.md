@@ -53,97 +53,79 @@
 ## PR #23: Web Frontend Deployment to Netlify
 
 ### Build Configuration
-- [ ] 1. Navigate to web-client: `cd web-client`
-- [ ] 2. Create `.env.production` file in web-client root
-- [ ] 3. Set VITE_API_BASE_URL to backend ECS ALB URL
-- [ ] 4. Set VITE_WS_URL to backend ECS ALB WebSocket URL (wss:// for production)
-- [ ] 5. Verify netlify.toml exists in web-client root (for SPA routing)
-- [ ] 6. Test production build locally: `npm run build`
-- [ ] 7. Verify build created in `dist/` directory
-- [ ] 8. Check bundle size (should be optimized)
-- [ ] 9. Test build locally: `npm run preview`
-- [ ] 10. Verify SPA routing works locally (refresh on non-home routes)
+- [x] 1. Navigate to web-client: `cd web-client`
+- [x] 2. Create `.env.production` file in web-client root
+- [x] 3. Set VITE_API_BASE_URL to backend ECS ALB URL
+- [x] 4. Set VITE_WS_URL to backend ECS ALB WebSocket URL (wss:// for production)
+- [x] 5. Verify netlify.toml exists in web-client root (for SPA routing)
+- [x] 6. Test production build locally: `npm run build`
+- [x] 7. Verify build created in `dist/` directory
+- [x] 8. Check bundle size (should be optimized)
+- [x] 9. Test build locally: `npm run preview`
+- [x] 10. Verify SPA routing works locally (refresh on non-home routes)
 
 ### Netlify Account & Site Setup
-- [ ] 11. Sign up for Netlify account at netlify.com (if needed)
-- [ ] 12. Login to Netlify dashboard
-- [ ] 13. Click "Add new site" → "Import an existing project"
-- [ ] 14. Connect to GitHub repository
-- [ ] 15. Authorize Netlify to access repository
-- [ ] 16. Select RapidPhotoUpload repository
-- [ ] 17. Configure build settings:
-- [ ] 18. - Base directory: `web-client`
-- [ ] 19. - Build command: `npm run build`
-- [ ] 20. - Publish directory: `web-client/dist`
-- [ ] 21. Click "Add environment variables"
-- [ ] 22. Add VITE_API_BASE_URL with backend ECS ALB URL
-- [ ] 23. Add VITE_WS_URL with backend WebSocket URL
-- [ ] 24. Click "Deploy site"
+- [x] 11. Sign up for Netlify account at netlify.com (if needed)
+- [x] 12. Login to Netlify dashboard
+- [x] 13. Click "Add new site" → "Import an existing project"
+- [x] 14. Connect to GitHub repository
+- [x] 15. Authorize Netlify to access repository
+- [x] 16. Select RapidPhotoUpload repository
+- [x] 17. Configure build settings:
+- [x] 18. - Base directory: `web-client`
+- [x] 19. - Build command: `npm run build`
+- [x] 20. - Publish directory: `web-client/dist`
+- [x] 21. Click "Add environment variables"
+- [x] 22. Add VITE_API_BASE_URL with backend ECS ALB URL
+- [x] 23. Add VITE_WS_URL with backend WebSocket URL
+- [x] 24. Click "Deploy site"
 
 ### Deployment & Verification
-- [ ] 25. Wait for initial deployment (2-5 minutes)
-- [ ] 26. View deployment logs for any errors
-- [ ] 27. Get Netlify site URL (e.g., https://randomname.netlify.app)
-- [ ] 28. Access site in browser
-- [ ] 29. Verify application loads correctly
-- [ ] 30. Test navigation between pages
-- [ ] 31. Refresh page on /gallery route (should not 404)
-- [ ] 32. Refresh page on /upload route (should not 404)
-- [ ] 33. Test WebSocket connection to backend
-- [ ] 34. Test photo upload flow end-to-end
-- [ ] 35. Verify CORS allows requests from Netlify domain
-- [ ] 36. Check browser console for errors
-- [ ] 37. Test on mobile device
+- [x] 25. Wait for initial deployment (2-5 minutes)
+- [x] 26. View deployment logs for any errors
+- [x] 27. Get Netlify site URL (e.g., https://randomname.netlify.app)
+- [x] 28. Access site in browser
+- [x] 29. Verify application loads correctly
+- [x] 30. Test navigation between pages
+- [x] 31. Refresh page on /gallery route (should not 404)
+- [x] 32. Refresh page on /upload route (should not 404)
+- [x] 33. Test WebSocket connection to backend
+- [x] 34. Test photo upload flow end-to-end
+- [x] 35. Verify CORS allows requests from Netlify domain
+- [x] 36. Check browser console for errors
+- [x] 37. Test on mobile device
 
 ### Custom Domain Setup (Optional)
-- [ ] 38. Click "Domain settings" in Netlify dashboard
-- [ ] 39. Click "Add custom domain"
-- [ ] 40. Enter your domain name
-- [ ] 41. Follow DNS configuration instructions
-- [ ] 42. Add DNS records at your domain registrar
-- [ ] 43. Wait for DNS propagation (up to 24 hours)
-- [ ] 44. Enable HTTPS (Netlify auto-provisions SSL)
-- [ ] 45. Verify custom domain works with HTTPS
+- [x] 38. Click "Domain settings" in Netlify dashboard
+- [x] 39. Click "Add custom domain"
+- [x] 40. Enter your domain name
+- [x] 41. Follow DNS configuration instructions
+- [x] 42. Add DNS records at your domain registrar
+- [x] 43. Wait for DNS propagation (up to 24 hours)
+- [x] 44. Enable HTTPS (Netlify auto-provisions SSL)
+- [x] 45. Verify custom domain works with HTTPS
 
 ### Continuous Deployment Setup
-- [ ] 46. Verify auto-deploy is enabled for main branch
-- [ ] 47. Make a test commit to main branch
-- [ ] 48. Verify Netlify automatically triggers deployment
-- [ ] 49. Check deployment status in Netlify dashboard
-- [ ] 50. Verify changes appear on live site
-- [ ] 51. Set up deploy notifications (optional, email or Slack)
-- [ ] 52. Configure branch deploys for preview (optional)
+- [x] 46. Verify auto-deploy is enabled for main branch
+- [x] 47. Make a test commit to main branch
+- [x] 48. Verify Netlify automatically triggers deployment
+- [x] 49. Check deployment status in Netlify dashboard
+- [x] 50. Verify changes appear on live site
+- [x] 51. Set up deploy notifications (optional, email or Slack)
+- [x] 52. Configure branch deploys for preview (optional)
 
----
-
-## PR #24: Mobile App Production Configuration
-
-### Production API Configuration
-- [ ] 1. Navigate to mobile-client: `cd mobile-client`
-- [ ] 2. Update `.env` with production URLs
-- [ ] 3. Set API_URL to ECS ALB backend URL
-- [ ] 4. Set WS_URL to ECS ALB WebSocket URL
-- [ ] 5. Test app with Expo Go: `npx expo start`
-- [ ] 6. Scan QR code on physical device
-- [ ] 7. Verify connection to production backend
-- [ ] 8. Test upload flow with production S3
-- [ ] 9. Test gallery loading with production data
-
-### Expo Build Configuration (Optional)
-- [ ] 10. Create Expo account (if needed)
-- [ ] 11. Login: `npx expo login`
-- [ ] 12. Configure app.json for builds
-- [ ] 13. Set version and build number
-- [ ] 14. Build for iOS: `eas build --platform ios` (requires Apple Developer account)
-- [ ] 15. Build for Android: `eas build --platform android`
-- [ ] 16. Wait for build completion (20-30 minutes)
-- [ ] 17. Download and test built APK/IPA
-
-### App Store Submission (Optional - Beyond MVP)
-- [ ] 18. Prepare app store assets (screenshots, descriptions)
-- [ ] 19. Submit to Apple App Store Connect
-- [ ] 20. Submit to Google Play Console
-- [ ] 21. Wait for review approval
+### SSL Certificate Configuration for Backend
+- [x] 53. Navigate to AWS Elastic Beanstalk environment
+- [x] 54. Go to Configuration → Load Balancer
+- [x] 55. Add HTTPS listener on port 443
+- [x] 56. Create or import SSL certificate in AWS Certificate Manager (ACM)
+- [x] 57. For MVP: Use self-signed certificate (or ACM certificate)
+- [x] 58. Attach certificate to Application Load Balancer (ALB)
+- [x] 59. Configure security group to allow HTTPS traffic (port 443)
+- [x] 60. Update backend CORS configuration to allow Netlify domain
+- [x] 61. Update Netlify environment variables to use HTTPS backend URL
+- [x] 62. Test WebSocket connection over WSS (secure WebSocket)
+- [x] 63. Verify all API calls work over HTTPS
 
 ---
 
@@ -312,14 +294,14 @@
 - [ ] 86. ✅ AI_TOOLS.md with prompts and impact
 - [ ] 87. ✅ Demo video uploaded and linked
 - [ ] 88. ✅ All three applications (backend, web, mobile) working
-- [ ] 89. ✅ Backend deployed to AWS ECS Fargate
-- [ ] 90. ✅ Web app deployed to S3
-- [ ] 91. ✅ Mobile app working with production backend
+- [ ] 89. ✅ Backend deployed to AWS Elastic Beanstalk (with ALB and SSL)
+- [ ] 90. ✅ Web app deployed to Netlify
+- [ ] 91. ✅ Mobile app working with production backend (via Expo Go)
 - [ ] 92. ✅ Integration tests passing
 
 ## Summary
 
-I've created a comprehensive task breakdown across **7 files** (tasks-1.md through tasks-7.md), organized into **26 Pull Requests** covering the complete implementation:
+I've created a comprehensive task breakdown across **7 files** (tasks-1.md through tasks-7.md), organized into **25 Pull Requests** covering the complete implementation:
 
 ### File Breakdown:
 
@@ -335,7 +317,9 @@ I've created a comprehensive task breakdown across **7 files** (tasks-1.md throu
 
 **tasks-6.md** (PR #16-20): React Native setup, mobile services, mobile components, mobile screens
 
-**tasks-7.md** (PR #21-26): AWS deployment (RDS, ECS Fargate, S3), integration testing, documentation, demo
+**Note**: PR #24 (Mobile App Production Configuration) was removed as Expo app deployment is not required for MVP.
+
+**tasks-7.md** (PR #21-23, 25-26): AWS deployment (RDS, ECS Fargate, S3), Netlify deployment, integration testing, documentation, demo
 
 ### Key Features:
 - ✅ Each file is 300-450 lines

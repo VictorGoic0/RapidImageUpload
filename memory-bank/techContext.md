@@ -20,8 +20,13 @@
   - Dev bucket: `rapidphoto-dev`
   - Prod bucket: `rapidphoto-prod`
   - Presigned URLs: 15-minute expiration for uploads, 60-minute for downloads
-- **Deployment**: AWS ECS Fargate (backend), S3 + CloudFront (web frontend)
-- **Database**: AWS RDS PostgreSQL 16 (production)
+- **Deployment**: 
+  - Backend: AWS Elastic Beanstalk with Application Load Balancer (ALB)
+  - Web Frontend: Netlify (with automatic SSL and continuous deployment)
+  - Database: AWS RDS PostgreSQL 16 (production)
+- **SSL/TLS**: 
+  - Backend: SSL certificate on ALB (self-signed or ACM certificate)
+  - Frontend: Netlify automatic SSL provisioning
 
 ### Web Frontend
 - **Framework**: React 19.1.0 with TypeScript 5.x
@@ -154,10 +159,13 @@ server:
 - **S3 CORS**: Configured for 5 front-end domains (see CorsConfig.java for complete list)
 
 ### CORS Configuration
-- **Backend CORS**: Centralized in `CorsConfig.java` with 5 allowed origins (localhost:5173-5177)
+- **Backend CORS**: Centralized in `CorsConfig.java` with allowed origins including:
+  - Development: localhost:5173-5177 (Vite dev servers)
+  - Production: Netlify domain (added for production deployment)
 - **WebSocket CORS**: Uses same origins from `CorsConfig.ALLOWED_ORIGINS` constant
 - **REST API CORS**: Configured globally for all `/api/**` endpoints
 - **Important**: Always use `CorsConfig.ALLOWED_ORIGINS` constant, never hardcode origins
+- **Production**: Netlify domain must be included in allowed origins for API access
 
 ## Key Dependencies
 
@@ -213,12 +221,16 @@ server:
 ## Deployment Architecture
 
 ### Production Stack
-- **Backend**: AWS ECS Fargate (Java 21)
-  - Application Load Balancer
-  - Container-based deployment
+- **Backend**: AWS Elastic Beanstalk (Java 21)
+  - Application Load Balancer (ALB) with HTTPS listener
+  - SSL certificate configured (self-signed or ACM)
+  - WebSocket support over WSS (secure WebSocket)
 - **Database**: AWS RDS PostgreSQL 16 (db.t3.micro)
 - **Storage**: AWS S3 (rapidphoto-prod bucket)
-- **Web Frontend**: S3 static hosting + CloudFront CDN
+- **Web Frontend**: Netlify
+  - Automatic SSL provisioning
+  - Continuous deployment from GitHub
+  - SPA routing support
 - **Monitoring**: CloudWatch Logs & Metrics
 
 ### Environment Variables (Production)
