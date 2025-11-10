@@ -41,7 +41,8 @@ public class CorsConfig implements WebMvcConfigurer {
         "http://localhost:5175",
         "http://localhost:5176",
         "http://localhost:5177",
-        "http://localhost:8081"
+        "http://localhost:8081",
+        "https://rapid-photo-upload.netlify.app"
     );
 
     /**
