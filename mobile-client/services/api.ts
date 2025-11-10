@@ -7,6 +7,7 @@ import type {
   PhotoMetadata,
   PhotoQueryResponse,
 } from '../types/photo';
+import { getCurrentUser } from './auth';
 
 /**
  * Extended error type for API errors with status and data.
@@ -92,20 +93,26 @@ const apiClient = createApiClient();
 /**
  * Initiates a batch upload by requesting presigned URLs for multiple photos.
  *
- * @param userId - The user ID
  * @param photos - Array of photo metadata
+ * @param userId - Optional user ID (if not provided, uses authenticated user)
  * @returns Promise resolving to batch upload response with presigned URLs
- * @throws Error if the request fails
+ * @throws Error if the request fails or user is not authenticated
  */
 export async function initiateBatchUpload(
-  userId: string,
-  photos: PhotoMetadata[]
+  photos: PhotoMetadata[],
+  userId?: string
 ): Promise<BatchUploadResponse> {
+  const authenticatedUserId = userId || (await getCurrentUser())?.userId;
+  
+  if (!authenticatedUserId) {
+    throw new Error('User not authenticated');
+  }
+
   const response = await apiClient.post<BatchUploadResponse>(
     '/api/photos/batch-init',
     { photos },
     {
-      params: { userId },
+      params: { userId: authenticatedUserId },
     }
   );
   return response.data;
@@ -115,23 +122,29 @@ export async function initiateBatchUpload(
  * Completes a photo upload by notifying the backend that the file has been uploaded to S3.
  *
  * @param photoId - The photo ID
- * @param userId - The user ID
  * @param s3Key - The S3 key where the file was uploaded
  * @param batchId - Optional batch ID for WebSocket progress tracking
+ * @param userId - Optional user ID (if not provided, uses authenticated user)
  * @returns Promise resolving to completion response with status
- * @throws Error if the request fails
+ * @throws Error if the request fails or user is not authenticated
  */
 export async function completePhotoUpload(
   photoId: string,
-  userId: string,
   s3Key: string,
-  batchId?: string
+  batchId?: string,
+  userId?: string
 ): Promise<PhotoCompletionResponse> {
+  const authenticatedUserId = userId || (await getCurrentUser())?.userId;
+  
+  if (!authenticatedUserId) {
+    throw new Error('User not authenticated');
+  }
+
   const response = await apiClient.post<PhotoCompletionResponse>(
     `/api/photos/${photoId}/complete`,
     { s3Key, batchId },
     {
-      params: { userId },
+      params: { userId: authenticatedUserId },
     }
   );
   return response.data;
@@ -140,19 +153,25 @@ export async function completePhotoUpload(
 /**
  * Retrieves a paginated list of photos for a user.
  *
- * @param userId - The user ID
  * @param page - Page number (0-indexed, default: 0)
  * @param size - Page size (default: 20)
+ * @param userId - Optional user ID (if not provided, uses authenticated user)
  * @returns Promise resolving to photo query response with pagination metadata
- * @throws Error if the request fails
+ * @throws Error if the request fails or user is not authenticated
  */
 export async function getUserPhotos(
-  userId: string,
   page: number = 0,
-  size: number = 20
+  size: number = 20,
+  userId?: string
 ): Promise<PhotoQueryResponse> {
+  const authenticatedUserId = userId || (await getCurrentUser())?.userId;
+  
+  if (!authenticatedUserId) {
+    throw new Error('User not authenticated');
+  }
+
   const response = await apiClient.get<PhotoQueryResponse>('/api/photos', {
-    params: { userId, page, size },
+    params: { userId: authenticatedUserId, page, size },
   });
   return response.data;
 }
@@ -161,13 +180,19 @@ export async function getUserPhotos(
  * Retrieves a single photo by ID.
  *
  * @param photoId - The photo ID
- * @param userId - The user ID
+ * @param userId - Optional user ID (if not provided, uses authenticated user)
  * @returns Promise resolving to photo data
- * @throws Error if the request fails or photo is not found
+ * @throws Error if the request fails or photo is not found or user is not authenticated
  */
-export async function getPhotoById(photoId: string, userId: string): Promise<Photo> {
+export async function getPhotoById(photoId: string, userId?: string): Promise<Photo> {
+  const authenticatedUserId = userId || (await getCurrentUser())?.userId;
+  
+  if (!authenticatedUserId) {
+    throw new Error('User not authenticated');
+  }
+
   const response = await apiClient.get<Photo>(`/api/photos/${photoId}`, {
-    params: { userId },
+    params: { userId: authenticatedUserId },
   });
   return response.data;
 }

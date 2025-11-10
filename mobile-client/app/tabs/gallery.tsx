@@ -3,24 +3,20 @@ import { SafeAreaView, View, Text, TouchableOpacity, ActivityIndicator, StyleShe
 import { StatusBar } from 'expo-status-bar';
 import { PhotoGrid } from '../../components/PhotoGrid';
 import { usePhotoGallery } from '../../hooks/usePhotoGallery';
+import { useAuth } from '../../contexts/AuthContext';
 import { deletePhoto } from '../../services/api';
 import type { Photo } from '../../types/photo';
 import { UPLOAD_STATUS } from '../../types/photo';
 
 /**
- * Mock userId constant for MVP (hardcoded UUID).
- * In production, this would come from authentication context.
- * Should match the userId used in UploadScreen.
- */
-const MOCK_USER_ID = '550e8400-e29b-41d4-a716-446655440000';
-
-/**
  * Gallery screen component that displays user's photos in a grid layout with pagination.
  */
 export default function GalleryScreen() {
+  const { user } = useAuth();
+  
   // Initialize photo gallery hook
   const { photos, loading, error, currentPage, totalPages, loadMore, refetch, removePhoto } =
-    usePhotoGallery(MOCK_USER_ID);
+    usePhotoGallery(user?.userId || '');
 
   // Handle refresh
   const handleRefresh = () => {

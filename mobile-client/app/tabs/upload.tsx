@@ -6,23 +6,19 @@ import { UploadProgress } from '../../components/UploadProgress';
 import { BatchProgress } from '../../components/BatchProgress';
 import { useWebSocket } from '../../hooks/useWebSocket';
 import { usePhotoUpload } from '../../hooks/usePhotoUpload';
+import { useAuth } from '../../contexts/AuthContext';
 import type { UploadStatus } from '../../types/photo';
 import { UPLOAD_STATUS } from '../../types/photo';
-
-/**
- * Mock userId constant for MVP (hardcoded UUID).
- * In production, this would come from authentication context.
- * Should match the userId used in GalleryScreen.
- */
-const MOCK_USER_ID = '550e8400-e29b-41d4-a716-446655440000';
 
 /**
  * Upload screen component that handles photo uploads with progress tracking.
  */
 export default function UploadScreen() {
+  const { user } = useAuth();
+  
   // Initialize photo upload hook (no progress callback needed for raw WebSocket)
   const { uploading, error, uploadResults, batchId, uploadPhotos, cleanup } = usePhotoUpload(
-    MOCK_USER_ID,
+    user?.userId || '',
     () => {} // Empty callback since we're using raw WebSocket for progress
   );
 

@@ -210,136 +210,136 @@
 ### Web Client - Auth UI & State
 
 #### Auth Service
-- [ ] 51. Create `web-client/src/services/auth.ts`
-- [ ] 52. Add `register(username: string, password: string)` function
-- [ ] 53. POST to `/api/auth/register`, return { userId, username }
-- [ ] 54. Add `login(username: string, password: string)` function
-- [ ] 55. POST to `/api/auth/login`, return { userId, username }
-- [ ] 56. Add `logout()` function to clear localStorage
-- [ ] 57. Add `getCurrentUser()` function to get user from localStorage
-- [ ] 58. Add `isAuthenticated()` function to check if user exists in localStorage
+- [x] 51. Create `web-client/src/services/auth.ts`
+- [x] 52. Add `register(username: string, password: string)` function
+- [x] 53. POST to `/api/auth/register`, return { userId, username }
+- [x] 54. Add `login(username: string, password: string)` function
+- [x] 55. POST to `/api/auth/login`, return { userId, username }
+- [x] 56. Add `logout()` function to clear localStorage
+- [x] 57. Add `getCurrentUser()` function to get user from localStorage
+- [x] 58. Add `isAuthenticated()` function to check if user exists in localStorage
 
 #### Auth Context
-- [ ] 59. Create `web-client/src/contexts/AuthContext.tsx`
-- [ ] 60. Create AuthContext with user state (userId, username)
-- [ ] 61. Add login, logout, register functions
-- [ ] 62. Load user from localStorage on mount
-- [ ] 63. Save user to localStorage on login/register
-- [ ] 64. Clear localStorage on logout
-- [ ] 65. Export AuthProvider and useAuth hook
+- [x] 59. Create `web-client/src/contexts/AuthContext.tsx`
+- [x] 60. Create AuthContext with user state (userId, username)
+- [x] 61. Add login, logout, register functions
+- [x] 62. Load user from localStorage on mount
+- [x] 63. Save user to localStorage on login/register
+- [x] 64. Clear localStorage on logout
+- [x] 65. Export AuthProvider and useAuth hook
 
 #### Login Page
-- [ ] 66. Create `web-client/src/pages/LoginPage.tsx`
-- [ ] 67. Add form with username and password fields
-- [ ] 68. Add "Login" button
-- [ ] 69. Add "Don't have an account? Register" link
-- [ ] 70. Call auth.login() on form submit
-- [ ] 71. Navigate to gallery on successful login
-- [ ] 72. Show error message for invalid credentials
-- [ ] 73. Style with Tailwind CSS (clean, centered form)
+- [x] 66. Create `web-client/src/pages/LoginPage.tsx`
+- [x] 67. Add form with username and password fields
+- [x] 68. Add "Login" button
+- [x] 69. Add "Don't have an account? Register" link
+- [x] 70. Call auth.login() on form submit
+- [x] 71. Navigate to gallery on successful login
+- [x] 72. Show error message for invalid credentials
+- [x] 73. Style with Tailwind CSS (clean, centered form)
 
 #### Register Page
-- [ ] 74. Create `web-client/src/pages/RegisterPage.tsx`
-- [ ] 75. Add form with username and password fields
-- [ ] 76. Add "Register" button
-- [ ] 77. Add "Already have an account? Login" link
-- [ ] 78. Call auth.register() on form submit
-- [ ] 79. Navigate to gallery on successful registration
-- [ ] 80. Show error message for duplicate username
-- [ ] 81. Style with Tailwind CSS (clean, centered form)
+- [x] 74. Create `web-client/src/pages/RegisterPage.tsx`
+- [x] 75. Add form with username and password fields
+- [x] 76. Add "Register" button
+- [x] 77. Add "Already have an account? Login" link
+- [x] 78. Call auth.register() on form submit
+- [x] 79. Navigate to gallery on successful registration
+- [x] 80. Show error message for duplicate username
+- [x] 81. Style with Tailwind CSS (clean, centered form)
 
 #### Protected Routes
-- [ ] 82. Create `web-client/src/components/ProtectedRoute.tsx`
-- [ ] 83. Use useAuth hook to check authentication
-- [ ] 84. If not authenticated, redirect to /login
-- [ ] 85. If authenticated, render children
-- [ ] 86. Navigate to `web-client/src/App.tsx`
-- [ ] 87. Wrap AuthProvider around entire app
-- [ ] 88. Add route for /login (LoginPage)
-- [ ] 89. Add route for /register (RegisterPage)
-- [ ] 90. Wrap /upload and /gallery routes with ProtectedRoute
-- [ ] 91. Set default route to /login if not authenticated
+- [x] 82. Create `web-client/src/components/ProtectedRoute.tsx`
+- [x] 83. Use useAuth hook to check authentication
+- [x] 84. If not authenticated, redirect to /login
+- [x] 85. If authenticated, render children
+- [x] 86. Navigate to `web-client/src/App.tsx`
+- [x] 87. Wrap AuthProvider around entire app
+- [x] 88. Add route for /login (LoginPage)
+- [x] 89. Add route for /register (RegisterPage)
+- [x] 90. Wrap /upload and /gallery routes with ProtectedRoute
+- [x] 91. Set default route to /login if not authenticated
 
 #### Navigation Updates
-- [ ] 92. Navigate to `web-client/src/components/Navigation.tsx`
-- [ ] 93. Add useAuth hook
-- [ ] 94. Show username in navigation when logged in
-- [ ] 95. Add Logout button
-- [ ] 96. Call auth.logout() and navigate to /login on logout
+- [x] 92. Navigate to `web-client/src/components/Navigation.tsx`
+- [x] 93. Add useAuth hook
+- [x] 94. Show username in navigation when logged in
+- [x] 95. Add Logout button
+- [x] 96. Call auth.logout() and navigate to /login on logout
 
 #### API Service Updates
-- [ ] 97. Navigate to `web-client/src/services/api.ts`
-- [ ] 98. Update API client to get userId from auth context (via getCurrentUser)
-- [ ] 99. Update all API calls to use authenticated userId instead of hardcoded
-- [ ] 100. Update `initiateBatchUpload` to use auth userId
-- [ ] 101. Update `completePhotoUpload` to use auth userId
-- [ ] 102. Update `getUserPhotos` to use auth userId
-- [ ] 103. Update `getPhotoById` to use auth userId
+- [x] 97. Navigate to `web-client/src/services/api.ts`
+- [x] 98. Update API client to get userId from auth context (via getCurrentUser)
+- [x] 99. Update all API calls to use authenticated userId instead of hardcoded
+- [x] 100. Update `initiateBatchUpload` to use auth userId
+- [x] 101. Update `completePhotoUpload` to use auth userId
+- [x] 102. Update `getUserPhotos` to use auth userId
+- [x] 103. Update `getPhotoById` to use auth userId
 
 ---
 
 ### Mobile Client - Auth UI & State
 
 #### Auth Service
-- [ ] 104. Create `mobile-client/services/auth.ts`
-- [ ] 105. Add `register(username: string, password: string)` function
-- [ ] 106. POST to `/api/auth/register`, return { userId, username }
-- [ ] 107. Add `login(username: string, password: string)` function
-- [ ] 108. POST to `/api/auth/login`, return { userId, username }
-- [ ] 109. Add `logout()` function to clear AsyncStorage
-- [ ] 110. Add `getCurrentUser()` function to get user from AsyncStorage
-- [ ] 111. Add `isAuthenticated()` function to check if user exists
+- [x] 104. Create `mobile-client/services/auth.ts`
+- [x] 105. Add `register(username: string, password: string)` function
+- [x] 106. POST to `/api/auth/register`, return { userId, username }
+- [x] 107. Add `login(username: string, password: string)` function
+- [x] 108. POST to `/api/auth/login`, return { userId, username }
+- [x] 109. Add `logout()` function to clear AsyncStorage
+- [x] 110. Add `getCurrentUser()` function to get user from AsyncStorage
+- [x] 111. Add `isAuthenticated()` function to check if user exists
 
 #### Auth Context
-- [ ] 112. Create `mobile-client/contexts/AuthContext.tsx`
-- [ ] 113. Create AuthContext with user state (userId, username)
-- [ ] 114. Add login, logout, register functions
-- [ ] 115. Load user from AsyncStorage on mount
-- [ ] 116. Save user to AsyncStorage on login/register
-- [ ] 117. Clear AsyncStorage on logout
-- [ ] 118. Export AuthProvider and useAuth hook
+- [x] 112. Create `mobile-client/contexts/AuthContext.tsx`
+- [x] 113. Create AuthContext with user state (userId, username)
+- [x] 114. Add login, logout, register functions
+- [x] 115. Load user from AsyncStorage on mount
+- [x] 116. Save user to AsyncStorage on login/register
+- [x] 117. Clear AsyncStorage on logout
+- [x] 118. Export AuthProvider and useAuth hook
 
 #### Login Screen
-- [ ] 119. Create `mobile-client/app/auth/login.tsx`
-- [ ] 120. Add form with username and password TextInputs
-- [ ] 121. Add "Login" button
-- [ ] 122. Add "Don't have an account? Register" link
-- [ ] 123. Call auth.login() on button press
-- [ ] 124. Navigate to tabs on successful login
-- [ ] 125. Show error alert for invalid credentials
-- [ ] 126. Style with React Native components
+- [x] 119. Create `mobile-client/app/auth/login.tsx`
+- [x] 120. Add form with username and password TextInputs
+- [x] 121. Add "Login" button
+- [x] 122. Add "Don't have an account? Register" link
+- [x] 123. Call auth.login() on button press
+- [x] 124. Navigate to tabs on successful login
+- [x] 125. Show error alert for invalid credentials
+- [x] 126. Style with React Native components
 
 #### Register Screen
-- [ ] 127. Create `mobile-client/app/auth/register.tsx`
-- [ ] 128. Add form with username and password TextInputs
-- [ ] 129. Add "Register" button
-- [ ] 130. Add "Already have an account? Login" link
-- [ ] 131. Call auth.register() on button press
-- [ ] 132. Navigate to tabs on successful registration
-- [ ] 133. Show error alert for duplicate username
-- [ ] 134. Style with React Native components
+- [x] 127. Create `mobile-client/app/auth/register.tsx`
+- [x] 128. Add form with username and password TextInputs
+- [x] 129. Add "Register" button
+- [x] 130. Add "Already have an account? Login" link
+- [x] 131. Call auth.register() on button press
+- [x] 132. Navigate to tabs on successful registration
+- [x] 133. Show error alert for duplicate username
+- [x] 134. Style with React Native components
 
 #### Protected Navigation
-- [ ] 135. Navigate to `mobile-client/app/_layout.tsx`
-- [ ] 136. Wrap AuthProvider around entire app
-- [ ] 137. Add auth check in root layout
-- [ ] 138. If not authenticated, redirect to /auth/login
-- [ ] 139. If authenticated, allow access to tabs
+- [x] 135. Navigate to `mobile-client/app/_layout.tsx`
+- [x] 136. Wrap AuthProvider around entire app
+- [x] 137. Add auth check in root layout
+- [x] 138. If not authenticated, redirect to /auth/login
+- [x] 139. If authenticated, allow access to tabs
 
 #### Tab Layout Updates
-- [ ] 140. Navigate to `mobile-client/app/tabs/_layout.tsx`
-- [ ] 141. Add useAuth hook
-- [ ] 142. Add logout button in header (if possible) or as tab
-- [ ] 143. Call auth.logout() and navigate to /auth/login on logout
+- [x] 140. Navigate to `mobile-client/app/tabs/_layout.tsx`
+- [x] 141. Add useAuth hook
+- [x] 142. Add logout button in header (if possible) or as tab
+- [x] 143. Call auth.logout() and navigate to /auth/login on logout
 
 #### API Service Updates
-- [ ] 144. Navigate to `mobile-client/services/api.ts`
-- [ ] 145. Update API client to get userId from auth context
-- [ ] 146. Update all API calls to use authenticated userId instead of hardcoded
-- [ ] 147. Update `initiateBatchUpload` to use auth userId
-- [ ] 148. Update `completePhotoUpload` to use auth userId
-- [ ] 149. Update `getUserPhotos` to use auth userId
-- [ ] 150. Update `getPhotoById` to use auth userId
+- [x] 144. Navigate to `mobile-client/services/api.ts`
+- [x] 145. Update API client to get userId from auth context
+- [x] 146. Update all API calls to use authenticated userId instead of hardcoded
+- [x] 147. Update `initiateBatchUpload` to use auth userId
+- [x] 148. Update `completePhotoUpload` to use auth userId
+- [x] 149. Update `getUserPhotos` to use auth userId
+- [x] 150. Update `getPhotoById` to use auth userId
 
 ---
 
