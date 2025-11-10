@@ -1,11 +1,30 @@
 # Active Context: RapidPhotoUpload
 
 ## Current Status
-**Phase**: Mocked User Authentication Complete
+**Phase**: Photo Authorization Complete
 **Date**: 2025-01-XX
-**Focus**: PR #26 (Mocked User Authentication) complete for backend, web, and mobile clients
+**Focus**: PR #27 (Photo Authorization) complete - Delete endpoint now includes user authorization checks
 
 ## Recent Changes
+- **PR #27 Complete: Photo Authorization (Delete with User Check) (2025-01-XX)**:
+  - **Backend Implementation**:
+    - Updated `DeletePhotoController` DELETE endpoint to accept `userId` as `@RequestParam`
+    - Removed mock userId constant, now uses authenticated userId from request
+    - Updated `DeletePhotoCommandHandler` to use `photoRepository.findByIdAndUserId()` instead of `findById()`
+    - Authorization check ensures photo belongs to requesting user before deletion
+    - Enhanced logging to include userId in authorization checks
+    - Updated exception handling to distinguish not found vs unauthorized (returns 404 for both security)
+  - **Web Client Implementation**:
+    - Updated `deletePhoto()` API function to get userId from `getCurrentUser()` helper
+    - Added userId as query parameter to DELETE request
+    - Added authentication check (throws error if user not authenticated)
+  - **Mobile Client Implementation**:
+    - Updated `deletePhoto()` API function to get userId from `getCurrentUser()` helper (async)
+    - Added userId as query parameter to DELETE request
+    - Added authentication check (throws error if user not authenticated)
+  - **Security**: Delete operations now properly verify photo ownership before allowing deletion
+  - **All tasks completed**: 16/16 tasks (backend: 8, web: 4, mobile: 4)
+
 - **PR #26 Complete: Mocked User Authentication (2025-01-XX)**:
   - **Backend Implementation**:
     - Created `User` domain entity with `id` (UUID), `username` (unique), `password` (plain text for MVP), and `createdAt` timestamp
@@ -540,7 +559,13 @@
 - Cursor rules directory initialized
 
 ## Current Work Focus
-1. **Mocked User Authentication** - **COMPLETE (PR #26)**
+1. **Photo Authorization** - **COMPLETE (PR #27)**
+   - ✅ Delete endpoint updated with userId authorization
+   - ✅ Backend uses findByIdAndUserId for ownership verification
+   - ✅ Web client passes authenticated userId to delete API
+   - ✅ Mobile client passes authenticated userId to delete API
+   - ✅ Security: Users can only delete their own photos
+2. **Mocked User Authentication** - **COMPLETE (PR #26)**
    - ✅ Backend User entity and repository
    - ✅ Photo-User foreign key relationship
    - ✅ Auth feature with register/login endpoints
@@ -548,7 +573,7 @@
    - ✅ Mobile client auth context and protected navigation
    - ✅ All API calls use authenticated user ID
    - ✅ Database schema migration handled automatically
-2. **Photo Delete Functionality** - **COMPLETE (PR #25)**
+3. **Photo Delete Functionality** - **COMPLETE (PR #25)**
    - ✅ Backend delete feature with CQRS pattern
    - ✅ S3Service.deleteObject() with error handling
    - ✅ Web client delete with confirmation modal
@@ -591,7 +616,7 @@
 8. ✅ Configure backend SSL on Elastic Beanstalk (PR #23 Complete)
 9. ✅ Implement Photo Delete Functionality (PR #25 Complete)
 10. ✅ Implement Mocked User Authentication (PR #26 Complete)
-11. Implement Photo Authorization (PR #29)
+11. ✅ Implement Photo Authorization (PR #27 Complete)
 12. Final documentation & demo preparation
 
 ## Active Decisions & Considerations

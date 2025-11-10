@@ -87,9 +87,9 @@
     - PhotoCompletionCommandHandler.java
   
   /photodelete/           # Complete feature in one slice
-    - DeletePhotoController.java
+    - DeletePhotoController.java (with userId authorization)
     - DeletePhotoCommand.java
-    - DeletePhotoCommandHandler.java
+    - DeletePhotoCommandHandler.java (uses findByIdAndUserId for authorization)
     - PhotoNotFoundException.java
 
   /auth/                   # Complete feature in one slice
@@ -204,6 +204,14 @@ xhr.upload.addEventListener('progress', (e) => {
 4. Update this documentation
 
 **Key Rule**: Never hardcode CORS origins in controllers or WebSocket config. Always use `CorsConfig.ALLOWED_ORIGINS`.
+
+## Authorization Patterns
+
+### Photo Ownership Verification
+- Delete operations use `photoRepository.findByIdAndUserId()` to verify ownership
+- PhotoNotFoundException thrown if photo not found or doesn't belong to user
+- Returns 404 (not found) for both cases to avoid information leakage
+- All delete API calls require authenticated userId as query parameter
 
 ## Authentication Patterns
 

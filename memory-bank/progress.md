@@ -1,6 +1,15 @@
 # Progress: RapidPhotoUpload
 
 ## What Works
+- **Photo Authorization (PR #27 Complete - 2025-01-XX)**:
+  - Delete endpoint updated with userId authorization check
+  - DeletePhotoController accepts userId as @RequestParam
+  - DeletePhotoCommandHandler uses findByIdAndUserId() for ownership verification
+  - Web client deletePhoto() passes authenticated userId
+  - Mobile client deletePhoto() passes authenticated userId
+  - Security: Users can only delete their own photos (404 returned if photo not found or doesn't belong to user)
+  - All 16 tasks completed (backend: 8, web: 4, mobile: 4)
+
 - **Mocked User Authentication (PR #26 Complete - 2025-01-XX)**:
   - Backend User entity with id (UUID), username (unique), password (plain text for MVP), and createdAt timestamp
   - UserRepository with findByUsername() and existsByUsername() methods
@@ -218,6 +227,7 @@
 - [x] Backend integration tests (PR #9 Complete)
 - [x] Photo delete feature (PR #25 Complete)
 - [x] Mocked user authentication (PR #26 Complete)
+- [x] Photo authorization (PR #27 Complete)
 
 ### Web Frontend (Day 3)
 - [x] React + Vite + TypeScript project setup (PR #10 Complete)
