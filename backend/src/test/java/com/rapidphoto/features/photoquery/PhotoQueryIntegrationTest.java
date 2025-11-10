@@ -6,7 +6,9 @@ import com.rapidphoto.domain.Photo;
 import com.rapidphoto.domain.PhotoId;
 import com.rapidphoto.domain.PhotoRepository;
 import com.rapidphoto.domain.UploadStatus;
+import com.rapidphoto.domain.User;
 import com.rapidphoto.domain.UserId;
+import com.rapidphoto.domain.UserRepository;
 import com.rapidphoto.infrastructure.s3.S3Service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,16 +46,26 @@ class PhotoQueryIntegrationTest {
     private PhotoRepository photoRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private S3Service s3Service;
 
     private UserId testUserId;
     private UserId otherUserId;
+    private User testUser;
+    private User otherUser;
 
     @BeforeEach
     void setUp() {
         photoRepository.deleteAll();
-        testUserId = new UserId(UUID.randomUUID());
-        otherUserId = new UserId(UUID.randomUUID());
+        userRepository.deleteAll();
+        testUser = User.create("testuser", "password");
+        testUser = userRepository.save(testUser);
+        testUserId = new UserId(testUser.getId());
+        otherUser = User.create("otheruser", "password");
+        otherUser = userRepository.save(otherUser);
+        otherUserId = new UserId(otherUser.getId());
         reset(s3Service);
     }
 
@@ -65,7 +77,7 @@ class PhotoQueryIntegrationTest {
 
         // Create 5 photos for test user
         for (int i = 0; i < 5; i++) {
-            Photo photo = Photo.createPending(testUserId, "photo" + i + ".jpg", 1024L, "image/jpeg");
+            Photo photo = Photo.createPending(testUser, "photo" + i + ".jpg", 1024L, "image/jpeg");
             if (i == 0) {
                 // Make first photo COMPLETED to test download URL generation
                 photo.markAsCompleted("users/" + testUserId.value() + "/photos/photo0.jpg");
@@ -129,7 +141,7 @@ class PhotoQueryIntegrationTest {
         // Given
         // Create 25 photos for test user
         for (int i = 0; i < 25; i++) {
-            Photo photo = Photo.createPending(testUserId, "photo" + i + ".jpg", 1024L, "image/jpeg");
+            Photo photo = Photo.createPending(testUser, "photo" + i + ".jpg", 1024L, "image/jpeg");
             photoRepository.save(photo);
         }
 
@@ -174,7 +186,7 @@ class PhotoQueryIntegrationTest {
     @Test
     void shouldGetPhotoById() throws Exception {
         // Given
-        Photo photo = Photo.createPending(testUserId, "test.jpg", 1024L, "image/jpeg");
+        Photo photo = Photo.createPending(testUser, "test.jpg", 1024L, "image/jpeg");
         String s3Key = "users/" + testUserId.value() + "/photos/test-key";
         photo.markAsCompleted(s3Key);
         photo = photoRepository.save(photo);

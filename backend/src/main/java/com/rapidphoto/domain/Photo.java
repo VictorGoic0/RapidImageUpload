@@ -12,8 +12,12 @@ public class Photo {
     private PhotoId id;
     
     @Embedded
-    @AttributeOverride(name = "value", column = @Column(name = "user_id", nullable = false))
+    @AttributeOverride(name = "value", column = @Column(name = "user_id", nullable = false, insertable = false, updatable = false))
     private UserId userId;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(name = "fk_photo_user"))
+    private User user;
     
     @Column(nullable = false)
     private String fileName;
@@ -46,17 +50,32 @@ public class Photo {
     }
     
     // Private constructor for factory methods
-    private Photo(PhotoId id, UserId userId, String fileName, Long fileSize, String contentType) {
+    private Photo(PhotoId id, User user, String fileName, Long fileSize, String contentType) {
         this.id = id;
-        this.userId = userId;
+        this.user = user;
+        this.userId = new UserId(user.getId());
         this.fileName = fileName;
         this.fileSize = fileSize;
         this.contentType = contentType;
         this.status = UploadStatus.PENDING;
     }
     
+    // Factory method that accepts UserId (for backward compatibility)
+    // Note: This method is deprecated. Use createPending(User, ...) instead.
+    // Handlers should use EntityManager.getReference(User.class, userId.value()) to get a User proxy.
+    @Deprecated
     public static Photo createPending(UserId userId, String fileName, Long fileSize, String contentType) {
-        return new Photo(PhotoId.generate(), userId, fileName, fileSize, contentType);
+        // This method should not be used - handlers should use EntityManager.getReference() 
+        // to get a User proxy and call createPending(User, ...)
+        throw new UnsupportedOperationException(
+            "Use Photo.createPending(User, ...) instead. " +
+            "Get User using EntityManager.getReference(User.class, userId.value()) in handlers."
+        );
+    }
+    
+    // New factory method that accepts User entity
+    public static Photo createPending(User user, String fileName, Long fileSize, String contentType) {
+        return new Photo(PhotoId.generate(), user, fileName, fileSize, contentType);
     }
     
     public void markAsCompleted(String s3Key) {
@@ -91,6 +110,10 @@ public class Photo {
     
     public UserId getUserId() {
         return userId;
+    }
+    
+    public User getUser() {
+        return user;
     }
     
     public String getFileName() {

@@ -6,7 +6,9 @@ import com.rapidphoto.domain.Photo;
 import com.rapidphoto.domain.PhotoId;
 import com.rapidphoto.domain.PhotoRepository;
 import com.rapidphoto.domain.UploadStatus;
+import com.rapidphoto.domain.User;
 import com.rapidphoto.domain.UserId;
+import com.rapidphoto.domain.UserRepository;
 import com.rapidphoto.infrastructure.s3.S3Service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,21 +45,28 @@ class PhotoCompletionIntegrationTest {
     private PhotoRepository photoRepository;
 
     @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
     private S3Service s3Service;
 
     private UserId testUserId;
+    private User testUser;
 
     @BeforeEach
     void setUp() {
         photoRepository.deleteAll();
-        testUserId = new UserId(UUID.randomUUID());
+        userRepository.deleteAll();
+        testUser = User.create("testuser", "password");
+        testUser = userRepository.save(testUser);
+        testUserId = new UserId(testUser.getId());
         reset(s3Service);
     }
 
     @Test
     void shouldCompletePhotoUpload() throws Exception {
         // Given
-        Photo photo = Photo.createPending(testUserId, "test.jpg", 1024L, "image/jpeg");
+        Photo photo = Photo.createPending(testUser, "test.jpg", 1024L, "image/jpeg");
         photo = photoRepository.save(photo);
         String s3Key = "users/" + testUserId.value() + "/photos/test-key";
         
@@ -114,7 +123,7 @@ class PhotoCompletionIntegrationTest {
     @Test
     void shouldFailIfS3ObjectNotFound() throws Exception {
         // Given
-        Photo photo = Photo.createPending(testUserId, "test.jpg", 1024L, "image/jpeg");
+        Photo photo = Photo.createPending(testUser, "test.jpg", 1024L, "image/jpeg");
         photo = photoRepository.save(photo);
         String s3Key = "users/" + testUserId.value() + "/photos/test-key";
         
@@ -141,7 +150,7 @@ class PhotoCompletionIntegrationTest {
     @Test
     void shouldRejectCompletingAlreadyCompletedPhoto() throws Exception {
         // Given
-        Photo photo = Photo.createPending(testUserId, "test.jpg", 1024L, "image/jpeg");
+        Photo photo = Photo.createPending(testUser, "test.jpg", 1024L, "image/jpeg");
         String s3Key = "users/" + testUserId.value() + "/photos/test-key";
         photo.markAsCompleted(s3Key);
         photo = photoRepository.save(photo);

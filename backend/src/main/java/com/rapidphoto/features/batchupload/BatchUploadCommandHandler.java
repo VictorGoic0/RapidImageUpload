@@ -2,8 +2,10 @@ package com.rapidphoto.features.batchupload;
 
 import com.rapidphoto.domain.Photo;
 import com.rapidphoto.domain.PhotoRepository;
+import com.rapidphoto.domain.User;
 import com.rapidphoto.infrastructure.s3.S3Service;
 import com.rapidphoto.infrastructure.s3.S3UploadException;
+import jakarta.persistence.EntityManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -27,10 +29,15 @@ public class BatchUploadCommandHandler {
 
     private final PhotoRepository photoRepository;
     private final S3Service s3Service;
+    private final EntityManager entityManager;
 
-    public BatchUploadCommandHandler(PhotoRepository photoRepository, S3Service s3Service) {
+    public BatchUploadCommandHandler(
+            PhotoRepository photoRepository, 
+            S3Service s3Service,
+            EntityManager entityManager) {
         this.photoRepository = photoRepository;
         this.s3Service = s3Service;
+        this.entityManager = entityManager;
     }
 
     @Transactional
@@ -45,11 +52,15 @@ public class BatchUploadCommandHandler {
                  command.userId().value(), batchId, photoCount);
 
         try {
+            // Get User reference (proxy) for foreign key constraint
+            // Using getReference() creates a proxy without hitting the database
+            User user = entityManager.getReference(User.class, command.userId().value());
+            
             // Create Photo entities
             List<Photo> photos = new ArrayList<>();
             for (PhotoMetadata metadata : command.photos()) {
                 Photo photo = Photo.createPending(
-                    command.userId(),
+                    user,
                     metadata.fileName(),
                     metadata.size(),
                     metadata.contentType()

@@ -129,70 +129,81 @@
 ### Backend - User Entity & Repository
 
 #### Domain Layer - User Model
-- [ ] 1. Create `backend/src/main/java/com/rapidphoto/domain/User.java` entity
-- [ ] 2. Add @Entity and @Table(name = "users")
-- [ ] 3. Add @Id @GeneratedValue UUID id field
-- [ ] 4. Add @Column(unique = true, nullable = false) String username
-- [ ] 5. Add @Column(nullable = false) String password (plain text for MVP)
-- [ ] 6. Add @CreationTimestamp LocalDateTime createdAt
-- [ ] 7. Add default constructor (protected)
-- [ ] 8. Add constructor with username and password
-- [ ] 9. Add static factory method `create(String username, String password)`
-- [ ] 10. Add getters for all fields
-- [ ] 11. Add equals and hashCode based on id
+- [x] 1. Create `backend/src/main/java/com/rapidphoto/domain/User.java` entity
+- [x] 2. Add @Entity and @Table(name = "users")
+- [x] 3. Add @Id @GeneratedValue UUID id field
+- [x] 4. Add @Column(unique = true, nullable = false) String username
+- [x] 5. Add @Column(nullable = false) String password (plain text for MVP)
+- [x] 6. Add @CreationTimestamp LocalDateTime createdAt
+- [x] 7. Add default constructor (protected)
+- [x] 8. Add constructor with username and password
+- [x] 9. Add static factory method `create(String username, String password)`
+- [x] 10. Add getters for all fields
+- [x] 11. Add equals and hashCode based on id
 
 #### Repository
-- [ ] 12. Create `backend/src/main/java/com/rapidphoto/domain/UserRepository.java`
-- [ ] 13. Extend JpaRepository<User, UUID>
-- [ ] 14. Add method: `Optional<User> findByUsername(String username)`
-- [ ] 15. Add method: `boolean existsByUsername(String username)`
+- [x] 12. Create `backend/src/main/java/com/rapidphoto/domain/UserRepository.java`
+- [x] 13. Extend JpaRepository<User, UUID>
+- [x] 14. Add method: `Optional<User> findByUsername(String username)`
+- [x] 15. Add method: `boolean existsByUsername(String username)`
+
+#### Database Schema Migration
+- [x] 15a. **No manual migration required** - JPA `ddl-auto: update` handles schema changes automatically
+- [x] 15b. On application startup, Hibernate will:
+  - Create `users` table if it doesn't exist (with columns: id, username, password, created_at)
+  - Add foreign key constraint `fk_photo_user` to `photos.user_id` column (if not already present)
+  - Existing photos with mock user IDs will remain valid (they reference valid UUIDs)
+- [x] 15c. **Testing**: Simply start the application once to trigger schema creation/update
+  - No SQL scripts or migration tools needed
+  - Schema changes happen automatically on first startup after code changes
+  - Verify by checking database: `SELECT * FROM users;` and `\d photos;` (PostgreSQL)
 
 ---
 
 ### Backend - Auth Feature (VSA)
 
 #### Auth Commands & Handlers
-- [ ] 16. Create `backend/src/main/java/com/rapidphoto/features/auth/` directory
-- [ ] 17. Create `RegisterUserCommand.java` record (username, password)
-- [ ] 18. Create `RegisterUserCommandHandler.java`
-- [ ] 19. Inject UserRepository
-- [ ] 20. Check if username already exists (throw exception if exists)
-- [ ] 21. Create User entity with User.create()
-- [ ] 22. Save to UserRepository
-- [ ] 23. Return RegisterUserResponse (userId, username)
-- [ ] 24. Create `LoginUserCommand.java` record (username, password)
-- [ ] 25. Create `LoginUserCommandHandler.java`
-- [ ] 26. Inject UserRepository
-- [ ] 27. Find user by username
-- [ ] 28. If not found, throw AuthenticationException
-- [ ] 29. Compare plain text passwords (simple equality check)
-- [ ] 30. If passwords don't match, throw AuthenticationException
-- [ ] 31. Return LoginUserResponse (userId, username)
+- [x] 16. Create `backend/src/main/java/com/rapidphoto/features/auth/` directory
+- [x] 17. Create `RegisterUserCommand.java` record (username, password)
+- [x] 18. Create `RegisterUserCommandHandler.java`
+- [x] 19. Inject UserRepository
+- [x] 20. Check if username already exists (throw exception if exists)
+- [x] 21. Create User entity with User.create()
+- [x] 22. Save to UserRepository
+- [x] 23. Return RegisterUserResponse (userId, username)
+- [x] 24. Create `LoginUserCommand.java` record (username, password)
+- [x] 25. Create `LoginUserCommandHandler.java`
+- [x] 26. Inject UserRepository
+- [x] 27. Find user by username
+- [x] 28. If not found, throw AuthenticationException
+- [x] 29. Compare plain text passwords (simple equality check)
+- [x] 30. If passwords don't match, throw AuthenticationException
+- [x] 31. Return LoginUserResponse (userId, username)
 
 #### Response DTOs
-- [ ] 32. Create `RegisterUserResponse.java` record (UUID userId, String username)
-- [ ] 33. Create `LoginUserResponse.java` record (UUID userId, String username)
+- [x] 32. Create `RegisterUserResponse.java` record (UUID userId, String username)
+- [x] 33. Create `LoginUserResponse.java` record (UUID userId, String username)
 
 #### Auth Controller
-- [ ] 34. Create `AuthController.java` in `features/auth/`
-- [ ] 35. Add @RestController and @RequestMapping("/api/auth")
-- [ ] 36. Inject RegisterUserCommandHandler and LoginUserCommandHandler
-- [ ] 37. Create POST endpoint: `@PostMapping("/register")`
-- [ ] 38. Accept @RequestBody RegisterRequest (username, password)
-- [ ] 39. Create RegisterUserCommand
-- [ ] 40. Call handler, return RegisterUserResponse (201 Created)
-- [ ] 41. Add exception handling for duplicate username (409 Conflict)
-- [ ] 42. Create POST endpoint: `@PostMapping("/login")`
-- [ ] 43. Accept @RequestBody LoginRequest (username, password)
-- [ ] 44. Create LoginUserCommand
-- [ ] 45. Call handler, return LoginUserResponse (200 OK)
-- [ ] 46. Add exception handling for invalid credentials (401 Unauthorized)
-- [ ] 47. Add logging for auth operations
+- [x] 34. Create `AuthController.java` in `features/auth/`
+- [x] 35. Add @RestController and @RequestMapping("/api/auth")
+- [x] 36. Inject RegisterUserCommandHandler and LoginUserCommandHandler
+- [x] 37. Create POST endpoint: `@PostMapping("/register")`
+- [x] 38. Accept @RequestBody RegisterRequest (username, password)
+- [x] 39. Create RegisterUserCommand
+- [x] 40. Call handler, return RegisterUserResponse (201 Created)
+- [x] 41. Add exception handling for duplicate username (409 Conflict)
+- [x] 42. Create POST endpoint: `@PostMapping("/login")`
+- [x] 43. Accept @RequestBody LoginRequest (username, password)
+- [x] 44. Create LoginUserCommand
+- [x] 45. Call handler, return LoginUserResponse (200 OK)
+- [x] 46. Add exception handling for invalid credentials (401 Unauthorized)
+- [x] 47. Add logging for auth operations
 
 #### Request DTOs
-- [ ] 48. Create inner record `RegisterRequest(String username, String password)` in controller
-- [ ] 49. Create inner record `LoginRequest(String username, String password)` in controller
-- [ ] 50. Add @Valid validation annotations if desired
+- [x] 48. Create inner record `RegisterRequest(String username, String password)` in controller
+- [x] 49. Create inner record `LoginRequest(String username, String password)` in controller
+- [x] 50. Add @Valid validation annotations if desired
 
 ---
 
@@ -332,7 +343,7 @@
 
 ---
 
-## PR #29: Photo Authorization (Delete with User Check)
+## PR #27: Photo Authorization (Delete with User Check)
 
 ### Backend - Update Delete Endpoint
 - [ ] 1. Navigate to `DeletePhotoController.java`
@@ -394,20 +405,20 @@
 
 ## Summary
 
-**PR #27: Photo Delete Functionality**
+**PR #25: Photo Delete Functionality**
 - Backend: S3 delete, delete command/handler/controller
 - Web: Delete button, confirmation modal, optimistic UI updates
 - Mobile: Long-press delete, alert confirmation, optimistic UI updates
 - **Estimated Time**: 45 minutes - 1 hour
 
-**PR #28: Mocked User Authentication**
+**PR #26: Mocked User Authentication**
 - Backend: User entity, auth endpoints (register/login)
 - Web: Login/register pages, auth context, protected routes
 - Mobile: Login/register screens, auth context, protected navigation
 - API updates to use authenticated userId
 - **Estimated Time**: 1.5 - 2 hours
 
-**PR #29: Photo Authorization**
+**PR #27: Photo Authorization**
 - Update delete endpoint to verify photo ownership
 - Update API calls to pass userId
 - **Estimated Time**: 15-20 minutes
