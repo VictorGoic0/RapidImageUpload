@@ -54,10 +54,19 @@ export function useWebSocket(batchId: string | null, baseUrl: string) {
       },
       onMessage: (message: BatchProgress) => {
         // Handle different message types
-        if (message.type === 'connected') {
+        // Backend sends { type: "connected", batchId, message } on initial connection
+        if ('type' in message && (message as any).type === 'connected') {
           // Initial connection confirmation
           if (__DEV__) {
-            console.log('[useWebSocket] Connection confirmed:', message.message);
+            console.log('[useWebSocket] Connection confirmed:', (message as any).message);
+          }
+          return;
+        }
+
+        // Skip if this is not a valid progress message (missing photoId)
+        if (!message.photoId) {
+          if (__DEV__) {
+            console.log('[useWebSocket] Skipping non-progress message:', message);
           }
           return;
         }
